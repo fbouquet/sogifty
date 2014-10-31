@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/action_delete"
+        
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        
+        android:title="Supprimer"/>
+    <item
+        android:id="@+id/action_add"
+        android:orderInCategory="200"
+        android:showAsAction="always"
+        android:title="Ajouter">
+    </item>
+
+</menu> 
