@@ -78,7 +78,8 @@ public class HelloAndroidActivity extends Activity {
 				String idValue = id.getText().toString();
 
 				if (deleteMode) {
-
+					System.out.println("je clique dessus");
+					
 					if (!friendsToDelete.contains(idValue))
 						friendsToDelete.add(idValue);
 					else
@@ -88,6 +89,8 @@ public class HelloAndroidActivity extends Activity {
 							((User) listJson.getAdapter().getItem(position))
 									.getNom());
 				} else {
+					System.out.println("je clique dessus");
+					
 					// TextView id = (TextView) view.findViewById(R.id._id);
 					SparseBooleanArray checkedPositions = listJson
 							.getCheckedItemPositions();
@@ -133,8 +136,9 @@ public class HelloAndroidActivity extends Activity {
 
 		//gettingJson();
 		parser = new ParserJson(this);
-		usersList = parser.gettingJson();
+		//usersList = parser.gettingJson();
 		
+		createFalseList();
 		adapter = new UserAdapter(this, usersList.getListUsers());
 		listJson.setAdapter(adapter);
 		
@@ -232,6 +236,88 @@ public class HelloAndroidActivity extends Activity {
 				String.valueOf(friendsToDelete.size()) + " amis supprimés",
 				Toast.LENGTH_SHORT).show();
 		friendsToDelete.clear();
+	}
+	
+	public void createFalseList(){
+		User u = new User();
+		usersList = new Users();
+		u.setAvatar("u");
+		u.setFonction("b");
+		u.setGender("male");
+		u.setId("0");
+		u.setNom("Villalba");
+		u.setPrenom("Léo");
+		u.setAge(21);
+		u.setRemainingDay("3");
+		usersList.addUser(u);
+		
+		User v = new User();
+		v.setAvatar("blabl");
+		v.setFonction("b");
+		v.setGender("b");
+		v.setId("1");
+		v.setAge(22);
+		v.setNom("Sagardia");
+		v.setPrenom("Elorri");
+		v.setRemainingDay("8");
+		usersList.addUser(v);
+		
+		User w = new User();
+		w.setAvatar("blabl");
+		w.setFonction("b");
+		w.setGender("b");
+		w.setId("2");
+		w.setAge(22);
+		w.setNom("Folliot");
+		w.setPrenom("Thomas");
+		w.setRemainingDay("144");
+		usersList.addUser(w);
+		
+		User x = new User();
+		x.setAvatar("blabl");
+		x.setFonction("b");
+		x.setGender("b");
+		x.setId("3");
+		x.setAge(1000);
+		x.setNom("JOMARD");
+		x.setPrenom("ARnauuuud");
+		x.setRemainingDay("70000");
+		usersList.addUser(x);
+		
+		User y = new User();
+		y.setAvatar("blabl");
+		y.setFonction("b");
+		y.setGender("b");
+		y.setId("5");
+		y.setAge(2);
+		y.setNom("Jouuu");
+		y.setPrenom("Valouuuuuuve");
+		y.setRemainingDay("4");
+		usersList.addUser(y);
+		
+		User z = new User();
+		z.setAvatar("blabl");
+		z.setFonction("b");
+		z.setGender("b");
+		z.setId("4");
+		z.setAge(27);
+		z.setNom("Bouquet");
+		z.setPrenom("Fleur");
+		z.setRemainingDay("80");
+		usersList.addUser(z);
+		
+		User e = new User();
+		e.setAvatar("blabl");
+		e.setFonction("b");
+		e.setGender("b");
+		e.setId("6");
+		e.setAge(22);
+		e.setNom("Garbage");
+		e.setPrenom("Yvonne");
+		e.setRemainingDay("57");
+		usersList.addUser(e);
+		
+		
 	}
 
 	

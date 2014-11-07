@@ -24,7 +24,8 @@
         android:text="@+string/Bouton1"
         android:visibility="gone"
          />
-</LinearLayout>
+	</LinearLayout>
+	
 
     <ListView
         android:id="@+id/listJson"

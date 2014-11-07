@@ -11,7 +11,7 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 
-public class User {  
+public class User implements Comparable<User> {  
   private String nom;  
   @JsonProperty("prenom")  
   private String prenom;
@@ -24,12 +24,20 @@ public class User {
   @JsonProperty("_id")
   private String _id;
   
-  private String avatar;
+  public void setAge(int age) {
+	this.age = age;
+}
+
+private String avatar;
   
   private String remainingDay;
   
 
   private String gender;
+  
+  public User(){
+	  
+  }
 
   @JsonProperty("nom")  
   public void setNom(String nom) {  
@@ -92,6 +100,27 @@ public String getGender() {
 public void setGender(String gender) {
 	this.gender = gender;
 }
+
+@Override
+public int compareTo(User otherUser){
+
+	int dateOU = Integer.parseInt(otherUser.getRemainingDay());
+	int dateU = Integer.parseInt(this.getRemainingDay());
+	
+	if(dateOU > dateU){
+		return -1;
+	}
+	else if(dateOU < dateU){
+		return 1;
+	}
+	else{
+		return 0;
+	}
+}
+
+
+
+
 
   
 

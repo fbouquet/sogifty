@@ -80,13 +80,15 @@ public class GiftAdapter extends BaseAdapter {
 		holder.price.setText(g.getPrice());
 		
 		
-		String imgUrl = g.getImgUrl();
-		
-		
-		if(imgUrl != null)
-			UrlImageViewHelper.setUrlDrawable(holder.iv, imgUrl);
-		else
-			holder.iv.setImageResource(android.R.drawable.ic_menu_gallery);
+//		String imgUrl = g.getImgUrl();
+//		
+//		if(imgUrl != null){
+//			UrlImageViewHelper.setUrlDrawable(holder.iv, imgUrl);
+//			
+//		}
+//		else
+//			
+		holder.iv.setImageResource(android.R.drawable.ic_menu_gallery);
 		
 		
 		
