@@ -103,13 +103,19 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@+strings/tagsFriend" /> 
-		<GridView
-            android:id="@+id/main_gridGifts"
-            android:layout_width="0dp"
+		<ImageView
+            android:id="@+id/imageViewGift"
+	        android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:numColumns="1" >
-        </GridView>
+            android:numColumns="1" 
+            android:layout_margin="0sp"
+	        android:paddingLeft="0sp"
+	        android:paddingRight="10sp"
+	        android:scaleType="centerCrop"
+	        android:src="@android:drawable/ic_menu_gallery"
+            >
+        </ImageView>
 	     
     </LinearLayout>
     

@@ -42,12 +42,12 @@ import android.widget.Toast;
 public class HelloAndroidActivity extends Activity {
 	private ProgressDialog pDialog;
 	private ListView listJson;
-	Button deleteBtn = null;
-	boolean deleteMode = false;
-	Users usersList = null;
-	ArrayAdapter<Users> adapterCheckList = null;
-	ListAdapter adapter = null;
-	List<HashMap<String, String>> liste;
+	private Button deleteBtn = null;
+	private boolean deleteMode = false;
+	private Users usersList = null;
+	private ArrayAdapter<Users> adapterCheckList = null;
+	private ListAdapter adapter = null;
+	private List<HashMap<String, String>> liste;
 
 	private List<String> friendsToDelete = null;
 	private UserAdapter userAdapter = null;
@@ -78,7 +78,6 @@ public class HelloAndroidActivity extends Activity {
 				String idValue = id.getText().toString();
 
 				if (deleteMode) {
-					System.out.println("je clique dessus");
 					
 					if (!friendsToDelete.contains(idValue))
 						friendsToDelete.add(idValue);
@@ -89,26 +88,9 @@ public class HelloAndroidActivity extends Activity {
 							((User) listJson.getAdapter().getItem(position))
 									.getNom());
 				} else {
-					System.out.println("je clique dessus");
-					
 					// TextView id = (TextView) view.findViewById(R.id._id);
-					SparseBooleanArray checkedPositions = listJson
-							.getCheckedItemPositions();
-					Log.i("List of ids to remove", checkedPositions.toString());
-
-					Intent intent = new Intent(HelloAndroidActivity.this,
-							FriendDetailActivity.class);
-
-					User u = (User) listJson.getAdapter().getItem(position);
-
-					intent.putExtra("name", u.getNom());
 					
-					intent.putExtra("avatar", u.getAvatar());
-					intent.putExtra("id", u.getId());
-
-					startActivity(intent);
-					overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
-
+					createFriendActivity(position);
 				}
 
 				userAdapter.toggleCheckBox(position);
@@ -236,6 +218,26 @@ public class HelloAndroidActivity extends Activity {
 				String.valueOf(friendsToDelete.size()) + " amis supprimés",
 				Toast.LENGTH_SHORT).show();
 		friendsToDelete.clear();
+	}
+	
+	public void createFriendActivity(int position){
+		SparseBooleanArray checkedPositions = listJson
+				.getCheckedItemPositions();
+		Log.i("List of ids to remove", checkedPositions.toString());
+
+		Intent intent = new Intent(HelloAndroidActivity.this,
+				FriendDetailActivity.class);
+
+		User u = (User) listJson.getAdapter().getItem(position);
+
+		intent.putExtra("name", u.getNom());
+		
+		intent.putExtra("avatar", u.getAvatar());
+		intent.putExtra("id", u.getId());
+
+		startActivity(intent);
+		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
+
 	}
 	
 	public void createFalseList(){

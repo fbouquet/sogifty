@@ -95,7 +95,7 @@ public class UserAdapter extends BaseAdapter {
 		ImageView iv;
 		ImageView ar;
 		TextView tags;
-		GridView giftsGrid;
+		ImageView giftImage;
 	}
 	
 	
@@ -116,7 +116,7 @@ public class UserAdapter extends BaseAdapter {
 			holder.iv = (ImageView)convertView.findViewById(R.id.imageViewUser);
 			holder.remainingDate = (TextView)convertView.findViewById(R.id.remainingDate);
 			holder.tags = (TextView)convertView.findViewById(R.id.tvLikes);
-			holder.giftsGrid = (GridView)convertView.findViewById(R.id.main_gridGifts);
+			holder.giftImage = (ImageView)convertView.findViewById(R.id.imageViewGift);
 			//holder.fonction = (TextView)convertView.findViewById(R.id.fonction);
 			holder.cb = (CheckBox)convertView.findViewById(R.id.checkBox);
 			holder.ar = (ImageView)convertView.findViewById(R.id.arrow);
@@ -134,37 +134,15 @@ public class UserAdapter extends BaseAdapter {
 		holder.age.setText(String.valueOf(u.getAge()));
 		holder.remainingDate.setText("J-"+u.getRemainingDay());
 		holder.tags.setText("Préférences : \n - sport \n - cuisine \n - intelligent \n - musculation");
-		ListAdapter adapter = new GiftAdapter(this.context, createGifts());
-		holder.giftsGrid.setAdapter(adapter);
-		
+	
 		if(position == 0){
 
-			convertView.setOnClickListener(new AdapterView.OnClickListener() {
-				
-
-				@Override
-				public void onClick(View v) {
-				
-					Intent intent = new Intent(context,
-							FriendDetailActivity.class);
-
-					User u = users.get(0);
-					intent.putExtra("name", u.getNom());
-					
-					intent.putExtra("avatar", u.getAvatar());
-					intent.putExtra("id", u.getId());
-
-					context.startActivity(intent);
-					
-				}
-			});
-			
 			holder.tags.setVisibility(CheckBox.VISIBLE);
-			holder.giftsGrid.setVisibility(CheckBox.VISIBLE);
+			holder.giftImage.setVisibility(CheckBox.VISIBLE);
 		}
 		else{
 			holder.tags.setVisibility(CheckBox.GONE);
-			holder.giftsGrid.setVisibility(CheckBox.GONE);
+			holder.giftImage.setVisibility(CheckBox.GONE);
 		}
 		//holder.fonction.setText("Fonction : "+ String.valueOf(users.get(position).getFonction()));
 		//holder.cb.setChecked(usersChecked.get(position));

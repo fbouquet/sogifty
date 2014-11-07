@@ -62,11 +62,11 @@ public final class R {
         public static final int imageGift=0x7f0b0009;
         public static final int imageView=0x7f0b000b;
         public static final int imageView1=0x7f0b001c;
+        public static final int imageViewGift=0x7f0b001a;
         public static final int imageViewUser=0x7f0b0010;
         public static final int ivDetail=0x7f0b0000;
         public static final int listJson=0x7f0b0008;
         public static final int listViewWidget=0x7f0b001d;
-        public static final int main_gridGifts=0x7f0b001a;
         public static final int main_ll_itemUserList=0x7f0b000f;
         public static final int nom=0x7f0b0011;
         public static final int prenom=0x7f0b0012;
