@@ -17,16 +17,18 @@
         android:label="@string/app_name"
         android:theme="@style/MyTheme"
         >
-        <activity android:name="com.sogifty.activities.HelloAndroidActivity" >
+        <activity android:name="com.sogifty.activities.ConnectionActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.sogifty.activities.FriendDetailActivity" >
+        <activity android:name="com.sogifty.activities.HelloAndroidActivity" />
+         
+        <activity android:name="com.sogifty.activities.FriendDetailActivity" />
             
-            </activity>
+       
             
         <receiver android:name="com.sogifty.widget.WidgetProvider" >
             <intent-filter>

@@ -3,12 +3,16 @@ package com.sogifty.activities;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 import com.sogifty.model.User;
 import com.sogifty.model.Users;
 import com.sogifty.R;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -33,8 +37,10 @@ public class HelloAndroidActivity extends Activity {
 	private static final String FRIENDS_DELETED = " amis supprimés";
 	private static final String ITEM_POSITION = "Item in position " ;
 	private static final String CLICKED = " clicked";
-	
-	
+	private static final String EMAIL = "EmailUser";
+	private static final String PASSWORD = "PasswordUser";
+
+	private ProgressDialog pDialog;
 	private ListView listJson;
 	private TextView id;
 	private Button deleteBtn = null;
@@ -185,6 +191,13 @@ public class HelloAndroidActivity extends Activity {
 						+ CLICKED, Toast.LENGTH_LONG).show();
 	}
 
+	
+	public static Intent getIntent(Context ctxt, String email, String password) {
+		Intent newActivityIntent = new Intent(ctxt, HelloAndroidActivity.class);
+		newActivityIntent.putExtra(EMAIL, email);
+    	newActivityIntent.putExtra(PASSWORD, password);
+    	return newActivityIntent;
+	}
 	
 	
 	@Override
