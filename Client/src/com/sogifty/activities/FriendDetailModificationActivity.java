@@ -28,7 +28,7 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
-public class FriendDetailActivity extends Activity {
+public class FriendDetailModificationActivity extends Activity {
 	User user = null;
 	Intent myIntent= null;
 	List<Gift> gifts = null;
@@ -38,7 +38,7 @@ public class FriendDetailActivity extends Activity {
 	 @Override
 	    public void onCreate(Bundle savedInstanceState)  {
 			super.onCreate(savedInstanceState);
-			setContentView(R.layout.activity_friend_details);
+			setContentView(R.layout.activity_friend_details_modification);
 		
 			gifts = new ArrayList<Gift>();
 			user = new User();

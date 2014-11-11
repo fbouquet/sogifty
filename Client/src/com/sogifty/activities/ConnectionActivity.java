@@ -49,7 +49,7 @@ public class ConnectionActivity extends Activity{
 	}
 	
 	protected void createFriendListActivty() {
-		Intent intent = HelloAndroidActivity.getIntent(this, emailText.getText().toString(), passwordText.getText().toString());
+		Intent intent = FriendListActivity.getIntent(this, emailText.getText().toString(), passwordText.getText().toString());
 		startActivity(intent);
 	}
 
