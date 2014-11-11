@@ -13,6 +13,7 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
+
 import com.sogifty.model.User;
 import com.sogifty.model.Users;
 
@@ -20,6 +21,7 @@ import com.sogifty.R;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -40,6 +42,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class HelloAndroidActivity extends Activity {
+	private static final String EMAIL = "EmailUser";
+	private static final String PASSWORD = "PasswordUser";
 	private ProgressDialog pDialog;
 	private ListView listJson;
 	private Button deleteBtn = null;
@@ -155,6 +159,15 @@ public class HelloAndroidActivity extends Activity {
 
 	}
 
+	
+	public static Intent getIntent(Context ctxt, String email, String password) {
+		Intent newActivityIntent = new Intent(ctxt, HelloAndroidActivity.class);
+		newActivityIntent.putExtra(EMAIL, email);
+    	newActivityIntent.putExtra(PASSWORD, password);
+    	return newActivityIntent;
+	}
+	
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
