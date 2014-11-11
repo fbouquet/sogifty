@@ -28,7 +28,7 @@ public class WidgetService extends RemoteViewsService {
 	 * here Adapter is ListProvider
 	 * */
 	
-	private ParserJson parser = new ParserJson(this);
+	private ParserJson parser = new ParserJson("lala");
 	private List<Gift> listGift = new ArrayList<Gift>();
 	private List<User> listUsers = new ArrayList<User>();
 	

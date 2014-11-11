@@ -5,16 +5,20 @@ import java.util.List;
 
 
 
+
+
 import com.sogifty.model.User;
 import com.sogifty.model.Users;
 import com.sogifty.R;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings.System;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
@@ -137,7 +141,14 @@ public class HelloAndroidActivity extends Activity {
 		listJson.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
 		//gettingJson();
-		parser = new ParserJson(this);
+		String test = "{'user': {'name' : 'elorri'	}}";
+		ParserJson js = new ParserJson(test);
+		
+		//java.lang.System.out.println(parser);
+		AlertDialog.Builder adb = new AlertDialog.Builder(this);
+		adb.setMessage(js.executeParse());
+		AlertDialog ad = adb.create();
+		ad.show();
 		//usersList = parser.gettingJson();
 		
 		createFalseList();
