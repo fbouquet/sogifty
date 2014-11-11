@@ -139,7 +139,7 @@ public class FriendListActivity extends Activity {
 		listJson.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
 		//gettingJson();
-		parser = new ParserJson(this);
+		//parser = new ParserJson(this);
 		//usersList = parser.gettingJson();
 		
 		createFalseList();

@@ -1,47 +1,29 @@
 package com.sogifty.activities;
 
-import java.io.IOException;
-
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONObject;
+import org.json.JSONException;
 
 import android.content.Context;
 
-import com.sogifty.model.Users;
 
 public class ParserJson {
-	Users usersList = new Users();
+	private static final String ERROR = "error";
 	Context context = null;
-	public ParserJson(Context c){
-		context = c;
+	String stringToParse;
+	
+	public ParserJson(String stringToParse){
+		this.stringToParse = stringToParse;
 	}
 	
-//	private static ObjectMapper sMapper = new ObjectMapper();
-//	static {
-//		sMapper.configure(
-//				org.codehaus.jackson.map.DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES,
-//				false);
-//	}
-//	
-//
-//	public final Users gettingJson() {
-//
-//		try {
-//			usersList = sMapper.readValue(context.getAssets().open("users.json"),
-//					Users.class);
-//		} catch (JsonParseException e) {
-//			e.printStackTrace();
-//		} catch (JsonMappingException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		
-//		return usersList;
-//		// Toast.makeText(this,
-//		// String.valueOf(usersList.getUserById(5).getId()),
-//		// Toast.LENGTH_LONG).show();
-//
-//	}
+	public String executeParse(){
+		try{
+			JSONObject json = new JSONObject(stringToParse);
+			JSONObject user =  json.getJSONObject("user");
+			return user.getString("name");
+			
+		}catch (JSONException e) {
+			e.printStackTrace();
+			return ERROR;
+		}
+	}
 }
