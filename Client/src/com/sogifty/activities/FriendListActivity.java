@@ -68,13 +68,16 @@ public class FriendListActivity extends Activity {
 		listJson.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 		public void onItemClick(AdapterView<?> adapter, View view,
 					int position, long arg) {
+			
+				TextView id = (TextView) findViewById(R.id._id);
+			
 				String idValue = id.getText().toString();
 
 				if (deleteMode) {
 					deleteFriend(idValue,position);
 				} 
 				else {
-					createFriendActivity(position);
+					createFriendDetailsActivity(position);
 				}
 
 				userAdapter.toggleCheckBox(position);
@@ -121,7 +124,6 @@ public class FriendListActivity extends Activity {
 	private void initLayout() {
 		friendsToDelete = new ArrayList<String>();
 		listJson = (ListView) findViewById(R.id.listJson);
-		id = (TextView) findViewById(R.id._id);
 		deleteBtn = (Button) findViewById(R.id.deleteBtn);
 
 	}
@@ -160,20 +162,13 @@ public class FriendListActivity extends Activity {
 //						.getNom());
 	}
 
-	public void createFriendActivity(int position){
+	public void createFriendDetailsActivity(int position){
 		SparseBooleanArray checkedPositions = listJson
 				.getCheckedItemPositions();
 		//Log.i(ID_TO_REMOVE_LIST, checkedPositions.toString());
-
-		Intent intent = new Intent(FriendListActivity.this,
-				FriendDetailActivity.class);
-
 		User u = (User) listJson.getAdapter().getItem(position);
 
-		intent.putExtra(NAME, u.getNom());
-		
-		intent.putExtra(AVATAR, u.getAvatar());
-		intent.putExtra(ID, u.getId());
+		Intent intent = FriendDetailsActivity.getIntent(this, u.getNom(), u.getPrenom(), u.getRemainingDay());
 
 		startActivity(intent);
 		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
@@ -235,7 +230,7 @@ public class FriendListActivity extends Activity {
 			break;
 		case R.id.action_add:
 			Intent intent = new Intent(FriendListActivity.this,
-					FriendDetailActivity.class);
+					FriendDetailModificationActivity.class);
 
 			startActivity(intent);
 			overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
