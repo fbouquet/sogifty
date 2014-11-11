@@ -1,29 +1,16 @@
 package com.sogifty.activities;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.ksoap2.SoapEnvelope;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapSerializationEnvelope;
-import org.ksoap2.transport.HttpTransportSE;
 
 import com.sogifty.model.User;
 import com.sogifty.model.Users;
-
 import com.sogifty.R;
+
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
@@ -31,24 +18,30 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class HelloAndroidActivity extends Activity {
-	private ProgressDialog pDialog;
+	private static String FRIEND_LIST = "Liste des amis";
+	private static String APPLICATION_NAME = "Sogifti";
+	private static String NAME = "name";
+	private static String AVATAR = "avatar";
+	private static String ID = "id";
+	private static final String FRIENDS_DELETED = " amis supprimés";
+	private static final String ITEM_POSITION = "Item in position " ;
+	private static final String CLICKED = " clicked";
+	
+	
 	private ListView listJson;
+	private TextView id;
 	private Button deleteBtn = null;
+	
 	private boolean deleteMode = false;
 	private Users usersList = null;
-	private ArrayAdapter<Users> adapterCheckList = null;
 	private ListAdapter adapter = null;
-	private List<HashMap<String, String>> liste;
-
 	private List<String> friendsToDelete = null;
 	private UserAdapter userAdapter = null;
 	
@@ -59,37 +52,22 @@ public class HelloAndroidActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		ActionBar actionBar = getActionBar();
-		// add the custom view to the action bar
-		// actionBar.setCustomView(R.layout.custom_menu);
-		actionBar.setSubtitle("Liste des amis");
-		actionBar.setTitle("Sogifti");
-
-		friendsToDelete = new ArrayList<String>();
-
-		listJson = (ListView) findViewById(R.id.listJson);
+		initActionBar();
+		
+		initLayout();
+		
+		createListView();
+		
+		
 		listJson.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			public void onItemClick(AdapterView<?> adapter, View view,
+		public void onItemClick(AdapterView<?> adapter, View view,
 					int position, long arg) {
-				// Object listItem = FriendListView.getItemAtPosition(position);
-				// view.findViewById(R.id.UserId).get
-
-				TextView id = (TextView) view.findViewById(R.id._id);
 				String idValue = id.getText().toString();
 
 				if (deleteMode) {
-					
-					if (!friendsToDelete.contains(idValue))
-						friendsToDelete.add(idValue);
-					else
-						friendsToDelete.remove(friendsToDelete.indexOf(idValue));
-
-					Log.i("L'id est",
-							((User) listJson.getAdapter().getItem(position))
-									.getNom());
-				} else {
-					// TextView id = (TextView) view.findViewById(R.id._id);
-					
+					deleteFriend(idValue,position);
+				} 
+				else {
 					createFriendActivity(position);
 				}
 
@@ -97,23 +75,59 @@ public class HelloAndroidActivity extends Activity {
 				userAdapter.notifyDataSetChanged();
 			}
 
+		
 		});
 
 		listJson.setOnItemLongClickListener(new OnItemLongClickListener() {
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
 					int position, long id) {
 
-				UserAdapter u = (UserAdapter) parent.getAdapter();
-				User o = (User) u.getItem(position);
-
-				Toast.makeText(
-						HelloAndroidActivity.this,
-						"Item in position " + o.getId()
-								+ " clicked", Toast.LENGTH_LONG).show();
+				longClickFonction(parent,position);
 				return true;
+			}
+
+			
+		});
+
+		
+		
+		deleteBtn.setText(R.string.deleteModeBtnFalse);
+		deleteBtn.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View view) {
+
+				deleteMode = !deleteMode;
+
+				if (deleteMode) {
+					listJson.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+					friendsToDelete.clear();
+				} else {
+					deleteBtn.setText(R.string.deleteModeBtnFalse);
+					removeCheckedElementFromList();
+					listJson.setChoiceMode(ListView.CHOICE_MODE_NONE);
+				}
 			}
 		});
 
+	}
+
+	
+	private void initLayout() {
+		friendsToDelete = new ArrayList<String>();
+		listJson = (ListView) findViewById(R.id.listJson);
+		id = (TextView) findViewById(R.id._id);
+		deleteBtn = (Button) findViewById(R.id.deleteBtn);
+
+	}
+
+	private void initActionBar() {
+		ActionBar actionBar = getActionBar();
+		actionBar.setSubtitle(FRIEND_LIST);
+		actionBar.setTitle(APPLICATION_NAME);
+
+	}
+	
+	private void createListView() {
 		listJson.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
 		//gettingJson();
@@ -126,35 +140,53 @@ public class HelloAndroidActivity extends Activity {
 		
 		
 		userAdapter = ((UserAdapter) listJson.getAdapter());
-		
-
-		/* Toggle Delete Button Definition */
-		deleteBtn = (Button) findViewById(R.id.deleteBtn);
-
-		deleteBtn.setText(R.string.deleteModeBtnFalse);
-		deleteBtn.setOnClickListener(new View.OnClickListener() {
-
-			public void onClick(View view) {
-
-				deleteMode = !deleteMode;
-				if (deleteMode) {
-
-					// createList();
-					listJson.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-
-					// Initialization of the list of friend to delete
-					friendsToDelete.clear();
-				} else {
-					deleteBtn.setText(R.string.deleteModeBtnFalse);
-					removeCheckedElementFromList();
-					listJson.setChoiceMode(ListView.CHOICE_MODE_NONE);
-
-				}
-			}
-		});
-
 	}
 
+	
+	private void deleteFriend(String idValue, int position) {
+		if (!friendsToDelete.contains(idValue))
+			friendsToDelete.add(idValue);
+		else
+			friendsToDelete.remove(friendsToDelete.indexOf(idValue));
+
+//		Log.i("id is",
+//				((User) listJson.getAdapter().getItem(position))
+//						.getNom());
+	}
+
+	public void createFriendActivity(int position){
+		SparseBooleanArray checkedPositions = listJson
+				.getCheckedItemPositions();
+		//Log.i(ID_TO_REMOVE_LIST, checkedPositions.toString());
+
+		Intent intent = new Intent(HelloAndroidActivity.this,
+				FriendDetailActivity.class);
+
+		User u = (User) listJson.getAdapter().getItem(position);
+
+		intent.putExtra(NAME, u.getNom());
+		
+		intent.putExtra(AVATAR, u.getAvatar());
+		intent.putExtra(ID, u.getId());
+
+		startActivity(intent);
+		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
+
+	}
+	
+	private void longClickFonction(AdapterView<?> parent,int position) {
+		//utility to determine
+		UserAdapter u = (UserAdapter) parent.getAdapter();
+		User o = (User) u.getItem(position);
+
+		Toast.makeText(
+				HelloAndroidActivity.this,
+				ITEM_POSITION + o.getId()
+						+ CLICKED, Toast.LENGTH_LONG).show();
+	}
+
+	
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -174,7 +206,6 @@ public class HelloAndroidActivity extends Activity {
 			friendsToDelete.clear();
 			invalidateOptionsMenu();
 			deleteMode = !deleteMode;
-			// Initialization of the list of friend to delete
 			userAdapter.showCheckbox();
 			
 
@@ -183,7 +214,7 @@ public class HelloAndroidActivity extends Activity {
 			invalidateOptionsMenu();
 			deleteMode = !deleteMode;
 
-			Log.i("Friends to Delete", friendsToDelete.toString());
+			//Log.i("Friends to Delete", friendsToDelete.toString());
 			removeCheckedElementFromList();
 			userAdapter.showCheckbox();
 			userAdapter.initChecked();
@@ -215,31 +246,12 @@ public class HelloAndroidActivity extends Activity {
 
 		userAdapter.notifyDataSetChanged();
 		Toast.makeText(this,
-				String.valueOf(friendsToDelete.size()) + " amis supprimés",
+				String.valueOf(friendsToDelete.size()) + FRIENDS_DELETED,
 				Toast.LENGTH_SHORT).show();
 		friendsToDelete.clear();
 	}
 	
-	public void createFriendActivity(int position){
-		SparseBooleanArray checkedPositions = listJson
-				.getCheckedItemPositions();
-		Log.i("List of ids to remove", checkedPositions.toString());
-
-		Intent intent = new Intent(HelloAndroidActivity.this,
-				FriendDetailActivity.class);
-
-		User u = (User) listJson.getAdapter().getItem(position);
-
-		intent.putExtra("name", u.getNom());
 		
-		intent.putExtra("avatar", u.getAvatar());
-		intent.putExtra("id", u.getId());
-
-		startActivity(intent);
-		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
-
-	}
-	
 	public void createFalseList(){
 		User u = new User();
 		usersList = new Users();
