@@ -2,13 +2,10 @@ package com.sogifty.activities;
 
 
 import com.sogifty.R;
-import com.sogifty.model.User;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;

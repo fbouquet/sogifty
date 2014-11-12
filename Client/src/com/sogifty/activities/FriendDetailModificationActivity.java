@@ -8,8 +8,8 @@ import java.util.List;
 import com.sogifty.R;
 import com.sogifty.tools.AvatarGenerator;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
+import com.sogifty.model.Friend;
 import com.sogifty.model.Gift;
-import com.sogifty.model.User;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -29,7 +29,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 public class FriendDetailModificationActivity extends Activity {
-	User user = null;
+	Friend friend = null;
 	Intent myIntent= null;
 	List<Gift> gifts = null;
 	
@@ -41,13 +41,13 @@ public class FriendDetailModificationActivity extends Activity {
 			setContentView(R.layout.activity_friend_details_modification);
 		
 			gifts = new ArrayList<Gift>();
-			user = new User();
-			user.setNom("Pickachu");
+			friend = new Friend();
+			friend.setNom("Pickachu");
 			
-			user.setAvatar("http://www.ffworld.com/images/discu/avatars/ff7/17.jpg");
+			friend.setAvatar("http://www.ffworld.com/images/discu/avatars/ff7/17.jpg");
 			
 			if(getIntent().getStringExtra("name") != null)
-				user = getUser();
+				friend = getFriend();
 
 			initView();
 			fillListGifts();
@@ -76,24 +76,24 @@ public class FriendDetailModificationActivity extends Activity {
 
 		    tvLikes.setText(R.string.tagsFriend);
 		    
-		    etName.setText(user.getNom());
+		    etName.setText(friend.getNom());
 		    
 		    etTags.setText("Sport Vêtements Sac");
 		    
 		    //UrlImageViewHelper.setUrlDrawable(iv, user.getAvatar());
 		    try {
-				iv.setImageBitmap(AvatarGenerator.generate(user.getNom(), "M", this));
+				iv.setImageBitmap(AvatarGenerator.generate(friend.getNom(), "M", this));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	 }
 	 
-	 private User getUser(){
-		 User u = new User();
+	 private Friend getFriend(){
+		 Friend f = new Friend();
 		 myIntent = getIntent();
 		 
-		 u.setNom(myIntent.getStringExtra("name"));
+		 f.setNom(myIntent.getStringExtra("name"));
 		 
 		 
 		 
@@ -104,7 +104,7 @@ public class FriendDetailModificationActivity extends Activity {
 		 
 
 		 
-		 return u;
+		 return f;
 	 }
 	 
 	 private void fillListGifts(){

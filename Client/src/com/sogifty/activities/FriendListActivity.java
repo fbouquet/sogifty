@@ -5,8 +5,8 @@ import java.util.List;
 
 
 
-import com.sogifty.model.User;
-import com.sogifty.model.Users;
+import com.sogifty.model.Friend;
+import com.sogifty.model.Friends;
 import com.sogifty.R;
 
 import android.app.ActionBar;
@@ -46,10 +46,10 @@ public class FriendListActivity extends Activity {
 	private Button deleteBtn = null;
 	
 	private boolean deleteMode = false;
-	private Users usersList = null;
+	private Friends friendsList = null;
 	private ListAdapter adapter = null;
-	private List<String> friendsToDelete = null;
-	private UserAdapter userAdapter = null;
+	private List<Integer> friendsToDelete = null;
+	private FriendAdapter userAdapter = null;
 	
 	private ParserJson parser = null;
 
@@ -122,7 +122,7 @@ public class FriendListActivity extends Activity {
 
 	
 	private void initLayout() {
-		friendsToDelete = new ArrayList<String>();
+		friendsToDelete = new ArrayList<Integer>();
 		listJson = (ListView) findViewById(R.id.listJson);
 		deleteBtn = (Button) findViewById(R.id.deleteBtn);
 
@@ -143,17 +143,15 @@ public class FriendListActivity extends Activity {
 		//usersList = parser.gettingJson();
 		
 		createFalseList();
-		adapter = new UserAdapter(this, usersList.getListUsers());
+		adapter = new FriendAdapter(this, friendsList.getListFriends());
 		listJson.setAdapter(adapter);
-		
-		
-		userAdapter = ((UserAdapter) listJson.getAdapter());
+		userAdapter = ((FriendAdapter) listJson.getAdapter());
 	}
 
 	
 	private void deleteFriend(String idValue, int position) {
 		if (!friendsToDelete.contains(idValue))
-			friendsToDelete.add(idValue);
+			friendsToDelete.add(Integer.parseInt(idValue));
 		else
 			friendsToDelete.remove(friendsToDelete.indexOf(idValue));
 
@@ -166,9 +164,9 @@ public class FriendListActivity extends Activity {
 		SparseBooleanArray checkedPositions = listJson
 				.getCheckedItemPositions();
 		//Log.i(ID_TO_REMOVE_LIST, checkedPositions.toString());
-		User u = (User) listJson.getAdapter().getItem(position);
+		Friend f = (Friend) listJson.getAdapter().getItem(position);
 
-		Intent intent = FriendDetailsActivity.getIntent(this, u.getNom(), u.getPrenom(), u.getRemainingDay());
+		Intent intent = FriendDetailsActivity.getIntent(this, f.getNom(), f.getPrenom(), f.getRemainingDay());
 
 		startActivity(intent);
 		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
@@ -177,8 +175,8 @@ public class FriendListActivity extends Activity {
 	
 	private void longClickFonction(AdapterView<?> parent,int position) {
 		//utility to determine
-		UserAdapter u = (UserAdapter) parent.getAdapter();
-		User o = (User) u.getItem(position);
+		FriendAdapter f = (FriendAdapter) parent.getAdapter();
+		Friend o = (Friend) f.getItem(position);
 
 		Toast.makeText(
 				FriendListActivity.this,
@@ -230,7 +228,7 @@ public class FriendListActivity extends Activity {
 			break;
 		case R.id.action_add:
 			Intent intent = new Intent(FriendListActivity.this,
-					FriendDetailModificationActivity.class);
+					FriendDetailsActivity.class);
 
 			startActivity(intent);
 			overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
@@ -243,11 +241,11 @@ public class FriendListActivity extends Activity {
 
 	private void removeCheckedElementFromList() {
 
-		for (String id : friendsToDelete) {
-			List<User> u = usersList.getListUsers();
-			for (int i = 0; i < u.size(); i++) {
-				if (u.get(i).getId() == id) {
-					u.remove(i);
+		for (Integer id : friendsToDelete) {
+			List<Friend> f = friendsList.getListFriends();
+			for (int i = 0; i < f.size(); i++) {
+				if (f.get(i).getId() == id) {
+					f.remove(i);
 				}
 			}
 		}
@@ -261,83 +259,86 @@ public class FriendListActivity extends Activity {
 	
 		
 	public void createFalseList(){
-		User u = new User();
-		usersList = new Users();
-		u.setAvatar("u");
-		u.setFonction("b");
-		u.setGender("male");
-		u.setId("0");
-		u.setNom("Villalba");
-		u.setPrenom("Léo");
-		u.setAge(21);
-		u.setRemainingDay("3");
-		usersList.addUser(u);
+		friendsList = new Friends();
 		
-		User v = new User();
+		
+		
+		Friend f = new Friend();
+		f.setAvatar("u");
+		f.setFonction("b");
+		f.setGender("male");
+		f.setId(Integer.parseInt("0"));
+		f.setNom("Villalba");
+		f.setPrenom("Léo");
+		f.setAge(21);
+		f.setRemainingDay(Integer.parseInt("3"));
+		friendsList.addFriend(f);
+		
+		Friend v = new Friend();
 		v.setAvatar("blabl");
 		v.setFonction("b");
 		v.setGender("b");
-		v.setId("1");
+		v.setId(Integer.parseInt("1"));
 		v.setAge(22);
 		v.setNom("Sagardia");
 		v.setPrenom("Elorri");
-		v.setRemainingDay("8");
-		usersList.addUser(v);
+		v.setRemainingDay(Integer.parseInt("8"));
+		friendsList.addFriend(v);
 		
-		User w = new User();
+		Friend w = new Friend();
 		w.setAvatar("blabl");
 		w.setFonction("b");
 		w.setGender("b");
-		w.setId("2");
+		w.setId(Integer.parseInt("2"));
 		w.setAge(22);
 		w.setNom("Folliot");
 		w.setPrenom("Thomas");
-		w.setRemainingDay("144");
-		usersList.addUser(w);
+		w.setRemainingDay(Integer.parseInt("144"));
+		friendsList.addFriend(w);
 		
-		User x = new User();
+		Friend x = new Friend();
 		x.setAvatar("blabl");
 		x.setFonction("b");
 		x.setGender("b");
-		x.setId("3");
+		x.setId(Integer.parseInt("3"));
 		x.setAge(1000);
 		x.setNom("JOMARD");
 		x.setPrenom("ARnauuuud");
-		x.setRemainingDay("70000");
-		usersList.addUser(x);
+		x.setRemainingDay(Integer.parseInt("70000"));
+		friendsList.addFriend(x);
 		
-		User y = new User();
+		Friend y = new Friend();
 		y.setAvatar("blabl");
 		y.setFonction("b");
 		y.setGender("b");
-		y.setId("5");
+		y.setId(Integer.parseInt("5"));
 		y.setAge(2);
 		y.setNom("Jouuu");
 		y.setPrenom("Valouuuuuuve");
-		y.setRemainingDay("4");
-		usersList.addUser(y);
+		y.setRemainingDay(Integer.parseInt("4"));
+		friendsList.addFriend(y);
 		
-		User z = new User();
+		Friend z = new Friend();
 		z.setAvatar("blabl");
 		z.setFonction("b");
 		z.setGender("b");
-		z.setId("4");
+		z.setId(Integer.parseInt("4"));
 		z.setAge(27);
 		z.setNom("Bouquet");
 		z.setPrenom("Fleur");
-		z.setRemainingDay("80");
-		usersList.addUser(z);
+		z.setRemainingDay(Integer.parseInt("80"));
+		friendsList.addFriend(z);
 		
-		User e = new User();
+		Friend e = new Friend();
 		e.setAvatar("blabl");
 		e.setFonction("b");
 		e.setGender("b");
-		e.setId("6");
+		e.setId(Integer.parseInt("6"));
 		e.setAge(22);
 		e.setNom("Garbage");
 		e.setPrenom("Yvonne");
-		e.setRemainingDay("57");
-		usersList.addUser(e);
+		e.setRemainingDay(Integer.parseInt("57"));
+		friendsList.addFriend(e);
 		
 		
 	}

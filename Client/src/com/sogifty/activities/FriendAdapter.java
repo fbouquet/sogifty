@@ -11,7 +11,7 @@ import java.util.List;
 import com.sogifty.tools.AvatarGenerator;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import com.sogifty.model.Gift;
-import com.sogifty.model.User;
+import com.sogifty.model.Friend;
 import com.sogifty.R;
 
 import android.annotation.SuppressLint;
@@ -34,48 +34,48 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class UserAdapter extends BaseAdapter {
+public class FriendAdapter extends BaseAdapter {
 
-	List<User> users;
+	List<Friend> friends;
 	boolean deleteMode = false;
 	LayoutInflater inflater;
-	SparseBooleanArray usersChecked = null;
+	SparseBooleanArray friendsChecked = null;
 	Context context = null;
 
 	boolean showCheckbox = false;
 	
-	public UserAdapter(Context context,List<User> users) {
+	public FriendAdapter(Context context,List<Friend> friends) {
 		inflater = (LayoutInflater)
                 context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.context = context;
-		Collections.sort(users);
-		this.users = users;
-		usersChecked = new SparseBooleanArray();
+		Collections.sort(friends);
+		this.friends = friends;
+		friendsChecked = new SparseBooleanArray();
 	}
 	
 	
 	public int getCount() {
-		return users.size();
+		return friends.size();
 	}
 
 	public Object getItem(int position) {
-		return users.get(position);
+		return friends.get(position);
 	}
 
 	public long getItemId(int position) {
-		return Integer.parseInt(users.get(position).getId());
+		return friends.get(position).getId();
 	}
 	
 	public void initChecked() {
-		usersChecked.clear();
+		friendsChecked.clear();
 	}
 	
 	public void toggleCheckBox(int position) {
 		//If the element is not in the array we put it with true value but if it is already in, we just take the opposite value
-		if(usersChecked.indexOfKey(position) < 0)
-			usersChecked.put(position, true);
+		if(friendsChecked.indexOfKey(position) < 0)
+			friendsChecked.put(position, true);
 		else
-			usersChecked.put(position, !usersChecked.get(position));
+			friendsChecked.put(position, !friendsChecked.get(position));
 	}
 	
 	public void showCheckbox() {
@@ -128,11 +128,11 @@ public class UserAdapter extends BaseAdapter {
 		}
 		
 		
-		User u = users.get(position);
-		holder.nom.setText(u.getNom());
-		holder.prenom.setText(u.getPrenom());
-		holder.age.setText(String.valueOf(u.getAge()));
-		holder.remainingDate.setText("J-"+u.getRemainingDay());
+		Friend f = friends.get(position);
+		holder.nom.setText(f.getNom());
+		holder.prenom.setText(f.getPrenom());
+		holder.age.setText(String.valueOf(f.getAge()));
+		holder.remainingDate.setText("J-"+f.getRemainingDay());
 		holder.tags.setText("Préférences : \n - sport \n - cuisine \n - intelligent \n - musculation");
 	
 		if(position == 0){
@@ -171,9 +171,8 @@ public class UserAdapter extends BaseAdapter {
 		*/
 		
 		try {
-			holder.iv.setImageBitmap(AvatarGenerator.generate(u.getNom(), u.getGender() ,context));
+			holder.iv.setImageBitmap(AvatarGenerator.generate(f.getNom(), f.getGender() ,context));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

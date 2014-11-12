@@ -11,35 +11,28 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 
-public class User implements Comparable<User> {  
+public class Friend implements Comparable<Friend> {  
   private String nom;  
-  @JsonProperty("prenom")  
   private String prenom;
-  @JsonProperty("fonction")
   private String fonction;
-  
-  @JsonProperty("age")
   private int age;
+  private int _id;
+  private String avatar;
+  private int remainingDay;
+
   
-  @JsonProperty("_id")
-  private String _id;
-  
-  public void setAge(int age) {
+public void setAge(int age) {
 	this.age = age;
 }
 
-private String avatar;
-  
-  private String remainingDay;
   
 
   private String gender;
   
-  public User(){
+  public Friend(){
 	  
   }
 
-  @JsonProperty("nom")  
   public void setNom(String nom) {  
 	  this.nom = nom;
   }
@@ -52,7 +45,6 @@ private String avatar;
 		return fonction;
 	  }
 
-  //@JsonProperty("avatar")
   public void setAvatar(String avatar) {
 	  this.avatar = avatar;
 	  
@@ -76,19 +68,19 @@ private String avatar;
 	  return age;
   }
  
-  public void setId(String id) {
+  public void setId(int id) {
 	  this._id = id;
   }
   
-  public String getId() {
+  public int getId() {
 	  return _id;
   }
 
-public String getRemainingDay() {
+public int getRemainingDay() {
 	return remainingDay;
 }
 
-public void setRemainingDay(String remainingDay) {
+public void setRemainingDay(int remainingDay) {
 	this.remainingDay = remainingDay;
 }
 
@@ -102,10 +94,10 @@ public void setGender(String gender) {
 }
 
 @Override
-public int compareTo(User otherUser){
+public int compareTo(Friend otherUser){
 
-	int dateOU = Integer.parseInt(otherUser.getRemainingDay());
-	int dateU = Integer.parseInt(this.getRemainingDay());
+	int dateOU = otherUser.getRemainingDay();
+	int dateU = this.getRemainingDay();
 	
 	if(dateOU > dateU){
 		return -1;

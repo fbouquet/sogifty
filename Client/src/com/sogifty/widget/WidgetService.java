@@ -9,12 +9,10 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
 import com.sogifty.activities.Constants;
-import com.sogifty.activities.HelloAndroidActivity;
 import com.sogifty.activities.ParserJson;
 import com.sogifty.activities.Setting;
-import com.sogifty.activities.UserAdapter;
+import com.sogifty.model.Friend;
 import com.sogifty.model.Gift;
-import com.sogifty.model.User;
 
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
@@ -23,14 +21,9 @@ import android.util.Log;
 import android.widget.RemoteViewsService;
 
 public class WidgetService extends RemoteViewsService {
-	/*
-	 * So pretty simple just defining the Adapter of the listview
-	 * here Adapter is ListProvider
-	 * */
-	
-	private ParserJson parser = new ParserJson("lala");
+		private ParserJson parser = new ParserJson("lala");
 	private List<Gift> listGift = new ArrayList<Gift>();
-	private List<User> listUsers = new ArrayList<User>();
+	private List<Friend> listFriends = new ArrayList<Friend>();
 	
 	@Override
 	public RemoteViewsFactory onGetViewFactory(Intent intent) {
@@ -97,28 +90,28 @@ public class WidgetService extends RemoteViewsService {
 		/* FIN DE LA REQUETE */
 		
 		//Donc ici c'est cool on passe la liste qu'on veut en paramètre
-		User u = new User();
-		u.setAvatar("http://image.jeuxvideo.com/images/pc/t/h/the-banner-saga-pc-00x.jpg");
-		u.setNom("Julie Belle");
-		u.setId("1");
-		u.setRemainingDay("2");
+		Friend f = new Friend();
+		f.setAvatar("http://image.jeuxvideo.com/images/pc/t/h/the-banner-saga-pc-00x.jpg");
+		f.setNom("Julie Belle");
+		f.setId(Integer.parseInt("1"));
+		f.setRemainingDay(Integer.parseInt("2"));
 		
-		listUsers.add(u);
+		listFriends.add(f);
 		
-		u = new User();
-		u.setAvatar("http://image.jeuxvideo.com/chroniques-images/0011/dmc-devil-may-cry-pc-00118146-1389610521-1389614776-accroche.jpg");
-		u.setNom("Maxime le Boxeur");
-		u.setId("2");
-		u.setRemainingDay("4");
-		listUsers.add(u);
+		f = new Friend();
+		f.setAvatar("http://image.jeuxvideo.com/chroniques-images/0011/dmc-devil-may-cry-pc-00118146-1389610521-1389614776-accroche.jpg");
+		f.setNom("Maxime le Boxeur");
+		f.setId(Integer.parseInt("2"));
+		f.setRemainingDay(Integer.parseInt("4"));
+		listFriends.add(f);
 		
-		u = new User();
-		u.setAvatar("http://image.jeuxvideo.com/chroniques-images/0011/dmc-devil-may-cry-pc-00118146-1389610521-1389614776-accroche.jpg");
-		u.setNom("Simon l'Enfant");
-		u.setId("3");
-		u.setRemainingDay("7");
+		f = new Friend();
+		f.setAvatar("http://image.jeuxvideo.com/chroniques-images/0011/dmc-devil-may-cry-pc-00118146-1389610521-1389614776-accroche.jpg");
+		f.setNom("Simon l'Enfant");
+		f.setId(Integer.parseInt("3"));
+		f.setRemainingDay(Integer.parseInt("7"));
 		
-		listUsers.add(u);
+		listFriends.add(f);
 		
 		
 		Gift g = new Gift();
@@ -151,7 +144,7 @@ public class WidgetService extends RemoteViewsService {
 		
 		listGift.add(g);
 		
-		return (new ListProvider(this.getApplicationContext(), intent, listUsers, listGift));
+		return (new ListProvider(this.getApplicationContext(), intent, listFriends, listGift));
 		//return (new ListProvider(this.getApplicationContext(), intent, listUsers, listGift));
 	}
 	

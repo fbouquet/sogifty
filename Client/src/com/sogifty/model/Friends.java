@@ -7,34 +7,33 @@ import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
-public class Users {  
-    private List<User> listUsers;  
+public class Friends {  
+    private List<Friend> listFriends;  
     
-    public Users(){
-    	listUsers = new ArrayList<User>();
+    public Friends(){
+    	listFriends = new ArrayList<Friend>();
     }
     
     
-    public List<User> getListUsers() {  
-        return listUsers;  
+    public List<Friend> getListFriends() {  
+        return listFriends;  
     }  
   
-    @JsonProperty("user")  
-    public void setListUsers(List<User> listUsers) {  
-        this.listUsers = listUsers;  
+    public void setListFriends(List<Friend> listFriends) {  
+        this.listFriends = listFriends;  
     }
     
-    public User getUserById(String id){
-    	for(User u : listUsers )
+    public Friend getFriendById(int id){
+    	for(Friend f : listFriends )
     	{
-    		if(id == u.getId()){
-    			return u;
+    		if(id == f.getId()){
+    			return f;
     		}
     	}
     	return null;
     }
-    public void addUser(User u){
-    	this.listUsers.add(u);
+    public void addFriend(Friend f){
+    	this.listFriends.add(f);
     }
     
 }   

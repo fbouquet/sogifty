@@ -27,6 +27,7 @@
         <activity android:name="com.sogifty.activities.FriendListActivity" />
          
         <activity android:name="com.sogifty.activities.FriendDetailModificationActivity" />
+        <activity android:name="com.sogifty.activities.FriendDetailsActivity" />
             
        
             

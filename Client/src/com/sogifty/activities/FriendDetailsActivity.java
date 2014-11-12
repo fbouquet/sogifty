@@ -33,7 +33,7 @@ public class FriendDetailsActivity extends Activity{
 	
 
 
-	public static Intent getIntent(Context ctxt, String name, String firstname, String remainingDate) {
+	public static Intent getIntent(Context ctxt, String name, String firstname, int remainingDate) {
 		Intent newActivityIntent = new Intent(ctxt, FriendDetailsActivity.class);
 		newActivityIntent.putExtra(FIRTNAME, firstname);
 		newActivityIntent.putExtra(NAME, name);
