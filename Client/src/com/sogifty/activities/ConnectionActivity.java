@@ -5,6 +5,7 @@ import com.sogifty.R;
 import com.sogifty.tasks.ConnectionTask;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 
 public class ConnectionActivity extends Activity{
 	
+	private static final String EMPTY_CONNECTION_ITEMS = "Please enter email and password";
 
 	Button connectButton;
 	EditText emailText;
@@ -41,15 +43,28 @@ public class ConnectionActivity extends Activity{
 			
 			@Override
 			public void onClick(View view) {
-				new ConnectionTask(ConnectionActivity.this).execute(emailText.getText().toString(),passwordText.getText().toString());
-				createFriendListActivty();				
+				if(emailText.getText().toString().equals("") && passwordText.getText().toString().equals("")){
+					loadEmptyPopUp();
+				}
+				else{
+					new ConnectionTask(ConnectionActivity.this).execute(emailText.getText().toString(),passwordText.getText().toString());
+					createFriendListActivty();
+				}
 			}
+
+			
 		});
 	}
 	
 	protected void createFriendListActivty() {
 		Intent intent = FriendListActivity.getIntent(this, emailText.getText().toString(), passwordText.getText().toString());
 		startActivity(intent);
+	}
+	protected void loadEmptyPopUp() {
+		AlertDialog.Builder adb = new AlertDialog.Builder(this);
+		adb.setMessage(EMPTY_CONNECTION_ITEMS);
+		AlertDialog ad = adb.create();
+		ad.show();
 	}
 
 }

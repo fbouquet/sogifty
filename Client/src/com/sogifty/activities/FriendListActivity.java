@@ -63,7 +63,7 @@ public class FriendListActivity extends Activity {
 		
 		/****** Ici Test pour l'ID *******/
 		AlertDialog.Builder adb = new AlertDialog.Builder(this);
-		adb.setMessage("L'Id est "+DEFAULT_USER_ID);
+		adb.setMessage("L'Id est "+loadUserId());
 		AlertDialog ad = adb.create();
 		ad.show();
 		
