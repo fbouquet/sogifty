@@ -1,4 +1,4 @@
-package com.sogifty.servlet;
+package com.sogifty.webservice;
 
 import java.util.List;
 
