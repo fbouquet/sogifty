@@ -36,7 +36,7 @@ public class ConnectionTask extends AsyncTask<String,Integer,Integer>{
 	private static final String PROTOCOL_ERROR = "protocol_error";
 	private static final String IO_ERROR = "io_error";
 	private static final int GET_ID_ERROR = -1;
-	private static final String LOADING = "loading..";
+	private static final String LOADING = "Loading..";
 	private static final String USER_ID = "user_id";
 	private static final String FINALLY_ERROR = null;
 	
@@ -75,7 +75,6 @@ public class ConnectionTask extends AsyncTask<String,Integer,Integer>{
 	private int callServerConnectionWebService(String email, String passwd, String webServiceUrlInit) {
 		if(isConnected()){
 			String idUserJsonString = POST(email,passwd,webServiceUrlInit);
-			System.out.println("apres POST"+idUserJsonString);
 			if(idUserJsonString != EMPTY_ERROR 
 					&& idUserJsonString != MALDORMED_ERROR
 					&& idUserJsonString != PROTOCOL_ERROR

@@ -61,12 +61,15 @@ public class FriendListActivity extends Activity {
 		
 		createListView();
 		
-		/****** Ici Test pour l'ID *******/
+		/****** Here Test for user id *******/
+		/** id == -2, no user id in sharedPreferences => ConnectionTask not launched **/
+		/** id == -1, user id == errorId => ConnectionTask failed **/
+		/** id == other int, user id correspond to server user id => ConnectionTask to Server success **/
 		AlertDialog.Builder adb = new AlertDialog.Builder(this);
 		adb.setMessage("L'Id est "+loadUserId());
 		AlertDialog ad = adb.create();
 		ad.show();
-		
+		/****** End of test *******/
 		
 		listJson.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 		public void onItemClick(AdapterView<?> adapter, View view,
@@ -140,11 +143,6 @@ public class FriendListActivity extends Activity {
 	
 	private void createListView() {
 		listJson.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-
-		//gettingJson();
-		//parser = new ParserJson(this);
-		//usersList = parser.gettingJson();
-		
 		createFalseList();
 		adapter = new FriendAdapter(this, friendsList.getListFriends());
 		listJson.setAdapter(adapter);
@@ -263,8 +261,6 @@ public class FriendListActivity extends Activity {
 		
 	public void createFalseList(){
 		friendsList = new Friends();
-		
-		
 		
 		Friend f = new Friend();
 		f.setAvatar("u");
