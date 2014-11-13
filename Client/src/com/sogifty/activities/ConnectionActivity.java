@@ -2,6 +2,7 @@ package com.sogifty.activities;
 
 
 import com.sogifty.R;
+import com.sogifty.tasks.ConnectionTask;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -40,6 +41,7 @@ public class ConnectionActivity extends Activity{
 			
 			@Override
 			public void onClick(View view) {
+				new ConnectionTask(ConnectionActivity.this).execute(emailText.getText().toString(),passwordText.getText().toString());
 				createFriendListActivty();				
 			}
 		});

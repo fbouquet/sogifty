@@ -15,11 +15,11 @@ public class ParserJson {
 		this.stringToParse = stringToParse;
 	}
 	
-	public String executeParse(){
+	public String executeParseId(){
 		try{
 			JSONObject json = new JSONObject(stringToParse);
 			JSONObject user =  json.getJSONObject("user");
-			return user.getString("name");
+			return user.getString("id");
 			
 		}catch (JSONException e) {
 			e.printStackTrace();

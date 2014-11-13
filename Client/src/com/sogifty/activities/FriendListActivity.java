@@ -3,18 +3,19 @@ package com.sogifty.activities;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 import com.sogifty.model.Friend;
 import com.sogifty.model.Friends;
 import com.sogifty.R;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
@@ -31,16 +32,14 @@ import android.widget.Toast;
 public class FriendListActivity extends Activity {
 	private static String FRIEND_LIST = "Liste des amis";
 	private static String APPLICATION_NAME = "Sogifti";
-	private static String NAME = "name";
-	private static String AVATAR = "avatar";
-	private static String ID = "id";
 	private static final String FRIENDS_DELETED = " amis supprimés";
 	private static final String ITEM_POSITION = "Item in position " ;
 	private static final String CLICKED = " clicked";
 	private static final String EMAIL = "EmailUser";
 	private static final String PASSWORD = "PasswordUser";
+	private static final String USER_ID = "user_id";
+	private static final int DEFAULT_USER_ID = -2;
 
-	private ProgressDialog pDialog;
 	private ListView listJson;
 	private TextView id;
 	private Button deleteBtn = null;
@@ -51,8 +50,6 @@ public class FriendListActivity extends Activity {
 	private List<Integer> friendsToDelete = null;
 	private FriendAdapter userAdapter = null;
 	
-	private ParserJson parser = null;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -63,6 +60,12 @@ public class FriendListActivity extends Activity {
 		initLayout();
 		
 		createListView();
+		
+		/****** Ici Test pour l'ID *******/
+		AlertDialog.Builder adb = new AlertDialog.Builder(this);
+		adb.setMessage("L'Id est "+DEFAULT_USER_ID);
+		AlertDialog ad = adb.create();
+		ad.show();
 		
 		
 		listJson.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -341,6 +344,11 @@ public class FriendListActivity extends Activity {
 		friendsList.addFriend(e);
 		
 		
+	}
+	
+	private int loadUserId(){
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+		return preferences.getInt(USER_ID, DEFAULT_USER_ID);
 	}
 
 	
