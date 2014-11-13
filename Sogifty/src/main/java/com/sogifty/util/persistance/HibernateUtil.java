@@ -1,5 +1,6 @@
 package com.sogifty.util.persistance;
 
+import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -11,13 +12,13 @@ import com.sogifty.entity.User;
 public class HibernateUtil {
 	private static final ThreadLocal<Session> threadLocal = new ThreadLocal<Session>();
 	private static SessionFactory sessionFactory;
+	private static final Logger logger = Logger.getLogger(HibernateUtil.class);
 	
 	static {
 		try {
 			sessionFactory = configureSessionFactory();
 		} catch (Exception e) {
-			System.err.println("Error creating SessionFactory.");
-			e.printStackTrace();
+			logger.fatal("Error creating SessionFactory.", e);
 		}
 	}
 
@@ -52,8 +53,7 @@ public class HibernateUtil {
 		try {
 			sessionFactory = configureSessionFactory();
 		} catch (Exception e) {
-			System.err.println("Error creating SessionFactory.");
-			e.printStackTrace();
+			logger.fatal("Error creating SessionFactory.", e);
 		}
 	}
 
