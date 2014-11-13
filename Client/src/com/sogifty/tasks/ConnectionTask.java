@@ -74,18 +74,18 @@ public class ConnectionTask extends AsyncTask<String,Integer,Integer>{
 	private int callServerConnectionWebService(String email, String passwd, String webServiceUrlInit) {
 		if(isConnected()){
 			String idUserJsonString = POST(email,passwd,webServiceUrlInit);
-			if(idUserJsonString != EMPTY_ERROR 
-					&& idUserJsonString != MALDORMED_ERROR
-					&& idUserJsonString != PROTOCOL_ERROR
-					&& idUserJsonString != IO_ERROR
-					&& idUserJsonString != FINALLY_ERROR
+			if(idUserJsonString.equals(EMPTY_ERROR)  
+					|| idUserJsonString.equals(MALDORMED_ERROR)
+					|| idUserJsonString.equals(PROTOCOL_ERROR)
+					|| idUserJsonString.equals(IO_ERROR)
+					|| idUserJsonString.equals(FINALLY_ERROR)
 					){
+				return this.context.getResources().getInteger(R.integer.user_id_error);
+			}
+			else{
 				ParserJson parser = new ParserJson(idUserJsonString);
 				String id = parser.executeParseId();
 				return Integer.parseInt(id);
-			}
-			else{
-				return this.context.getResources().getInteger(R.integer.user_id_error);
 			}
 		}
 		else{
@@ -107,10 +107,14 @@ public class ConnectionTask extends AsyncTask<String,Integer,Integer>{
         InputStream inputStream = null;
         String result = "";
         try {
+        	System.out.println("dans Post1"+inputStream);
+            
         	HttpClient httpclient = new DefaultHttpClient();
-        	
+        	System.out.println("dans Post2"+inputStream);
+            
         	HttpPost httpPost = new HttpPost(url);
- 
+        	System.out.println("dans Post3"+inputStream);
+            
             String json = "";
             JSONObject userJsonObject = new JSONObject();
             try {
@@ -128,18 +132,25 @@ public class ConnectionTask extends AsyncTask<String,Integer,Integer>{
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
+            System.out.println("dans Post4"+inputStream);
+            
             json = userJsonObject.toString();
  
             StringEntity se = new StringEntity(json);
+            System.out.println("dans Post5"+inputStream);
+            
             httpPost.setEntity(se);
  
+            
             httpPost.setHeader("Accept", "application/json");
             httpPost.setHeader("Content-type", "application/json");
- 
+            System.out.println("dans Post6"+inputStream);
+            
             HttpResponse httpResponse = httpclient.execute(httpPost);
- 
+            System.out.println("dans Post7"+inputStream);
+            
             inputStream = httpResponse.getEntity().getContent();
-            System.out.println("dans Post"+inputStream);
+            System.out.println("dans Post8"+inputStream);
             if(inputStream != null)
                 result = convertInputStreamToString(inputStream);
             else
@@ -155,12 +166,12 @@ public class ConnectionTask extends AsyncTask<String,Integer,Integer>{
 				result = IO_ERROR;
 	            e.printStackTrace();
 			}finally {
-				result = FINALLY_ERROR;
 				if(inputStream != null){
 					closeInputStream(inputStream);
 				}
+				
 			}
- 
+        System.out.println("iciiiiii"+result);
         return result;
     }
 	private void closeInputStream(InputStream inputStream) {

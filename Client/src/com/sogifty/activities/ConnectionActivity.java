@@ -1,6 +1,5 @@
 package com.sogifty.activities;
 
-
 import com.sogifty.R;
 import com.sogifty.tasks.ConnectionTask;
 
@@ -18,10 +17,10 @@ public class ConnectionActivity extends Activity{
 	
 	private static final String EMPTY_CONNECTION_ITEMS = "Please enter email and password";
 
+	
 	Button connectButton;
 	EditText emailText;
 	EditText passwordText;
-	
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
