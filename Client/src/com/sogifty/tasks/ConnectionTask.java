@@ -38,7 +38,7 @@ public class ConnectionTask extends AsyncTask<String,Integer,Integer>{
 	private static final int GET_ID_ERROR = -1;
 	private static final String LOADING = "Loading..";
 	private static final String USER_ID = "user_id";
-	private static final String FINALLY_ERROR = null;
+	private static final String FINALLY_ERROR = "error";
 	
 	private ProgressDialog progressDialog;
 	private Context context;

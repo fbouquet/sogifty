@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.sogifty.model.Friend;
 import com.sogifty.model.Friends;
+import com.sogifty.tasks.ConnectionTask;
+import com.sogifty.tasks.GetFriendListTask;
 import com.sogifty.R;
 
 import android.app.ActionBar;
@@ -144,6 +146,7 @@ public class FriendListActivity extends Activity {
 	private void createListView() {
 		listJson.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		createFalseList();
+		//friendsList = new GetFriendListTask(FriendListActivity.this).execute(loadUserId());
 		adapter = new FriendAdapter(this, friendsList.getListFriends());
 		listJson.setAdapter(adapter);
 		userAdapter = ((FriendAdapter) listJson.getAdapter());
