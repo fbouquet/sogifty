@@ -40,8 +40,8 @@ public class FriendListActivity extends Activity {
 	private static final String EMAIL = "EmailUser";
 	private static final String PASSWORD = "PasswordUser";
 	private static final String USER_ID = "user_id";
-	private static final int DEFAULT_USER_ID = -2;
-
+	
+	
 	private ListView listJson;
 	private TextView id;
 	private Button deleteBtn = null;
@@ -195,7 +195,10 @@ public class FriendListActivity extends Activity {
     	newActivityIntent.putExtra(PASSWORD, password);
     	return newActivityIntent;
 	}
-	
+	public static Intent getIntent(Context ctxt){
+		Intent newActivityIntent = new Intent(ctxt, FriendListActivity.class);
+		return newActivityIntent;
+	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -347,7 +350,7 @@ public class FriendListActivity extends Activity {
 	
 	private int loadUserId(){
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-		return preferences.getInt(USER_ID, DEFAULT_USER_ID);
+		return preferences.getInt(USER_ID, getResources().getInteger(R.integer.user_id_default));
 	}
 
 	

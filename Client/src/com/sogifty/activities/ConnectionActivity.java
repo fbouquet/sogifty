@@ -6,6 +6,7 @@ import com.sogifty.tasks.ConnectionTask;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -65,6 +66,10 @@ public class ConnectionActivity extends Activity{
 		adb.setMessage(EMPTY_CONNECTION_ITEMS);
 		AlertDialog ad = adb.create();
 		ad.show();
+	}
+	public static Intent getIntent(Context ctxt){
+		Intent newActivityIntent = new Intent(ctxt, ConnectionActivity.class);
+		return newActivityIntent;
 	}
 
 }

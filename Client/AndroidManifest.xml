@@ -20,7 +20,7 @@
         android:label="@string/app_name"
         android:theme="@style/MyTheme"
         >
-        <activity android:name="com.sogifty.activities.ConnectionActivity" >
+        <activity android:name="com.sogifty.activities.StartActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,6 +31,7 @@
          
         <activity android:name="com.sogifty.activities.FriendDetailModificationActivity" />
         <activity android:name="com.sogifty.activities.FriendDetailsActivity" />
+        <activity android:name="com.sogifty.activities.ConnectionActivity" />
             
        
             

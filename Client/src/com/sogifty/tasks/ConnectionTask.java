@@ -35,7 +35,6 @@ public class ConnectionTask extends AsyncTask<String,Integer,Integer>{
 	private static final String MALDORMED_ERROR = "malformed_error";
 	private static final String PROTOCOL_ERROR = "protocol_error";
 	private static final String IO_ERROR = "io_error";
-	private static final int GET_ID_ERROR = -1;
 	private static final String LOADING = "Loading..";
 	private static final String USER_ID = "user_id";
 	private static final String FINALLY_ERROR = "error";
@@ -86,11 +85,11 @@ public class ConnectionTask extends AsyncTask<String,Integer,Integer>{
 				return Integer.parseInt(id);
 			}
 			else{
-				return GET_ID_ERROR;
+				return this.context.getResources().getInteger(R.integer.user_id_error);
 			}
 		}
 		else{
-			return GET_ID_ERROR;
+			return this.context.getResources().getInteger(R.integer.user_id_error);
 		}
 	}
 	
