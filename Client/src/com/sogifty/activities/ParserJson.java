@@ -17,9 +17,8 @@ public class ParserJson {
 	
 	public String executeParseId(){
 		try{
-			JSONObject json = new JSONObject(stringToParse);
-			JSONObject user =  json.getJSONObject("user");
-			return user.getString("id");
+			JSONObject userId = new JSONObject(stringToParse);
+			return userId.getString("id");
 			
 		}catch (JSONException e) {
 			e.printStackTrace();

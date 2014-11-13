@@ -28,9 +28,9 @@ import com.sogifty.activities.ParserJson;
 
 public class ConnectionTask extends AsyncTask<String,Integer,Integer>{
 
+	private static final String NAME = "name";
 	private static final String EMAIL = "email";
-	private static final String PASSWD = "passwd";
-	private static final String USER = "user";
+	private static final String PASSWD = "pwd";
 	private static final String EMPTY_ERROR = "response_empty_error";
 	private static final String MALDORMED_ERROR = "malformed_error";
 	private static final String PROTOCOL_ERROR = "protocol_error";
@@ -113,20 +113,19 @@ public class ConnectionTask extends AsyncTask<String,Integer,Integer>{
         	HttpPost httpPost = new HttpPost(url);
  
             String json = "";
-            JSONObject insideJsonObject = new JSONObject();
-            try {
-				insideJsonObject.put(EMAIL, email);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-            try {
-				insideJsonObject.put(PASSWD, passwd);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
             JSONObject userJsonObject = new JSONObject();
             try {
-				userJsonObject.put(USER,insideJsonObject);
+				userJsonObject.put(NAME, email);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+            try {
+				userJsonObject.put(EMAIL, email);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+            try {
+				userJsonObject.put(PASSWD, passwd);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
