@@ -12,22 +12,22 @@ import javax.persistence.Table;
 public class User {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "id")
-	private int id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 	
 	@Column(name = "name")
 	private String name;
 	
 	@Column(name = "pwd")
-	private String password;
+	private String pwd;
 	
 	@Column(name = "email")
 	private String email;
 	
 	public User() {};
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
@@ -43,12 +43,12 @@ public class User {
 		this.name = name;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getPwd() {
+		return pwd;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
 	}
 
 	public String getEmail() {
@@ -61,6 +61,6 @@ public class User {
 	
 	@Override
 	public String toString() {
-		return "(" + id + ") - " + name + " - " + password + " - " + email;
+		return "(" + id + ") - " + name + " - " + pwd + " - " + email;
 	}
 }
