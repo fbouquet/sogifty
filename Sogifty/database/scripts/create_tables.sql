@@ -16,7 +16,7 @@ create table friend (
     id serial primary key not null,
     name text not null,
     birthdate date not null,
-    app_user integer references app_user(id)
+    app_user_id integer references app_user(id)
 );
 
 create table gift (
