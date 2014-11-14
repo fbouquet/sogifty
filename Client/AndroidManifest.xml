@@ -32,6 +32,7 @@
         <activity android:name="com.sogifty.activities.FriendDetailModificationActivity" />
         <activity android:name="com.sogifty.activities.FriendDetailsActivity" />
         <activity android:name="com.sogifty.activities.ConnectionActivity" />
+        <activity android:name="com.sogifty.activities.SubscriptionActivity" />
             
        
             

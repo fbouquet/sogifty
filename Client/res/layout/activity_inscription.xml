@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/ivDetail"
+        android:layout_width="match_parent"
+        android:layout_height="155dp"
+        android:src="@drawable/sogifti_logo"
+        android:contentDescription="@string/inscription_iv_logo" />
+
+    <EditText
+        android:id="@+id/inscription_et_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/inscription_et_email"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/inscription_et_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/inscription_et_password"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/inscription_et_confirmation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/inscription_et_confirmation"
+        android:inputType="textPassword" />
+
+    <Button
+        android:id="@+id/inscription_b_inscription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/inscription_b_inscription" />
+
+</LinearLayout>

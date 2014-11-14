@@ -15,14 +15,27 @@
     
   	<string name="connection_et_email">Enter your email address</string>
     <string name="connection_et_password">Enter your password</string>  
-  	<string name="connection_b_connection">Connect</string>  
+  	<string name="connection_b_connection">Connect</string>
+  	<string name="connection_b_subscription">Subscribe</string>
+  	  
   	
   	<string name="frienddetail_tv_nameFriend">Name</string>  
   	<string name="frienddetail_tv_firstnameFriend">Firstname</string>  
   	<string name="frienddetail_tv_RemainingDate">J-</string>  
   	
-  	<string name="web_url_init">http://sogifty-api-env-9wjtpmmtjk.elasticbeanstalk.com/api/user</string>
-  	
+  	<string name="web_url_init">http://sogifty-api-env-9wjtpmmtjk.elasticbeanstalk.com/api/</string>
+  	 <string name="inscription_et_email">Enter your email address</string>
+    <string name="inscription_et_password">Enter your password</string>
+    <string name="inscription_et_confirmation">Confirm your password</string>
+    <string name="inscription_b_inscription">Inscription</string>
+    <string name="inscription_iv_logo">Logo</string>
+    
+    
+    <string name="no_network_connection_error">Please verify your network connection</string>
+    <string name="unknown_error">Unknown error</string>
+  	<string name="internal_error">Server error</string>
+  	<string name="http_error">Impossible to connect to the URL</string>
+  	<string name="user_already_exists">User already exists</string>
   	
     
 </resources>

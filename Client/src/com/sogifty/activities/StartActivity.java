@@ -15,14 +15,13 @@ public class StartActivity extends Activity{
 		super.onCreate(savedInstanceState);
 
 		if(loadUserId() == getResources().getInteger(R.integer.user_id_default) 
-				|| loadUserId() == getResources().getInteger(R.integer.user_id_error)){
+				|| loadUserId() == getResources().getInteger(R.integer.user_http_error)){
 			startConnectionActivty();
 		}
 		else{
 			startFriendListActivty();
 		}
-		
-	
+		finish();
 	}
 	protected void startFriendListActivty() {
 		Intent intent = FriendListActivity.getIntent(this);

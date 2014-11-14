@@ -2,6 +2,7 @@ package com.sogifty.activities;
 
 import com.sogifty.R;
 import com.sogifty.tasks.ConnectionTask;
+import com.sogifty.tasks.listeners.OnConnectionTaskListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -15,7 +16,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class ConnectionActivity extends Activity{
+public class ConnectionActivity extends Activity implements OnConnectionTaskListener{
 	
 	private static final String EMPTY_CONNECTION_ITEMS = "Please enter email and password";
 	private static final String USER_ID = "user_id";
@@ -23,6 +24,7 @@ public class ConnectionActivity extends Activity{
 	
 	
 	Button connectButton;
+	Button subscribeButton;
 	EditText emailText;
 	EditText passwordText;
 	
@@ -33,10 +35,12 @@ public class ConnectionActivity extends Activity{
 		setContentView(R.layout.activity_connection);
 		initializeActivity();
 		setButtonListener();
+		setSubscriptionButtonListener();
 	}
 	
 	private void initializeActivity() {
 		connectButton = (Button) findViewById(R.id.connection_b_connection);
+		subscribeButton = (Button) findViewById(R.id.connection_b_subscription);
 		emailText = (EditText) findViewById(R.id.connection_et_email);
 		passwordText = (EditText) findViewById(R.id.connection_et_password);			
 	}
@@ -51,12 +55,7 @@ public class ConnectionActivity extends Activity{
 					loadEmptyPopUp();
 				}
 				else{
-					int r = callConnectionTask();
-					//if(r != code erreur)
-					createFriendListActivty();
-//					else{
-//						loadNoUserPopUp();
-//					}
+					callConnectionTask();
 				}
 			}
 
@@ -65,18 +64,27 @@ public class ConnectionActivity extends Activity{
 			
 		});
 	}
+	private void setSubscriptionButtonListener() {
+		subscribeButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View view) {
+					createSubscriptionActivity();
+			}
+		});
+	}
 	
-	protected void createFriendListActivty() {
+
+	protected void createFriendListActivity() {
 		Intent intent = FriendListActivity.getIntent(this, emailText.getText().toString(), passwordText.getText().toString());
 		startActivity(intent);
 	}
-	private int callConnectionTask() {
-		new ConnectionTask(ConnectionActivity.this).execute(emailText.getText().toString(),passwordText.getText().toString());
-		return loadUserId();
+	protected void createSubscriptionActivity() {
+		Intent intent = SubscriptionActivity.getIntent(this);
+		startActivity(intent);
 	}
-	private int loadUserId(){
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-		return preferences.getInt(USER_ID, getResources().getInteger(R.integer.user_id_default));
+	private void callConnectionTask() {
+		new ConnectionTask(this,this).execute(emailText.getText().toString(),passwordText.getText().toString());
 	}
 	protected void loadEmptyPopUp() {
 		AlertDialog.Builder adb = new AlertDialog.Builder(this);
@@ -93,6 +101,29 @@ public class ConnectionActivity extends Activity{
 	public static Intent getIntent(Context ctxt){
 		Intent newActivityIntent = new Intent(ctxt, ConnectionActivity.class);
 		return newActivityIntent;
+	}
+
+	@Override
+	public void onConnectionFailed(String message) {
+		displayMessage(message);
+	}
+	private void displayMessage(String message){
+		AlertDialog.Builder adb = new AlertDialog.Builder(this);
+		adb.setMessage(message);
+		AlertDialog ad = adb.create();
+		ad.show();
+	}
+	private void saveMyId(Integer resultId) {
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+		SharedPreferences.Editor editor = preferences.edit();
+		editor.putInt(USER_ID, resultId);
+		editor.commit();
+	}
+	
+	@Override
+	public void onConnectionComplete(int userId) {
+		saveMyId(userId);
+		createFriendListActivity();
 	}
 
 }
