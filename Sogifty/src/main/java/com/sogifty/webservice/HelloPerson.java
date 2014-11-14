@@ -36,6 +36,6 @@ public class HelloPerson {
 		RecommendationEngine recommendationEngine = new RecommendationEngine();
 		recommendationEngine.runEngine(new CdiscountConfiguration());
 		
-		return Response.status(200).entity("(Hibernate OK) \n Hello " + who).build();
+		return Response.status(200).entity("(Hibernate OK) \n Helloooo " + who).build();
 	}
 }

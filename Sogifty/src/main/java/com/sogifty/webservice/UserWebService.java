@@ -22,10 +22,11 @@ public class UserWebService {
 	@POST
 	public Response register(User user) {
 		UserModel returnedUser = null;
+
 		try {
 			returnedUser = userService.register(user);
 		} catch (UserException e) {
-			return Response.status(418).entity(e.getMessage()).build();
+			return Response.status(e.getStatus()).entity(e.getMessage()).build();
 		}
 		return Response.ok(returnedUser).build();
 	}
