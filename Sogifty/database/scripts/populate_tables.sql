@@ -1,10 +1,10 @@
-insert into app_user (name, email, pwd)
+insert into app_user (email, pwd)
 values
-       ('thomas', 'thomas@mail.com', 'pass'),
-       ('valentin', 'valentin@mail.com', 'passValentin'),
-       ('florent', 'florent@mail.com', 'passFlorent');
+       ('thomas@mail.com', 'pass'),
+       ('valentin@mail.com', 'passValentin'),
+       ('florent@mail.com', 'passFlorent');
 
-insert into friend (name, birthdate, app_user)
+insert into friend (name, birthdate, app_user_id)
 values
        ('ami', '1991-11-17', 1),
        ('bff', '1999-09-30', 1),
