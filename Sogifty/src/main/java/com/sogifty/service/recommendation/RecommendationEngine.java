@@ -1,4 +1,4 @@
-package com.sogifty.recommendation;
+package com.sogifty.service.recommendation;
 
 import java.io.IOException;
 

@@ -1,20 +1,12 @@
 package com.sogifty.webservice;
 
-import java.util.List;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
-import org.hibernate.Criteria;
-import org.hibernate.Query;
-import org.hibernate.Session;
-
-import com.sogifty.entity.User;
-import com.sogifty.recommendation.CdiscountConfiguration;
-import com.sogifty.recommendation.RecommendationEngine;
-import com.sogifty.util.persistance.HibernateUtil;
+import com.sogifty.service.recommendation.CdiscountConfiguration;
+import com.sogifty.service.recommendation.RecommendationEngine;
 
 @Path("hello")
 public class HelloPerson {
