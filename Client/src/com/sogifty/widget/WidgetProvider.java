@@ -1,31 +1,14 @@
 package com.sogifty.widget;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.ksoap2.SoapEnvelope;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapSerializationEnvelope;
-import org.ksoap2.transport.HttpTransportSE;
-
-import com.sogifty.activities.Constants;
-import com.sogifty.activities.FriendDetailActivity;
-import com.sogifty.activities.HelloAndroidActivity;
-import com.sogifty.activities.Setting;
-import com.sogifty.activities.UserAdapter;
-import com.sogifty.model.User;
+import com.sogifty.activities.FriendDetailModificationActivity;
 
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 import com.sogifty.R;
 
 public class WidgetProvider extends AppWidgetProvider {
@@ -110,7 +93,7 @@ public class WidgetProvider extends AppWidgetProvider {
 	        	int friendIndex = intent.getIntExtra(EXTRA_FRIEND_INDEX, 0);
 	            //Toast.makeText(context, "Touched view " + String.valueOf(viewIndex), Toast.LENGTH_SHORT).show();
 	            
-	            Intent i = new Intent(context, FriendDetailActivity.class);
+	            Intent i = new Intent(context, FriendDetailModificationActivity.class);
 	            /* REPLACER TOUT CA PAR JUSTE friendId*/
 	            //i.putExtra("friendId", friendIndex);
 	            

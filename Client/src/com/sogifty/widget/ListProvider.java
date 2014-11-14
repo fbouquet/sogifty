@@ -1,19 +1,19 @@
 package com.sogifty.widget;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
+import com.sogifty.model.Friend;
 import com.sogifty.model.Gift;
-import com.sogifty.model.User;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService.RemoteViewsFactory;
+
 import com.sogifty.R;
 
 /**
@@ -22,13 +22,13 @@ import com.sogifty.R;
  * 
  */
 public class ListProvider implements RemoteViewsFactory {
-	private List<User> listUsers = new ArrayList<User>();
+	private List<Friend> listUsers = new ArrayList<Friend>();
 	private List<Gift> listGift = new ArrayList<Gift>();
 	private Context context = null;
 
 
 
-	public ListProvider(Context context, Intent intent, List<User> list, List<Gift> listGift) {
+	public ListProvider(Context context, Intent intent, List<Friend> list, List<Gift> listGift) {
 		this.context = context;
 
 		this.listGift = listGift; 
@@ -37,11 +37,11 @@ public class ListProvider implements RemoteViewsFactory {
 	}
 
 	private void getImageInCache() {
-		Iterator<User> i = listUsers.iterator();
+		Iterator<Friend> i = listUsers.iterator();
 
 		while (i.hasNext()) {
-			User u = i.next();
-			UrlImageViewHelper.loadUrlDrawable(context, u.getAvatar());
+			Friend f = i.next();
+			UrlImageViewHelper.loadUrlDrawable(context, f.getAvatar());
 		}
 		
 		Iterator<Gift> i2 = listGift.iterator();
@@ -62,12 +62,12 @@ public class ListProvider implements RemoteViewsFactory {
 		return position;
 	}
 	
-	public Gift getGiftForFriend(User u){
+	public Gift getGiftForFriend(Friend f){
 		Iterator<Gift> i = listGift.iterator();
 
 		while (i.hasNext()) {
 			Gift g = i.next();
-			if (g.getFriendId() == u.getId()){
+			if (g.getFriendId() == Integer.toString(f.getId())){
 				return g;
 			}
 		}
@@ -82,11 +82,11 @@ public class ListProvider implements RemoteViewsFactory {
 	public RemoteViews getViewAt(int position) {
 		final RemoteViews remoteView = new RemoteViews(
 				context.getPackageName(), R.layout.list_row);
-		User u = listUsers.get(position);
-		Gift g = getGiftForFriend(u);
+		Friend f = listUsers.get(position);
+		Gift g = getGiftForFriend(f);
 		
-		remoteView.setTextViewText(R.id.heading, u.getNom());
-		remoteView.setTextViewText(R.id.content, "Anniversaire dans "+u.getRemainingDay()+" jours.");
+		remoteView.setTextViewText(R.id.heading, f.getNom());
+		remoteView.setTextViewText(R.id.content, "Anniversaire dans "+f.getRemainingDay()+" jours.");
 		if(g.getPrice() == null)
 			remoteView.setTextViewText(R.id.price, "?€");
 		else	
@@ -116,7 +116,7 @@ public class ListProvider implements RemoteViewsFactory {
         
         Bundle extrasForFriendDetail = new Bundle();
         
-        extrasForFriendDetail.putString(WidgetProvider.EXTRA_FRIEND_INDEX, u.getId());
+        extrasForFriendDetail.putString(WidgetProvider.EXTRA_FRIEND_INDEX, Integer.toString(f.getId()));
         Intent fillInIntentDetail = new Intent();
         fillInIntentDetail.putExtras(extrasForFriendDetail);
         remoteView.setOnClickFillInIntent(R.id.heading, fillInIntentDetail);
