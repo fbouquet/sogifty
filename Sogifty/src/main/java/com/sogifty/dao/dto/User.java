@@ -1,4 +1,4 @@
-package com.sogifty.entity;
+package com.sogifty.dao.dto;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

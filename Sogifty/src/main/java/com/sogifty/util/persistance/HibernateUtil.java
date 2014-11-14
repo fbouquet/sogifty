@@ -7,7 +7,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
-import com.sogifty.entity.User;
+import com.sogifty.dao.dto.User;
 
 public class HibernateUtil {
 	private static final ThreadLocal<Session> threadLocal = new ThreadLocal<Session>();

@@ -1,4 +1,4 @@
-package com.sogifty.recommendation;
+package com.sogifty.service.recommendation;
 
 
 public class CdiscountConfiguration extends Configuration {

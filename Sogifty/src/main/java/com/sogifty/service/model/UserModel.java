@@ -1,9 +1,9 @@
-package com.sogifty.webservice.model;
+package com.sogifty.service.model;
 
-public class UserServiceModel {
+public class UserModel {
 	private Integer id;
 	
-	public UserServiceModel(Integer id) {
+	public UserModel(Integer id) {
 		this.setId(id);
 	}
 
