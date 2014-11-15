@@ -1,0 +1,10 @@
+# Built application files
+/Sogifty/target/
+
+# Eclipse project files
+/Sogifty/.classpath
+/Sogifty/.project
+/Sogifty/.settings/
+
+# Emacs files
+*~
