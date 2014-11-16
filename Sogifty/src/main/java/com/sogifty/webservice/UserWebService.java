@@ -8,7 +8,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.sogifty.dao.dto.User;
-import com.sogifty.exception.UserException;
+import com.sogifty.exception.SogiftyException;
 import com.sogifty.service.UserService;
 import com.sogifty.service.model.UserModel;
 
@@ -25,7 +25,7 @@ public class UserWebService {
 
 		try {
 			returnedUser = userService.register(user);
-		} catch (UserException e) {
+		} catch (SogiftyException e) {
 			return Response.status(e.getStatus()).entity(e.getMessage()).build();
 		}
 		return Response.ok(returnedUser).build();
