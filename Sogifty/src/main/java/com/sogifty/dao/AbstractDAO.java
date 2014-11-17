@@ -11,7 +11,7 @@ import com.sogifty.exception.SogiftyException;
 import com.sogifty.util.persistance.HibernateUtil;
 
 public abstract class AbstractDAO<T> {
-	private final Logger logger = Logger.getLogger(getClass());
+	protected final Logger logger = Logger.getLogger(getClass());
 	
 	public Integer create(T obj) throws SogiftyException {
 		Session session = null;
