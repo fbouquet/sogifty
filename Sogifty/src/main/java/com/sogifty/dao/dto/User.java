@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "app_user")
-public class User {
+public class User implements DTO {
 	
 	@Id
 	@Column(name = "id")
