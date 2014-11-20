@@ -21,7 +21,6 @@ import com.sogifty.service.model.FriendModel;
 public class FriendWebService {
 	private FriendService friendService = new FriendService();
 	
-	@Path("create")
 	@POST
 	public Response create(Friend friend) {
 		FriendModel returnedFriend = null;
