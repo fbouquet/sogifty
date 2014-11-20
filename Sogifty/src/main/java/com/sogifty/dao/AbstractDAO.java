@@ -4,6 +4,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.StaleStateException;
 import org.hibernate.Transaction;
 import org.hibernate.exception.ConstraintViolationException;
 
@@ -12,7 +13,7 @@ import com.sogifty.exception.SogiftyException;
 import com.sogifty.util.persistance.HibernateUtil;
 
 public abstract class AbstractDAO<T extends DTO> {
-	private final Logger logger = Logger.getLogger(getClass());
+	protected final Logger logger = Logger.getLogger(getClass());
 	
 	public Integer create(T obj) throws SogiftyException {
 		Session session = null;
@@ -45,6 +46,7 @@ public abstract class AbstractDAO<T extends DTO> {
 		return createdObjectId;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Integer update(T obj) throws SogiftyException {
 		Session session = null;
 		Transaction t = null;
@@ -52,11 +54,13 @@ public abstract class AbstractDAO<T extends DTO> {
 			logger.fatal("Could not find object to update in database");
 			throw new SogiftyException(Response.Status.NOT_FOUND);
 		}
+		T updatedObject = null;
 		Integer updatedObjectId = null;
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			t = session.beginTransaction();
-			updatedObjectId = (Integer) session.merge(obj);
+			updatedObject = (T) session.merge(obj);
+			updatedObjectId = updatedObject.getId();
 			t.commit();
 		} catch(ConstraintViolationException e) {
 			if(t != null) {
@@ -92,6 +96,12 @@ public abstract class AbstractDAO<T extends DTO> {
 			t = session.beginTransaction();
 			session.delete(obj);
 			t.commit();
+		} catch(StaleStateException e) {
+				if(t != null) {
+					t.rollback();
+				}
+				logger.fatal("The object to delete doesn't exist: "+ e);
+				throw new SogiftyException(Response.Status.NOT_FOUND);
 		} catch(Exception e) {
 			if(t != null) {
 				t.rollback();
