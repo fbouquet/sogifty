@@ -1,11 +1,19 @@
 package com.sogifty.dao.dto;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonManagedReference;
 
 @Entity
 @Table(name = "app_user")
@@ -21,6 +29,11 @@ public class User implements DTO {
 	
 	@Column(name = "email")
 	private String email;
+	
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "appUser", cascade = CascadeType.ALL)
+	@Column(nullable = true)
+	@JsonManagedReference
+	private Set<Friend> friends;
 	
 	public User() {};
 
@@ -46,6 +59,11 @@ public class User implements DTO {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	@JsonIgnore
+	public Set<Friend> getFriends() {
+		return friends;
 	}
 	
 	@Override
