@@ -36,6 +36,19 @@ public class UserWebService {
 		return Response.ok(returnedUser).build();
 	}
 	
+	@Path("login")
+	@POST
+	public Response login(User user) {
+		UserModel returnedUser = null;
+
+		try {
+			returnedUser = userService.login(user);
+		} catch (SogiftyException e) {
+			return Response.status(e.getStatus()).entity(e.getMessage()).build();
+		}
+		return Response.ok(returnedUser).build();
+	}
+
 	@Path("{userId}/friends")
 	@GET
 	public Response getFriends(@PathParam("userId") int userId) {

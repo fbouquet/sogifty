@@ -13,8 +13,9 @@ import com.sogifty.exception.SogiftyException;
 import com.sogifty.util.persistance.HibernateUtil;
 
 public abstract class AbstractDAO<T extends DTO> {
+
 	protected final Logger logger = Logger.getLogger(getClass());
-	
+
 	public Integer create(T obj) throws SogiftyException {
 		Session session = null;
 		Transaction t = null;
@@ -25,27 +26,21 @@ public abstract class AbstractDAO<T extends DTO> {
 			createdObjectId = (Integer) session.save(obj);
 			t.commit();
 		} catch(ConstraintViolationException e) {
-			if(t != null) {
-				t.rollback();
-			}
+			rollbackTransaction(t);
 			logger.fatal("This object is already stored in the db : "+ e);
 			throw new SogiftyException(Response.Status.CONFLICT);
 		}
 		catch(Exception e) {
-			if(t != null) {
-				t.rollback();
-			}
+			rollbackTransaction(t);
 			logger.fatal("Could not create the object: "+ e);
 			throw new SogiftyException(Response.Status.INTERNAL_SERVER_ERROR);
 		} finally {
-			if (session != null) {
-				session.close();
-			}
+			closeSession(session);
 		}
-		
+
 		return createdObjectId;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public Integer update(T obj) throws SogiftyException {
 		Session session = null;
@@ -63,27 +58,21 @@ public abstract class AbstractDAO<T extends DTO> {
 			updatedObjectId = updatedObject.getId();
 			t.commit();
 		} catch(ConstraintViolationException e) {
-			if(t != null) {
-				t.rollback();
-			}
+			rollbackTransaction(t);
 			logger.fatal("This updated object violates some constraint in the db : "+ e);
 			throw new SogiftyException(Response.Status.CONFLICT);
 		}
 		catch(Exception e) {
-			if(t != null) {
-				t.rollback();
-			}
+			rollbackTransaction(t);
 			logger.fatal("Could not update the object: "+ e);
 			throw new SogiftyException(Response.Status.INTERNAL_SERVER_ERROR);
 		} finally {
-			if (session != null) {
-				session.close();
-			}
+			closeSession(session);
 		}
-		
+
 		return updatedObjectId;
 	}
-	
+
 	public void delete(T obj) throws SogiftyException {
 		Session session = null;
 		Transaction t = null;
@@ -97,21 +86,27 @@ public abstract class AbstractDAO<T extends DTO> {
 			session.delete(obj);
 			t.commit();
 		} catch(StaleStateException e) {
-				if(t != null) {
-					t.rollback();
-				}
-				logger.fatal("The object to delete doesn't exist: "+ e);
-				throw new SogiftyException(Response.Status.NOT_FOUND);
+			rollbackTransaction(t);
+			logger.fatal("The object to delete doesn't exist: "+ e);
+			throw new SogiftyException(Response.Status.NOT_FOUND);
 		} catch(Exception e) {
-			if(t != null) {
-				t.rollback();
-			}
+			rollbackTransaction(t);
 			logger.fatal("Could not delete the object: "+ e);
 			throw new SogiftyException(Response.Status.INTERNAL_SERVER_ERROR);
 		} finally {
-			if (session != null) {
-				session.close();
-			}
+			closeSession(session);
+		}
+	}
+
+	protected void closeSession(Session session) {
+		if (session != null) {
+			session.close();
+		}
+	}
+
+	protected void rollbackTransaction(Transaction t) {
+		if(t != null) {
+			t.rollback();
 		}
 	}
 }
