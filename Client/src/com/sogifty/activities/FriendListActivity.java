@@ -1,35 +1,34 @@
 package com.sogifty.activities;
 
+
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.sogifty.model.Friend;
-import com.sogifty.model.Friends;
-import com.sogifty.tasks.ConnectionTask;
-import com.sogifty.tasks.GetFriendListTask;
-import com.sogifty.R;
 
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.sogifty.R;
+import com.sogifty.model.Friend;
+import com.sogifty.model.Friends;
 
 public class FriendListActivity extends Activity {
 	private static String FRIEND_LIST = "Liste des amis";
@@ -171,7 +170,6 @@ public class FriendListActivity extends Activity {
 		Friend f = (Friend) listJson.getAdapter().getItem(position);
 
 		Intent intent = FriendDetailsActivity.getIntent(this, f.getNom(), f.getPrenom(), f.getRemainingDay());
-
 		startActivity(intent);
 		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
 

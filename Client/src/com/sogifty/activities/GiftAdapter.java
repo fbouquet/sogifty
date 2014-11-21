@@ -1,23 +1,16 @@
 package com.sogifty.activities;
 
-import java.io.IOException;
 import java.util.List;
 
-import com.sogifty.tools.AvatarGenerator;
-
-import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
-import com.sogifty.model.Gift;
-
-import com.sogifty.R;
 import android.content.Context;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.sogifty.model.Gift;
 
 
 public class GiftAdapter extends BaseAdapter {
@@ -64,11 +57,11 @@ public class GiftAdapter extends BaseAdapter {
 
 		if(convertView == null) {
 			holder = new ViewHolder();
-			convertView = inflater.inflate(R.layout.giftitem, null);
-
-			holder.price = (TextView)convertView.findViewById(R.id.priceGift);
-			holder.iv = (ImageView)convertView.findViewById(R.id.imageGift);
-			
+//			convertView = inflater.inflate(R.layout.giftitem, null);
+//
+//			holder.price = (TextView)convertView.findViewById(R.id.priceGift);
+//			holder.iv = (ImageView)convertView.findViewById(R.id.imageGift);
+//			
 			
 			convertView.setTag(holder);
 		} else {

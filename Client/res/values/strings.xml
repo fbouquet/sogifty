@@ -21,10 +21,13 @@
   	
   	<string name="frienddetail_tv_nameFriend">Name</string>  
   	<string name="frienddetail_tv_firstnameFriend">Firstname</string>  
-  	<string name="frienddetail_tv_RemainingDate">J-</string>  
+  	<string name="frienddetail_tv_RemainingDate">J-</string> 
+  	<string name="frienddetails_tv_tags">Goûts :</string>
+  	<string name="frienddetails_actv_tags">Entrer un goût</string>
+  	
   	
   	<string name="web_url_init">http://sogifty-api-env-9wjtpmmtjk.elasticbeanstalk.com/api/</string>
-  	 <string name="inscription_et_email">Enter your email address</string>
+  	<string name="inscription_et_email">Enter your email address</string>
     <string name="inscription_et_password">Enter your password</string>
     <string name="inscription_et_confirmation">Confirm your password</string>
     <string name="inscription_b_inscription">Inscription</string>
@@ -36,6 +39,10 @@
   	<string name="internal_error">Server error</string>
   	<string name="http_error">Impossible to connect to the URL</string>
   	<string name="user_already_exists">User already exists</string>
+  	<string name="create_user_error">Create user error</string>
   	
-    
+  	<string name="giftPager_tv_description">Description :</string>
+  	<string name="giftPager_tv_title">Title</string>
+  	
+  	
 </resources>
