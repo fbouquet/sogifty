@@ -24,7 +24,7 @@ import com.sogifty.util.serialization.JsonDateSerializer;
 
 @Entity
 @Table(name = "friend")
-public class Friend implements DTO<Friend> {
+public class Friend implements DTO {
 	
 	@Id
 	@Column(name = "id")
@@ -83,11 +83,11 @@ public class Friend implements DTO<Friend> {
 		return this;
 	}
 
-	public Friend updateFields(Friend updatedObject, Friend obj) {
-		updatedObject.setId(obj.getId())
-					 .setName(obj.getName())
-					 .setBirthdate(obj.getBirthdate());
-		return updatedObject;
+	public Friend updateFields(Object objectToUpdate, Object updatedObject) {
+		Friend friendToUpdate = (Friend) objectToUpdate;
+		Friend updatedFriend = (Friend) updatedObject;
+		return friendToUpdate.setName(updatedFriend.getName())
+							 .setBirthdate(updatedFriend.getBirthdate());
 	}
 	
 	@Override

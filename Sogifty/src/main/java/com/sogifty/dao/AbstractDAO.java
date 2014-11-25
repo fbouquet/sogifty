@@ -55,7 +55,7 @@ public abstract class AbstractDAO<T extends DTO> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Integer update(Class<T> className, T obj) throws SogiftyException {
+	public Integer update(T obj) throws SogiftyException {
 		if (obj.getId() == null) {
 			logger.fatal("Could not find object to update in database");
 			throw new SogiftyException(Response.Status.NOT_FOUND);
@@ -101,11 +101,11 @@ public abstract class AbstractDAO<T extends DTO> {
 	}
 
 	@SuppressWarnings("unchecked")
-	private T updateFields(T updatedObject, T obj) throws SogiftyException {
+	private T updateFields(T objectToUpdate, T updatedObject) throws SogiftyException {
 		T updated = null;
 		try {
 			T instance = type.newInstance();
-			updated = (T) instance.updateFields(updatedObject, obj);
+			updated = (T) instance.updateFields(objectToUpdate, updatedObject);
 		} catch (InstantiationException e) {
 			logger.fatal("Could not update the object: " + e);
 			throw new SogiftyException(Response.Status.INTERNAL_SERVER_ERROR);

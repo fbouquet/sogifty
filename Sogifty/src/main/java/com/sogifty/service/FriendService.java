@@ -16,7 +16,7 @@ import com.sogifty.service.model.FriendModel;
 public class FriendService {
 	
 	private FriendDAO friendDAO = new FriendDAO();
-	private UserDAO userDAO = new UserDAO(User.class);
+	private UserDAO userDAO = new UserDAO();
 
 	public FriendModel create(int userId, FriendModel friend) throws SogiftyException {
 		User user = userDAO.getById(userId);
@@ -28,7 +28,7 @@ public class FriendService {
 	public FriendModel update(int userId, int friendId, FriendModel friend) throws SogiftyException {
 		checkParameters(userId, friendId, friend);
 		User user = userDAO.getById(userId);
-		return new FriendModel(friendDAO.update(Friend.class, new Friend().setId(friendId)
+		return new FriendModel(friendDAO.update(new Friend().setId(friendId)
 															.setName(friend.getName())
 															.setBirthdate(friend.getBirthdate())
 															.setUser(user)));

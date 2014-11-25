@@ -16,11 +16,9 @@ import com.sogifty.util.persistance.HibernateUtil;
 
 public class UserDAO extends AbstractDAO<User> {
 
-	public UserDAO() {};
-	
-	public UserDAO(Class<User> daoClass) {
-		this.setType(daoClass);
-	}
+	public UserDAO() {
+		this.setType(User.class);
+	};
 
 	public Set<Friend> getFriends(int userId) throws SogiftyException {
 		Session session = null;

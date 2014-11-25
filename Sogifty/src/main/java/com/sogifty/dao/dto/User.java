@@ -41,24 +41,27 @@ public class User implements DTO {
 		return id;
 	}
 
-	public void setId(int id) {
+	public User setId(int id) {
 		this.id = id;
+		return this;
 	}
 
 	public String getPwd() {
 		return pwd;
 	}
 
-	public void setPwd(String pwd) {
+	public User setPwd(String pwd) {
 		this.pwd = pwd;
+		return this;
 	}
 
 	public String getEmail() {
 		return email;
 	}
 
-	public void setEmail(String email) {
+	public User setEmail(String email) {
 		this.email = email;
+		return this;
 	}
 
 	@JsonIgnore
@@ -69,5 +72,12 @@ public class User implements DTO {
 	@Override
 	public String toString() {
 		return "(" + id + ") - " + pwd + " - " + email;
+	}
+
+	public User updateFields(Object objectToUpdate, Object updatedObject) {
+		User userToUpdate = (User) objectToUpdate;
+		User updatedUser = (User) updatedObject;
+		return userToUpdate.setPwd(updatedUser.getPwd())
+				   		   .setEmail(updatedUser.getEmail());
 	}
 }
