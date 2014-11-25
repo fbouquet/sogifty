@@ -24,7 +24,7 @@ import com.sogifty.util.serialization.JsonDateSerializer;
 
 @Entity
 @Table(name = "friend")
-public class Friend implements DTO {
+public class Friend implements DTO<Friend> {
 	
 	@Id
 	@Column(name = "id")
@@ -49,16 +49,18 @@ public class Friend implements DTO {
 		return id;
 	}
 
-	public void setId(int id) {
+	public Friend setId(int id) {
 		this.id = id;
+		return this;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
+	public Friend setName(String name) {
 		this.name = name;
+		return this;
 	}
 	
 	@JsonSerialize(using=JsonDateSerializer.class)
@@ -67,16 +69,25 @@ public class Friend implements DTO {
 	}
 
 	@JsonDeserialize(using=JsonDateDeserializer.class)
-	public void setBirthdate(Date birthdate) {
+	public Friend setBirthdate(Date birthdate) {
 		this.birthdate = birthdate;
+		return this;
 	}
 	
 	public User getUser() {
 		return appUser;
 	}
 
-	public void setUser(User appUser) {
+	public Friend setUser(User appUser) {
 		this.appUser = appUser;
+		return this;
+	}
+
+	public Friend updateFields(Friend updatedObject, Friend obj) {
+		updatedObject.setId(obj.getId())
+					 .setName(obj.getName())
+					 .setBirthdate(obj.getBirthdate());
+		return updatedObject;
 	}
 	
 	@Override

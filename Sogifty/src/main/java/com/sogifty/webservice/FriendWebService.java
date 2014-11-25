@@ -1,7 +1,10 @@
 package com.sogifty.webservice;
 
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -15,37 +18,51 @@ import com.sogifty.exception.SogiftyException;
 import com.sogifty.service.FriendService;
 import com.sogifty.service.model.FriendModel;
 
-@Path("friend")
+@Path("/users/{userId}/friends")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class FriendWebService {
 	private FriendService friendService = new FriendService();
 	
-	@POST
-	public Response create(Friend friend) {
-		FriendModel returnedFriend = null;
+	@GET
+	public Response getFriends(@PathParam("userId") int userId) {
+		List<FriendModel> returnedFriends = null;
 
 		try {
-			returnedFriend = friendService.create(friend);
+			returnedFriends = friendService.getFriends(userId);
 		} catch (SogiftyException e) {
 			return Response.status(e.getStatus()).entity(e.getMessage()).build();
 		}
-		return Response.ok(returnedFriend).build();
+		return Response.ok(returnedFriends).build();
+	}
+	
+	@POST
+	public Response create(@PathParam("userId") int userId, FriendModel friend) {
+		FriendModel returnedFriend = null;
+
+		try {
+			returnedFriend = friendService.create(userId, friend);
+		} catch (SogiftyException e) {
+			return Response.status(e.getStatus()).entity(e.getMessage()).build();
+		}
+		return Response.ok(returnedFriend.getId()).build();
 	}
 	
 	@Path("{friendId}")
 	@PUT
-	public Response update(@PathParam("friendId") int id, Friend friend) {
-		// Sets the right id to the friend to update
-		friend.setId(id);
+	public Response update(@PathParam("userId") int userId, @PathParam("friendId") int friendId, FriendModel friend) {
+//		// Sets the right id to the friend to update
+//		friend.setId(friendId);
+		
 		FriendModel returnedFriend = null;
 
 		try {
-			returnedFriend = friendService.update(friend);
+			returnedFriend = friendService.update(userId, friendId, friend);
 		} catch (SogiftyException e) {
 			return Response.status(e.getStatus()).entity(e.getMessage()).build();
 		}
-		return Response.ok(returnedFriend).build();
+		return Response.ok(returnedFriend.getId()).build();
+		//return Response.ok(friendId).build();
 	}
 	
 	@Path("{friendId}")
