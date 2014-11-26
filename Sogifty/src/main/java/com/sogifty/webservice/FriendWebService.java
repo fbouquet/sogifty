@@ -13,7 +13,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.sogifty.dao.dto.Friend;
 import com.sogifty.exception.SogiftyException;
 import com.sogifty.service.FriendService;
 import com.sogifty.service.model.FriendModel;
@@ -51,9 +50,6 @@ public class FriendWebService {
 	@Path("{friendId}")
 	@PUT
 	public Response update(@PathParam("userId") int userId, @PathParam("friendId") int friendId, FriendModel friend) {
-//		// Sets the right id to the friend to update
-//		friend.setId(friendId);
-		
 		FriendModel returnedFriend = null;
 
 		try {
@@ -62,17 +58,13 @@ public class FriendWebService {
 			return Response.status(e.getStatus()).entity(e.getMessage()).build();
 		}
 		return Response.ok(returnedFriend.getId()).build();
-		//return Response.ok(friendId).build();
 	}
 	
 	@Path("{friendId}")
 	@DELETE
-	public Response delete(@PathParam("friendId") int id, Friend friend) {
-		// Sets the right id to the friend to delete
-		friend.setId(id);
-
+	public Response delete(@PathParam("friendId") int id) {
 		try {
-			friendService.delete(friend);
+			friendService.delete(id);
 		} catch (SogiftyException e) {
 			return Response.status(e.getStatus()).entity(e.getMessage()).build();
 		}

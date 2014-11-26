@@ -2,7 +2,6 @@ package com.sogifty.dao.dto;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -38,7 +37,7 @@ public class Friend implements DTO {
 	@Temporal(TemporalType.DATE)
 	private Date birthdate;
 	
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "app_user_id")
 	@JsonBackReference
 	private User appUser;

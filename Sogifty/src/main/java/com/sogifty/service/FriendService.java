@@ -33,14 +33,9 @@ public class FriendService {
 															.setBirthdate(friend.getBirthdate())
 															.setUser(user)));
 	}
-	
-//	
-//	public FriendModel update(Friend friend) throws SogiftyException {
-//		return new FriendModel(friendDAO.update(friend));
-//	}
 
-	public void delete(Friend friend) throws SogiftyException {
-		friendDAO.delete(friend);
+	public void delete(Integer friendId) throws SogiftyException {
+		friendDAO.delete(friendId);
 	}
 
 	public List<FriendModel> getFriends(int userId) throws SogiftyException {
@@ -53,11 +48,19 @@ public class FriendService {
 	}
 	
 	private void checkParameters(int userId, int friendId, FriendModel friend) throws SogiftyException {
-//		if (friendDAO.getById(friendId).getUser().getId().intValue() != userId) {
-//			throw new SogiftyException(Response.Status.FORBIDDEN);
-//		}
+		if (getUserId(getFriendById(friendId)) != userId) {
+			throw new SogiftyException(Response.Status.FORBIDDEN);
+		}
 		if (friend.getName() == null || friend.getBirthdate() == null) {
 			throw new SogiftyException(Response.Status.BAD_REQUEST);
 		}
+	}
+
+	private Friend getFriendById(int friendId) throws SogiftyException {
+		return friendDAO.getById(friendId);
+	}
+	
+	private int getUserId(Friend friend) throws SogiftyException {
+		return friend.getUser().getId().intValue();
 	}
 }

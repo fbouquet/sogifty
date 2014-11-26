@@ -34,7 +34,6 @@ public abstract class AbstractDAO<T extends DTO> {
 		Integer createdObjectId = null;
 		try {
 			session = sessionFactory.openSession();
-//			session = HibernateUtil.getSessionFactory().openSession();
 			t = session.beginTransaction();
 			createdObjectId = (Integer) session.save(obj);
 			t.commit();
@@ -54,7 +53,6 @@ public abstract class AbstractDAO<T extends DTO> {
 		return createdObjectId;
 	}
 
-	@SuppressWarnings("unchecked")
 	public Integer update(T obj) throws SogiftyException {
 		if (obj.getId() == null) {
 			logger.fatal("Could not find object to update in database");
@@ -64,24 +62,16 @@ public abstract class AbstractDAO<T extends DTO> {
 		Transaction t = null;
 		T updatedObject = null;
 		Integer updatedObjectId = null;
-		logger.fatal("Before try in update!");
 		try {
 			session = sessionFactory.openSession();
-			//session = HibernateUtil.getSessionFactory().openSession();
 			Integer id = obj.getId();
-			logger.fatal("After obj.getId in update! Id : " + id.toString());
 			t = session.beginTransaction();
-			logger.fatal("transaction begun in update!");
-			logger.fatal("Before session.get in update!");
-			updatedObject = (T) session.load(getType(), id); // getById(id);
-			logger.fatal("After session.get in update!");
+			updatedObject = getById(id);
 			if (updatedObject == null) {
 				logger.fatal("retrieved object = null in update!");
 				throw new SogiftyException(Response.Status.NOT_FOUND);
 			}
-			logger.fatal("object got in update!");
 			updatedObject = updateFields(updatedObject, obj);
-			logger.fatal("fields updated in update!");
 			session.update(updatedObject);
 			updatedObjectId = updatedObject.getId();
 			t.commit();
@@ -116,17 +106,14 @@ public abstract class AbstractDAO<T extends DTO> {
 		return updated;
 	}
 
-	public void delete(T obj) throws SogiftyException {
+	public void delete(Integer id) throws SogiftyException {
 		Session session = null;
 		Transaction t = null;
-		if(obj.getId() == null) {
-			logger.fatal("Could not find object to delete in database");
-			throw new SogiftyException(Response.Status.NOT_FOUND);
-		}
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			t = session.beginTransaction();
-			session.delete(obj);
+			T objectToDelete = getById(id);
+			session.delete(objectToDelete);
 			t.commit();
 		} catch(StaleStateException e) {
 			rollbackTransaction(t);
@@ -140,32 +127,6 @@ public abstract class AbstractDAO<T extends DTO> {
 			closeSession(session);
 		}
 	}
-
-//	@SuppressWarnings("unchecked")
-//	public T getById(Class<T> className, Integer id) throws SogiftyException {
-//		if (id == null) {
-//			logger.fatal("Could not find object without id in database");
-//			throw new SogiftyException(Response.Status.BAD_REQUEST);
-//		}
-//		Session session = null;
-//		T found = null;
-//		try {
-//			session = HibernateUtil.getSessionFactory().openSession();
-//			Criteria criteria = session.createCriteria(className.getName());
-//			criteria.add(Restrictions.eq("id", id));
-//			found = (T) criteria.uniqueResult();
-//			if (found == null) {
-//				throw new SogiftyException(Response.Status.NOT_FOUND);
-//			}
-//		} catch(HibernateException e) {
-//			logger.fatal("Error while reading user from database: " + e);
-//			throw new SogiftyException(Response.Status.INTERNAL_SERVER_ERROR);
-//		} finally {
-//			closeSession(session);
-//		}
-//
-//		return found;
-//	}
 	
 	@SuppressWarnings("unchecked")
 	public T getById(Integer id) throws SogiftyException {
@@ -177,13 +138,12 @@ public abstract class AbstractDAO<T extends DTO> {
 		T found = null;
 		try {
 			session = sessionFactory.openSession();
-			//session = HibernateUtil.getSessionFactory().openSession();
 			found = (T) session.get(getType(), id);
 			if (found == null) {
 				throw new SogiftyException(Response.Status.NOT_FOUND);
 			}
 		} catch(HibernateException e) {
-			logger.fatal("Error while reading user from database: " + e);
+			logger.fatal("Error while reading object from database: " + e);
 			throw new SogiftyException(Response.Status.INTERNAL_SERVER_ERROR);
 		} finally {
 			closeSession(session);

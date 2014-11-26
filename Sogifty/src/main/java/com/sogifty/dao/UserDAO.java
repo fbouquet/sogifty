@@ -24,12 +24,7 @@ public class UserDAO extends AbstractDAO<User> {
 		Session session = null;
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
-			Criteria criteria = session.createCriteria(User.class);
-			criteria.add(Restrictions.eq("id", userId));
-			User user = (User) criteria.uniqueResult();
-			if (user == null) {
-				throw new SogiftyException(Response.Status.NOT_FOUND);
-			}
+			User user = getById(Integer.valueOf(userId));
 			return user.getFriends();
 		} catch(HibernateException e) {
 			logger.fatal("Error while reading user from database: " + e);
