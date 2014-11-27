@@ -32,6 +32,8 @@ public class ConnectionTask extends AsyncTask<String,Integer,Boolean>{
 	private static final String PASSWD = "pwd";
 	private static final String LOADING = "Loading..";
 	private static final String URL_SUFFIX_REGISTER = "user/login";
+	private static final int ALREADY_EXISTS_INTEGER = 404;
+	
 	
 	private ProgressDialog progressDialog;
 	private Context context;
@@ -96,6 +98,9 @@ public class ConnectionTask extends AsyncTask<String,Integer,Boolean>{
 		String message = context.getResources().getString(R.string.unknown_error);
 		if(httpStatus == context.getResources().getInteger(R.integer.user_http_error)){
 			message = context.getResources().getString(R.string.http_error);
+		}
+		else if(httpStatus == ALREADY_EXISTS_INTEGER){
+			message = context.getResources().getString(R.string.user_passwd_no_correspond);
 		}
 		return message;
 	}

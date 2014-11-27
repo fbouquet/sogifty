@@ -149,6 +149,8 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 	public void onGetFriendListComplete(Friends friendsList) {
 		listJson.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		//createFalseList();
+		if(friendsList.getListFriends().isEmpty())
+			displayMessage("you have no friend, add one");
 		adapter = new FriendAdapter(this, friendsList.getListFriends());
 		listJson.setAdapter(adapter);
 		userAdapter = ((FriendAdapter) listJson.getAdapter());
