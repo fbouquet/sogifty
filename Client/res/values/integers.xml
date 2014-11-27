@@ -4,5 +4,6 @@
 	<integer name="user_id_default">-2</integer>
 	<integer name="user_connection_error">-3</integer>
 	<integer name="intern_error">500</integer>
+	
 	    
 </resources>

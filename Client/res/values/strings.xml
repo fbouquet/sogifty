@@ -56,6 +56,8 @@
   	<string name="http_error">Impossible to connect to the URL</string>
   	<string name="user_already_exists">User already exists</string>
   	<string name="create_user_error">Create user error</string>
+  	<string name="user_passwd_no_correspond"> User and passwd dont correspond </string>
+  	
   	
   	<string name="giftPager_tv_description">Description :</string>
   	<string name="giftPager_tv_title">Title</string>

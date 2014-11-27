@@ -7,7 +7,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
-import com.sogifty.entity.User;
+import com.sogifty.dao.dto.Friend;
+import com.sogifty.dao.dto.User;
 
 public class HibernateUtil {
 	private static final ThreadLocal<Session> threadLocal = new ThreadLocal<Session>();
@@ -27,6 +28,7 @@ public class HibernateUtil {
 	private static SessionFactory configureSessionFactory() {
 		Configuration configuration = new Configuration().configure();
 		configuration.addAnnotatedClass(User.class);
+		configuration.addAnnotatedClass(Friend.class);
 		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
 		return configuration.buildSessionFactory(builder.build());
 	}
