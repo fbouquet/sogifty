@@ -29,8 +29,11 @@ import android.widget.Toast;
 import com.sogifty.R;
 import com.sogifty.model.Friend;
 import com.sogifty.model.Friends;
+import com.sogifty.tasks.GetFriendListTask;
+import com.sogifty.tasks.listeners.OnGetFriendListTaskListener;
+import com.sogifty.tasks.listeners.OnSubscriptionTaskListener;
 
-public class FriendListActivity extends Activity {
+public class FriendListActivity extends Activity implements OnGetFriendListTaskListener{
 	private static String FRIEND_LIST = "Liste des amis";
 	private static String APPLICATION_NAME = "Sogifti";
 	private static final String FRIENDS_DELETED = " amis supprimés";
@@ -60,17 +63,8 @@ public class FriendListActivity extends Activity {
 		
 		initLayout();
 		
-		createListView();
-		
-		/****** Here Test for user id *******/
-		/** id == -2, no user id in sharedPreferences => ConnectionTask not launched **/
-		/** id == -1, user id == errorId => ConnectionTask failed **/
-		/** id == other int, user id correspond to server user id => ConnectionTask to Server success **/
-		AlertDialog.Builder adb = new AlertDialog.Builder(this);
-		adb.setMessage("L'Id est "+loadUserId());
-		AlertDialog ad = adb.create();
-		ad.show();
-		/****** End of test *******/
+		//createListView();
+		new GetFriendListTask(FriendListActivity.this, this).execute();
 		
 		listJson.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 		public void onItemClick(AdapterView<?> adapter, View view,
@@ -128,6 +122,16 @@ public class FriendListActivity extends Activity {
 	}
 
 	
+//	private void createListView() {
+//		listJson.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+//		createFalseList();
+//		//friendsList = new GetFriendListTask(FriendListActivity.this).execute(loadUserId());
+//		adapter = new FriendAdapter(this, friendsList.getListFriends());
+//		listJson.setAdapter(adapter);
+//		userAdapter = ((FriendAdapter) listJson.getAdapter());
+//	}
+
+
 	private void initLayout() {
 		friendsToDelete = new ArrayList<Integer>();
 		listJson = (ListView) findViewById(R.id.listJson);
@@ -141,17 +145,23 @@ public class FriendListActivity extends Activity {
 		actionBar.setTitle(APPLICATION_NAME);
 
 	}
-	
-	private void createListView() {
+	@Override
+	public void onGetFriendListComplete(Friends friendsList) {
 		listJson.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-		createFalseList();
-		//friendsList = new GetFriendListTask(FriendListActivity.this).execute(loadUserId());
+		//createFalseList();
 		adapter = new FriendAdapter(this, friendsList.getListFriends());
 		listJson.setAdapter(adapter);
 		userAdapter = ((FriendAdapter) listJson.getAdapter());
 	}
-
 	
+	@Override
+	public void onGetFriendListFailed(String message) {
+		displayMessage(message);
+	}
+	
+	
+	
+
 	private void deleteFriend(String idValue, int position) {
 		if (!friendsToDelete.contains(idValue))
 			friendsToDelete.add(Integer.parseInt(idValue));
@@ -263,92 +273,98 @@ public class FriendListActivity extends Activity {
 	}
 	
 		
-	public void createFalseList(){
-		friendsList = new Friends();
-		
-		Friend f = new Friend();
-		f.setAvatar("u");
-		f.setFonction("b");
-		f.setGender("male");
-		f.setId(Integer.parseInt("0"));
-		f.setNom("Villalba");
-		f.setPrenom("Léo");
-		f.setAge(21);
-		f.setRemainingDay(Integer.parseInt("3"));
-		friendsList.addFriend(f);
-		
-		Friend v = new Friend();
-		v.setAvatar("blabl");
-		v.setFonction("b");
-		v.setGender("b");
-		v.setId(Integer.parseInt("1"));
-		v.setAge(22);
-		v.setNom("Sagardia");
-		v.setPrenom("Elorri");
-		v.setRemainingDay(Integer.parseInt("8"));
-		friendsList.addFriend(v);
-		
-		Friend w = new Friend();
-		w.setAvatar("blabl");
-		w.setFonction("b");
-		w.setGender("b");
-		w.setId(Integer.parseInt("2"));
-		w.setAge(22);
-		w.setNom("Folliot");
-		w.setPrenom("Thomas");
-		w.setRemainingDay(Integer.parseInt("144"));
-		friendsList.addFriend(w);
-		
-		Friend x = new Friend();
-		x.setAvatar("blabl");
-		x.setFonction("b");
-		x.setGender("b");
-		x.setId(Integer.parseInt("3"));
-		x.setAge(1000);
-		x.setNom("JOMARD");
-		x.setPrenom("ARnauuuud");
-		x.setRemainingDay(Integer.parseInt("70000"));
-		friendsList.addFriend(x);
-		
-		Friend y = new Friend();
-		y.setAvatar("blabl");
-		y.setFonction("b");
-		y.setGender("b");
-		y.setId(Integer.parseInt("5"));
-		y.setAge(2);
-		y.setNom("Jouuu");
-		y.setPrenom("Valouuuuuuve");
-		y.setRemainingDay(Integer.parseInt("4"));
-		friendsList.addFriend(y);
-		
-		Friend z = new Friend();
-		z.setAvatar("blabl");
-		z.setFonction("b");
-		z.setGender("b");
-		z.setId(Integer.parseInt("4"));
-		z.setAge(27);
-		z.setNom("Bouquet");
-		z.setPrenom("Fleur");
-		z.setRemainingDay(Integer.parseInt("80"));
-		friendsList.addFriend(z);
-		
-		Friend e = new Friend();
-		e.setAvatar("blabl");
-		e.setFonction("b");
-		e.setGender("b");
-		e.setId(Integer.parseInt("6"));
-		e.setAge(22);
-		e.setNom("Garbage");
-		e.setPrenom("Yvonne");
-		e.setRemainingDay(Integer.parseInt("57"));
-		friendsList.addFriend(e);
-		
-		
-	}
+//	public void createFalseList(){
+//		friendsList = new Friends();
+//		
+//		Friend f = new Friend();
+//		f.setAvatar("u");
+//		f.setFonction("b");
+//		f.setGender("male");
+//		f.setId(Integer.parseInt("0"));
+//		f.setNom("Villalba");
+//		f.setPrenom("Léo");
+//		f.setAge(21);
+//		f.setRemainingDay(Integer.parseInt("3"));
+//		friendsList.addFriend(f);
+//		
+//		Friend v = new Friend();
+//		v.setAvatar("blabl");
+//		v.setFonction("b");
+//		v.setGender("b");
+//		v.setId(Integer.parseInt("1"));
+//		v.setAge(22);
+//		v.setNom("Sagardia");
+//		v.setPrenom("Elorri");
+//		v.setRemainingDay(Integer.parseInt("8"));
+//		friendsList.addFriend(v);
+//		
+//		Friend w = new Friend();
+//		w.setAvatar("blabl");
+//		w.setFonction("b");
+//		w.setGender("b");
+//		w.setId(Integer.parseInt("2"));
+//		w.setAge(22);
+//		w.setNom("Folliot");
+//		w.setPrenom("Thomas");
+//		w.setRemainingDay(Integer.parseInt("144"));
+//		friendsList.addFriend(w);
+//		
+//		Friend x = new Friend();
+//		x.setAvatar("blabl");
+//		x.setFonction("b");
+//		x.setGender("b");
+//		x.setId(Integer.parseInt("3"));
+//		x.setAge(1000);
+//		x.setNom("JOMARD");
+//		x.setPrenom("ARnauuuud");
+//		x.setRemainingDay(Integer.parseInt("70000"));
+//		friendsList.addFriend(x);
+//		
+//		Friend y = new Friend();
+//		y.setAvatar("blabl");
+//		y.setFonction("b");
+//		y.setGender("b");
+//		y.setId(Integer.parseInt("5"));
+//		y.setAge(2);
+//		y.setNom("Jouuu");
+//		y.setPrenom("Valouuuuuuve");
+//		y.setRemainingDay(Integer.parseInt("4"));
+//		friendsList.addFriend(y);
+//		
+//		Friend z = new Friend();
+//		z.setAvatar("blabl");
+//		z.setFonction("b");
+//		z.setGender("b");
+//		z.setId(Integer.parseInt("4"));
+//		z.setAge(27);
+//		z.setNom("Bouquet");
+//		z.setPrenom("Fleur");
+//		z.setRemainingDay(Integer.parseInt("80"));
+//		friendsList.addFriend(z);
+//		
+//		Friend e = new Friend();
+//		e.setAvatar("blabl");
+//		e.setFonction("b");
+//		e.setGender("b");
+//		e.setId(Integer.parseInt("6"));
+//		e.setAge(22);
+//		e.setNom("Garbage");
+//		e.setPrenom("Yvonne");
+//		e.setRemainingDay(Integer.parseInt("57"));
+//		friendsList.addFriend(e);
+//		
+//		
+//	}
 	
 	private int loadUserId(){
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		return preferences.getInt(USER_ID, getResources().getInteger(R.integer.user_id_default));
+	}
+	private void displayMessage(String message) {
+		AlertDialog.Builder adb = new AlertDialog.Builder(this);
+		adb.setMessage(message);
+		AlertDialog ad = adb.create();
+		ad.show();
 	}
 
 	

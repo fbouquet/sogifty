@@ -160,11 +160,11 @@ public class FriendAdapter extends BaseAdapter {
 			holder.iv.setImageResource(android.R.drawable.ic_menu_gallery);
 		*/
 		
-		try {
-			holder.iv.setImageBitmap(AvatarGenerator.generate(f.getNom(), f.getGender() ,context));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			holder.iv.setImageBitmap(AvatarGenerator.generate(f.getNom(), f.getGender() ,context));
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 		
 		
 		return convertView;
