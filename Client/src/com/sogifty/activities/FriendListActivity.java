@@ -8,6 +8,7 @@ import java.util.List;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ClipData.Item;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,7 +30,9 @@ import android.widget.Toast;
 import com.sogifty.R;
 import com.sogifty.model.Friend;
 import com.sogifty.model.Friends;
+import com.sogifty.tasks.AddFriendTask;
 import com.sogifty.tasks.GetFriendListTask;
+import com.sogifty.tasks.listeners.OnAddFriendTaskListener;
 import com.sogifty.tasks.listeners.OnGetFriendListTaskListener;
 import com.sogifty.tasks.listeners.OnSubscriptionTaskListener;
 
@@ -47,6 +50,7 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 	private ListView listJson;
 	private TextView id;
 	private Button deleteBtn = null;
+	
 	
 	private boolean deleteMode = false;
 	private Friends friendsList = null;
@@ -118,6 +122,7 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 				}
 			}
 		});
+		
 
 	}
 
@@ -136,7 +141,6 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 		friendsToDelete = new ArrayList<Integer>();
 		listJson = (ListView) findViewById(R.id.listJson);
 		deleteBtn = (Button) findViewById(R.id.deleteBtn);
-
 	}
 
 	private void initActionBar() {
@@ -163,6 +167,7 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 	
 	
 	
+	
 
 	private void deleteFriend(String idValue, int position) {
 		if (!friendsToDelete.contains(idValue))
@@ -185,6 +190,10 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 		startActivity(intent);
 		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
 
+	}
+	protected void createAddFriendActivity() {
+		Intent intent = AddFriendActivity.getIntent(this);
+		startActivity(intent);
 	}
 	
 	private void longClickFonction(AdapterView<?> parent,int position) {
@@ -244,10 +253,11 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 			
 			break;
 		case R.id.action_add:
-			Intent intent = new Intent(FriendListActivity.this,
-					FriendDetailsActivity.class);
-
-			startActivity(intent);
+//			Intent intent = new Intent(FriendListActivity.this,
+//					FriendDetailsActivity.class);
+//
+//			startActivity(intent);
+			createAddFriendActivity();
 			overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
 			break;
 		default:
@@ -368,6 +378,9 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 		AlertDialog ad = adb.create();
 		ad.show();
 	}
+
+
+	
 
 	
 }

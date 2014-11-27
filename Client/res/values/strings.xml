@@ -46,5 +46,9 @@
   	<string name="giftPager_tv_description">Description :</string>
   	<string name="giftPager_tv_title">Title</string>
   	
+  	<string name="add_friend_et_name">Name</string>
+  	<string name="add_friend_et_birthdate">Birthdate dd-mm-yyyy</string>
+  	<string name="add_friend_b_add">Ajouter</string>
+  	
   	
 </resources>
