@@ -32,6 +32,7 @@ public class SubscriptionTask extends AsyncTask<String,Integer,Boolean>{
 	private static final String LOADING = "Loading..";
 	private static final String URL_SUFFIX_REGISTER = "user/register";
 	private static final int ALREADY_EXISTS_INTEGER = 409;
+	private static final int COULD_NOT_CREATE_USER = 418;
 	
 	private ProgressDialog progressDialog;
 	private Context context;
@@ -101,6 +102,8 @@ public class SubscriptionTask extends AsyncTask<String,Integer,Boolean>{
 		else if(httpStatus == context.getResources().getInteger(R.integer.intern_error)){
 			message = context.getResources().getString(R.string.internal_error);
 		}
+		else if(httpStatus == COULD_NOT_CREATE_USER)
+			message = context.getResources().getString(R.string.create_user_error);
 		else if(httpStatus == ALREADY_EXISTS_INTEGER){
 			message = context.getResources().getString(R.string.user_already_exists);
 		}

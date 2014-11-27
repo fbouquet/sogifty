@@ -5,19 +5,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sogifty.R;
-import com.sogifty.tools.AvatarGenerator;
-import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
-import com.sogifty.model.Friend;
-import com.sogifty.model.Gift;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +19,11 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+
+import com.sogifty.R;
+import com.sogifty.model.Friend;
+import com.sogifty.model.Gift;
+import com.sogifty.tools.AvatarGenerator;
 
 public class FriendDetailModificationActivity extends Activity {
 	Friend friend = null;

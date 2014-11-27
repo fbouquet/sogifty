@@ -1,7 +1,5 @@
 package com.sogifty.widget;
 
-import com.sogifty.activities.FriendDetailModificationActivity;
-
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -9,7 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.widget.RemoteViews;
+
 import com.sogifty.R;
+import com.sogifty.activities.FriendDetailModificationActivity;
 
 public class WidgetProvider extends AppWidgetProvider {
 	 public static final String TOAST_ACTION = "com.example.android.stackwidget.TOAST_ACTION";

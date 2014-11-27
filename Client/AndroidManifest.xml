@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sogifty"
-    android:versionName="0.0.1-SNAPSHOT" 
+    android:versionCode="1"
+    android:versionName="1.0" 
     >
     
 
@@ -33,7 +34,7 @@
         <activity android:name="com.sogifty.activities.FriendDetailsActivity" />
         <activity android:name="com.sogifty.activities.ConnectionActivity" />
         <activity android:name="com.sogifty.activities.SubscriptionActivity" />
-            
+        
        
             
         <receiver android:name="com.sogifty.widget.WidgetProvider" >

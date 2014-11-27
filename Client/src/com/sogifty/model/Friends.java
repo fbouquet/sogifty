@@ -1,11 +1,7 @@
 package com.sogifty.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-
-import org.codehaus.jackson.annotate.JsonProperty;
 
 public class Friends {  
     private List<Friend> listFriends;  

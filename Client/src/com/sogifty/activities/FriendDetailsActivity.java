@@ -1,39 +1,50 @@
 package com.sogifty.activities;
 
-import com.sogifty.R;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+
+import com.sogifty.R;
 
 public class FriendDetailsActivity extends Activity{
 	
 	private static final String FIRTNAME = "firstnameFriend";
 	private static final String NAME = "nameFriend";
 	private static final String REMAININGDATE = "RemaingDate";
+	private static final String[] EXISTING_TAGS = new String[] {
+        "Beau", "Fort", "Intelligent", "Gentil", "Rigolo"
+    };
+	private static final String ALREADY_IN_ERROR = "Goût déjà attribué";
+	
 	TextView nameText;
 	TextView firstnameText;
 	TextView remaingDate;
-	
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_friend_details);
-		initActivity();
-	}
-
-	private void initActivity() {
-		nameText = (TextView) findViewById(R.id.frienddetails_tv_name);
-		firstnameText =(TextView) findViewById(R.id.frienddetails_tv_firstname);
-		remaingDate =(TextView) findViewById(R.id.frienddetails_tv_RemainingDate);
-	}
-	
-
-
-	public static Intent getIntent(Context ctxt, String name, String firstname, int remainingDate) {
+	private ViewPager giftPager;
+    private GiftPagerAdapter giftPagerAdapter;
+    private ArrayAdapter<String> autoCompleteTagsAdapter;
+    private AutoCompleteTextView autoCompleteTagsTextView;
+    private List<String> leftFriendTags = new ArrayList<String>();
+    private List<String> rightFriendTags = new ArrayList<String>();
+    private LinearLayout leftTagsLayout ;
+    private LinearLayout rightTagsLayout ;
+    
+    public static Intent getIntent(Context ctxt, String name, String firstname, int remainingDate) {
 		Intent newActivityIntent = new Intent(ctxt, FriendDetailsActivity.class);
 		newActivityIntent.putExtra(FIRTNAME, firstname);
 		newActivityIntent.putExtra(NAME, name);
@@ -41,5 +52,165 @@ public class FriendDetailsActivity extends Activity{
     	return newActivityIntent;
 	}
 	
+    
+    @Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_friend_details);
+		initActivity();
+	}
+
+   
+    
+    
+	private void initActivity() {
+		
+		nameText = (TextView) findViewById(R.id.frienddetails_tv_name);
+		firstnameText =(TextView) findViewById(R.id.frienddetails_tv_firstname);
+		remaingDate =(TextView) findViewById(R.id.frienddetails_tv_RemainingDate);
+		
+		giftPager = (ViewPager) findViewById(R.id.frienddetails_vp_giftPager);
+		giftPagerAdapter = new GiftPagerAdapter(getFragmentManager());
+        giftPager.setAdapter(giftPagerAdapter);
+        
+        leftTagsLayout= (LinearLayout) findViewById(R.id.frienddetails_l_ltags);
+        rightTagsLayout= (LinearLayout) findViewById(R.id.frienddetails_l_rtags);
+    	
+        initAutoCompleteTags();
+	}
+	
+	
+	private void initAutoCompleteTags() {
+        autoCompleteTagsAdapter= new ArrayAdapter<String> (this, android.R.layout.simple_dropdown_item_1line, EXISTING_TAGS);
+        autoCompleteTagsTextView = (AutoCompleteTextView) findViewById(R.id.frienddetails_actv_edittags);
+        autoCompleteTagsTextView.setAdapter(autoCompleteTagsAdapter);
+        
+        autoCompleteTagsTextView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				String tagValue = autoCompleteTagsTextView.getText().toString();
+				addTag(tagValue);
+				
+			}
+		});
+	}
+
+
+	protected void addTag(String tagValue) {
+		
+		if(leftFriendTags.contains(tagValue) || rightFriendTags.contains(tagValue)){
+			displayMessage(ALREADY_IN_ERROR);
+		}
+		else {
+			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+					LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+			
+			final LinearLayout tagLayout = new LinearLayout(this);
+			lp.gravity=LinearLayout.HORIZONTAL;
+			tagLayout.setLayoutParams(lp);
+			
+			int position =0;
+			if(leftFriendTags.size()>rightFriendTags.size())
+				position = 1 ;
+			
+			
+			final TextView newTag = createAndAddTag (lp, tagValue, position);
+					
+			ImageButton buttonDelete = createAndAddButtonDelete(lp, position);
+			
+			tagLayout.addView(newTag);
+			tagLayout.addView(buttonDelete);
+			
+			if (position == 0){
+				leftTagsLayout.addView(tagLayout);
+			}
+			else{
+				rightTagsLayout.addView(tagLayout);
+			}
+			
+			
+			buttonDelete.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View deleteButton) {
+					String tag = newTag.getText().toString();
+					tagLayout.removeAllViews();
+					
+					if (leftFriendTags.contains(tag)){
+						leftTagsLayout.removeView(tagLayout);
+					}
+					else{
+						rightTagsLayout.removeView(tagLayout);
+					}	
+					deleteTag(newTag);
+					
+					
+				}
+			});
+			
+			
+			
+		}
+	}
+
+
+	protected void deleteTag(TextView newTag) {
+		
+		String tag = newTag.getText().toString();
+		
+		if (leftFriendTags.contains(tag)){
+			leftFriendTags.remove(tag);
+		}
+		else{
+			rightFriendTags.remove(tag);
+		}
+		
+	}
+
+
+	private TextView createAndAddTag(LayoutParams lp, String tagValue, int position) {
+		
+		TextView newTag = new TextView(this);
+		newTag.setLayoutParams(lp);
+		newTag.setText(tagValue);
+		
+		if (position == 0){
+			leftFriendTags.add(tagValue);
+		}
+		else{
+			rightFriendTags.add(tagValue);
+		}
+		return newTag;
+	}
+
+
+	private ImageButton createAndAddButtonDelete(LayoutParams lp, int position) {
+		
+		ImageButton buttonDelete = new ImageButton(this);
+		buttonDelete.setLayoutParams(lp);
+		buttonDelete.setImageResource(R.drawable.delete_button);
+		return buttonDelete;
+	}
+
+
+	@Override
+    public void onBackPressed() {
+        if (giftPager.getCurrentItem() == 0) {
+            // If the user is currently looking at the first step, allow the system to handle the
+            // Back button. This calls finish() on this activity and pops the back stack.
+            super.onBackPressed();
+        } else {
+            // Otherwise, select the previous step.
+            giftPager.setCurrentItem(giftPager.getCurrentItem() - 1);
+        }
+    }
+	
+	private void displayMessage(String message){
+		AlertDialog.Builder adb = new AlertDialog.Builder(this);
+		adb.setMessage(message);
+		AlertDialog ad = adb.create();
+		ad.show();
+	}
 	
 }
