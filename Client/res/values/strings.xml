@@ -3,6 +3,11 @@
 
     <string name="app_name">Sogifty</string>
     <string name="action_settings">Settings</string>
+    <string name="menu_list_delete">Supprimer</string>
+    <string name="menu_list_add">Ajouter</string>
+    <string name="menu_modify">Modifier</string>
+    <string name="menu_delete_ok">OK</string>
+    <string name="menu_modify_ok">OK</string>
     
     <string name="deleteModeBtnTrue">OK</string>
     <string name="deleteModeBtnFalse">Supprimer</string>
@@ -19,12 +24,23 @@
   	<string name="connection_b_subscription">Subscribe</string>
   	  
   	
-  	<string name="frienddetail_tv_nameFriend">Name</string>  
-  	<string name="frienddetail_tv_firstnameFriend">Firstname</string>  
+  	<string name="frienddetail_tv_nameFriend">Nom : </string>  
+  	<string name="frienddetail_tv_firstnameFriend">Prénom : </string>  
   	<string name="frienddetail_tv_RemainingDate">J-</string> 
-  	<string name="frienddetails_tv_tags">Goûts :</string>
-  	<string name="frienddetails_actv_tags">Entrer un goût</string>
+  	<string name="frienddetail_tv_age">Age : </string> 
+  	<string name="frienddetails_tv_tags">Goûts : </string>
+  	<string name="frienddetails_actv_tags">Entrer un goût </string>
   	
+  	<string name="modify_tv_name">Nom : </string>  
+  	<string name="modify_tv_firstname">Prénom : </string>  
+  	<string name="modify_tv_birthdaydate">Date d\'anniversaire : </string> 
+    <string name="modify_tv_function">Fonction : </string>
+    <string name="modify_tv_tags">Goûts : </string>
+    <string name="modify_actv_tags">Entrer un goût </string>
+    <string name="modify_h_name">Entrer le nom. </string>
+  	<string name="modify_h_function">Entrer la fonction </string>
+  	<string name="modify_h_firstname">Entrer le prenom</string>  
+  	<string name="modify_h_birthdaydate">JJ/MM/AAAA</string> 
   	
   	<string name="web_url_init">http://sogifty-api-env-9wjtpmmtjk.elasticbeanstalk.com/api/</string>
   	<string name="inscription_et_email">Enter your email address</string>
