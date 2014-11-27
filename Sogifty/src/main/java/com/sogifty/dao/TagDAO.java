@@ -1,31 +1,34 @@
 package com.sogifty.dao;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.ws.rs.core.Response;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
-import com.sogifty.dao.dto.Friend;
 import com.sogifty.dao.dto.Tag;
 import com.sogifty.exception.SogiftyException;
 import com.sogifty.util.persistance.HibernateUtil;
 
 
-public class FriendDAO extends AbstractDAO<Friend> {
-	public FriendDAO() {
-		this.setType(Friend.class);
+public class TagDAO extends AbstractDAO<Tag> {
+	public TagDAO() {
+		this.setType(Tag.class);
 	}
 	
-	public Set<Tag> getTags(int friendId) throws SogiftyException {
+	@SuppressWarnings("unchecked")
+	public Set<Tag> findAll() throws SogiftyException {
 		Session session = null;
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
-			Friend friend = getById(Integer.valueOf(friendId));
-			return friend.getTags();
+			List<Tag> tagsList = session.createCriteria(getType()).add(Restrictions.isNull("friend")).list();
+			return new HashSet<Tag>(tagsList);
 		} catch(HibernateException e) {
-			logger.fatal("Error while reading friend from database: " + e);
+			logger.fatal("Error while reading user from database: " + e);
 			throw new SogiftyException(Response.Status.INTERNAL_SERVER_ERROR);
 		} finally {
 			closeSession(session);
