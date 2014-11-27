@@ -8,8 +8,7 @@ drop table if exists match;
 
 create table app_user (
     id serial primary key not null,
-    name text not null,
-    email text not null,
+    email text not null unique,
     pwd text not null
 );
 
@@ -17,7 +16,7 @@ create table friend (
     id serial primary key not null,
     name text not null,
     birthdate date not null,
-    app_user integer references app_user(id)
+    app_user_id integer references app_user(id)
 );
 
 create table gift (
@@ -31,19 +30,19 @@ create table tag (
 );
 
 create table enjoy (
-       id serial primary key not null,
-       friend integer references friend(id),
-       tag integer references tag(id)
+    friend_id integer references friend(id),
+    tag_id integer references tag(id),
+    constraint "enjoy_PK" primary key(friend_id, tag_id)
 );
 
 create table correspond (
-       id serial primary key not null,
-       friend integer references friend(id),
-       gift integer references gift(id)
+     friend_id integer references friend(id),
+     gift_id integer references gift(id),
+     constraint "correspond_PK" primary key(friend_id, gift_id)
 );
 
 create table match (
-       id serial primary key not null,
-       tag integer references tag(id),
-       gift integer references gift(id)
+     tag_id integer references tag(id),
+     gift_id integer references gift(id),
+     constraint "match_PK" primary key(tag_id, gift_id)
 );
