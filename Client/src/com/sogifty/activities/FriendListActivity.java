@@ -186,7 +186,7 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 		//Log.i(ID_TO_REMOVE_LIST, checkedPositions.toString());
 		Friend f = (Friend) listJson.getAdapter().getItem(position);
 
-		Intent intent = FriendDetailsActivity.getIntent(this, f.getNom(), f.getPrenom(), f.getRemainingDay());
+		Intent intent = FriendDetailsActivity.getIntent(this, f.getNom(), f.getPrenom(), f.getRemainingDay(), f.getFonction(), f.getAge(), f.getAvatar(),f.getId());
 		startActivity(intent);
 		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
 
@@ -253,10 +253,6 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 			
 			break;
 		case R.id.action_add:
-//			Intent intent = new Intent(FriendListActivity.this,
-//					FriendDetailsActivity.class);
-//
-//			startActivity(intent);
 			createAddFriendActivity();
 			overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
 			break;
@@ -264,7 +260,7 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 			break;
 		}
 		return true;
-	}
+	} 
 
 	private void removeCheckedElementFromList() {
 
