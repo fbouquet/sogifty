@@ -94,6 +94,7 @@ public class SubscriptionTask extends AsyncTask<String,Integer,Boolean>{
 	
 	private String getErrorMessage() {
 		String message = context.getResources().getString(R.string.unknown_error);
+		System.out.println(httpStatus);
 		if(httpStatus == context.getResources().getInteger(R.integer.user_http_error)){
 			message = context.getResources().getString(R.string.http_error);
 		}
@@ -147,10 +148,11 @@ public class SubscriptionTask extends AsyncTask<String,Integer,Boolean>{
             inputStream = httpResponse.getEntity().getContent();
             httpStatus = httpResponse.getStatusLine().getStatusCode();
             android.util.Log.i("status",""+httpStatus);
-            if(inputStream != null)
+            if(inputStream != null){
                 result = convertInputStreamToString(inputStream);
+            }
             else{
-            	httpStatus = this.context.getResources().getInteger(R.integer.user_http_error);
+                httpStatus = this.context.getResources().getInteger(R.integer.user_http_error);
             }	
 	        } catch (MalformedURLException e){
 	        	httpStatus = this.context.getResources().getInteger(R.integer.user_http_error);
