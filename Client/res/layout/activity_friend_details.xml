@@ -37,7 +37,9 @@
                 android:id="@+id/frienddetails_tv_age"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/globalBackground" />
+                 android:text="@string/frienddetail_tv_age" />
+                
+         
 
             <TextView
                 android:id="@+id/frienddetails_tv_RemainingDate"
@@ -62,6 +64,7 @@
 
     <LinearLayout
         android:id="@+id/frienddetails_l_tags"
+        android:baselineAligned="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

@@ -28,6 +28,7 @@ public class Friends {
     	}
     	return null;
     }
+    
     public void addFriend(Friend f){
     	this.listFriends.add(f);
     }
