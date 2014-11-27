@@ -9,6 +9,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -21,20 +24,29 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.sogifty.R;
+import com.sogifty.model.Friend;
 
 public class FriendDetailsActivity extends Activity{
 	
-	private static final String FIRTNAME = "firstnameFriend";
-	private static final String NAME = "nameFriend";
-	private static final String REMAININGDATE = "RemaingDate";
+	static final String FIRTNAME = "firstnameFriend";
+	static final String NAME = "nameFriend";
+	static final String REMAININGDATE = "RemaingDate";
+	static final String FONCTION = "fonction";
+	static final String AGE = "age";
+	static final String AVATAR = "avatar";
+	static final String ID = "id";
+	
 	private static final String[] EXISTING_TAGS = new String[] {
         "Beau", "Fort", "Intelligent", "Gentil", "Rigolo"
     };
-	private static final String ALREADY_IN_ERROR = "Goût déjà attribué";
 	
+	private static final String ALREADY_IN_ERROR = "Goï¿½t dï¿½jï¿½ attribuï¿½";
+
 	TextView nameText;
 	TextView firstnameText;
 	TextView remaingDate;
+	TextView age;
+	
 	private ViewPager giftPager;
     private GiftPagerAdapter giftPagerAdapter;
     private ArrayAdapter<String> autoCompleteTagsAdapter;
@@ -43,12 +55,20 @@ public class FriendDetailsActivity extends Activity{
     private List<String> rightFriendTags = new ArrayList<String>();
     private LinearLayout leftTagsLayout ;
     private LinearLayout rightTagsLayout ;
+    private Friend friend;
     
-    public static Intent getIntent(Context ctxt, String name, String firstname, int remainingDate) {
-		Intent newActivityIntent = new Intent(ctxt, FriendDetailsActivity.class);
+    public static Intent getIntent(Context ctxt, String name, String firstname, int remainingDate, String function, int age, String avatar, int id) {
+		
+    	Intent newActivityIntent = new Intent(ctxt, FriendDetailsActivity.class);
+		
 		newActivityIntent.putExtra(FIRTNAME, firstname);
 		newActivityIntent.putExtra(NAME, name);
 		newActivityIntent.putExtra(REMAININGDATE, remainingDate);
+		newActivityIntent.putExtra(FONCTION, function);
+		newActivityIntent.putExtra(AGE, age);
+		newActivityIntent.putExtra(AVATAR, avatar);
+		newActivityIntent.putExtra(ID, id);
+		
     	return newActivityIntent;
 	}
 	
@@ -59,15 +79,22 @@ public class FriendDetailsActivity extends Activity{
 		setContentView(R.layout.activity_friend_details);
 		initActivity();
 	}
-
-   
     
     
 	private void initActivity() {
 		
+		initFriendInformations();
+	       
 		nameText = (TextView) findViewById(R.id.frienddetails_tv_name);
 		firstnameText =(TextView) findViewById(R.id.frienddetails_tv_firstname);
 		remaingDate =(TextView) findViewById(R.id.frienddetails_tv_RemainingDate);
+		age = (TextView) findViewById(R.id.frienddetails_tv_age);
+		
+		nameText.setText(friend.getNom());
+		firstnameText.setText(friend.getPrenom());
+		remaingDate.setText(remaingDate.getText() + String.format("%d", friend.getRemainingDay()));
+		age.setText(age.getText() + String.format("%d",friend.getAge()));
+		
 		
 		giftPager = (ViewPager) findViewById(R.id.frienddetails_vp_giftPager);
 		giftPagerAdapter = new GiftPagerAdapter(getFragmentManager());
@@ -76,10 +103,24 @@ public class FriendDetailsActivity extends Activity{
         leftTagsLayout= (LinearLayout) findViewById(R.id.frienddetails_l_ltags);
         rightTagsLayout= (LinearLayout) findViewById(R.id.frienddetails_l_rtags);
     	
+         
         initAutoCompleteTags();
 	}
 	
 	
+	private void initFriendInformations() {
+		friend =new Friend();
+		Intent tmp = getIntent();
+		friend.setNom(tmp.getStringExtra(NAME));
+		friend.setPrenom(tmp.getStringExtra(FIRTNAME));
+		friend.setRemainingDay(tmp.getIntExtra(REMAININGDATE, 0));
+		friend.setFonction(tmp.getStringExtra(FONCTION));
+		friend.setAge(tmp.getIntExtra(AGE, 0));
+		friend.setAvatar(tmp.getStringExtra(AVATAR));
+		friend.setId(tmp.getIntExtra(ID, 0));
+	}
+
+
 	private void initAutoCompleteTags() {
         autoCompleteTagsAdapter= new ArrayAdapter<String> (this, android.R.layout.simple_dropdown_item_1line, EXISTING_TAGS);
         autoCompleteTagsTextView = (AutoCompleteTextView) findViewById(R.id.frienddetails_actv_edittags);
@@ -148,8 +189,8 @@ public class FriendDetailsActivity extends Activity{
 					
 				}
 			});
-			
-			
+		// Clean autocompleteTextView	
+		autoCompleteTagsTextView.setText("");
 			
 		}
 	}
@@ -194,17 +235,6 @@ public class FriendDetailsActivity extends Activity{
 	}
 
 
-	@Override
-    public void onBackPressed() {
-        if (giftPager.getCurrentItem() == 0) {
-            // If the user is currently looking at the first step, allow the system to handle the
-            // Back button. This calls finish() on this activity and pops the back stack.
-            super.onBackPressed();
-        } else {
-            // Otherwise, select the previous step.
-            giftPager.setCurrentItem(giftPager.getCurrentItem() - 1);
-        }
-    }
 	
 	private void displayMessage(String message){
 		AlertDialog.Builder adb = new AlertDialog.Builder(this);
@@ -213,4 +243,25 @@ public class FriendDetailsActivity extends Activity{
 		ad.show();
 	}
 	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.friendetails_menu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_modify:
+			Intent intent = FriendDetailModificationActivity.getIntent(this, friend.getNom(), friend.getPrenom(), friend.getRemainingDay(), friend.getFonction(), friend.getAge(), friend.getAvatar(),friend.getId());
+			startActivity(intent);
+			overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
+			break;
+		default:
+			break;
+		}
+		return true;
+	} 
 }
