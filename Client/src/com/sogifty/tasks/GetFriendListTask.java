@@ -10,11 +10,7 @@ import java.net.ProtocolException;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -28,16 +24,11 @@ import com.sogifty.R;
 import com.sogifty.activities.ParserJson;
 import com.sogifty.model.Friends;
 import com.sogifty.tasks.listeners.OnGetFriendListTaskListener;
-import com.sogifty.tasks.listeners.OnSubscriptionTaskListener;
 
 public class GetFriendListTask extends AsyncTask<String,Integer,Boolean>{
 	private static final String USER_ID = "user_id";
-	private static final String EMAIL = "email";
-	private static final String PASSWD = "pwd";
 	private static final String LOADING = "Loading..";
 	private static final String URL_SUFFIX_REGISTER = "user/<userId>/friends";
-	private static final int ALREADY_EXISTS_INTEGER = 409;
-	private static final int COULD_NOT_CREATE_USER = 418;
 	
 	private ProgressDialog progressDialog;
 	private Context context;
