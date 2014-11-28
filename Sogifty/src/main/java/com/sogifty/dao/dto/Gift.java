@@ -1,5 +1,7 @@
 package com.sogifty.dao.dto;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,6 +32,12 @@ public class Gift implements DTO {
 
 	@Column(name = "url")
 	private String	url;
+	
+	@Column(name = "creation")
+	private Date creation;
+	
+	@Column(name = "last_update")
+	private Date lastUpdate;
 
 	public String getName() {
 		return name;
@@ -84,12 +92,31 @@ public class Gift implements DTO {
 		this.pictureUrl = pictureUrl;
 		return this;
 	}
+	
+	public Date getCreation() {
+		return creation;
+	}
+
+	public Gift setCreation(Date creation) {
+		this.creation = creation;
+		return this;
+	}
+
+	public Date getLastUpdate() {
+		return lastUpdate;
+	}
+
+	public Gift setLastUpdate(Date lastUpdate) {
+		this.lastUpdate = lastUpdate;
+		return this;
+	}
 
 	@Override
 	public String toString() {
 		return "Gift [id=" + id + ", name=" + name + ", description="
 				+ description + ", price=" + price + ", pictureUrl="
-				+ pictureUrl + ", url=" + url + "]";
+				+ pictureUrl + ", url=" + url + ", creation=" + creation
+				+ ", lastUpdate=" + lastUpdate + "]";
 	}
 
 	public Object updateFields(Object objectToUpdate, Object updatedObject) {
@@ -100,6 +127,8 @@ public class Gift implements DTO {
 				.setDescription(updatedGift.getDescription())
 				.setPictureUrl(updatedGift.getPictureUrl())
 				.setPrice(updatedGift.getPrice())
-				.setUrl(updatedGift.getUrl());
+				.setUrl(updatedGift.getUrl())
+				.setLastUpdate(updatedGift.getLastUpdate())
+				.setCreation(updatedGift.getCreation());
 	}
 }
