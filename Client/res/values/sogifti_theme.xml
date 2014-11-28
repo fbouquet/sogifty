@@ -1,16 +1,34 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
+
     <style name="MyTheme" parent="@android:style/Theme.Holo">
         <item name="android:actionBarStyle">@style/MyActionBar</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/blue</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColorHint">#95a5a6</item>
+        <item name="android:textCursorDrawable">@drawable/cursor_color</item>
+        <item name="android:editTextStyle">@style/MyEditText</item>
+        <item name="android:buttonStyle">@style/MyButtonStyle</item>
     </style>
 
     <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
-        <item name="android:background">#F84934</item>
+        <item name="android:background">#e74c3c</item>
         <item name="android:text">@color/red</item>
     </style>
 
+    <style name="MyEditText" parent="@android:style/Widget.Holo.Light.EditText">
+        <item name="android:textColor">@color/blue</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:imeOptions">actionDone</item>
+            </style>
 
-  <style name="MyTheme.ActionBar.TitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
-    <item name="android:textColor">@color/red</item>
-  </style>
+    <style name="MyButtonStyle" parent="@android:style/Widget.Holo.Light.Button">
+        <item name="android:background">@drawable/button_background</item>
+        <item name="android:textColor">@color/globalBackground</item>
+    </style>
+    
+    <style name="MyTheme.ActionBar.TitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/red</item>
+    </style>
+
 </resources>

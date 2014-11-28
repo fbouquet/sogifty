@@ -4,35 +4,25 @@ package com.sogifty.activities;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import com.sogifty.tools.AvatarGenerator;
-import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
-import com.sogifty.model.Gift;
-import com.sogifty.model.Friend;
-import com.sogifty.R;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
+
+import com.sogifty.R;
+import com.sogifty.model.Friend;
+import com.sogifty.model.Gift;
+import com.sogifty.tools.AvatarGenerator;
 
 public class FriendAdapter extends BaseAdapter {
 
@@ -170,11 +160,11 @@ public class FriendAdapter extends BaseAdapter {
 			holder.iv.setImageResource(android.R.drawable.ic_menu_gallery);
 		*/
 		
-		try {
-			holder.iv.setImageBitmap(AvatarGenerator.generate(f.getNom(), f.getGender() ,context));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			holder.iv.setImageBitmap(AvatarGenerator.generate(f.getNom(), f.getGender() ,context));
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 		
 		
 		return convertView;

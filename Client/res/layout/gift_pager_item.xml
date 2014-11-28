@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+   <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+       android:id="@+id/giftPager_sv_scrollView"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent" >
+
+       <LinearLayout
+           android:id="@+id/giftPager_l_giftpager" 
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_gravity="center_horizontal"
+           android:orientation="vertical">
+       <TextView
+           android:id="@+id/giftPager_tv_title"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:gravity="center_horizontal"
+           android:text="@string/giftPager_tv_title" />
+       
+       <ImageView
+            android:id="@+id/giftitem_iv_gift"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/cadeau"
+            android:scaleType="fitCenter"
+            android:contentDescription="@string/gift_pager_iv_gift_description" />
+       
+       <TextView
+           android:id="@+id/giftPager_tv_description"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:text="@string/giftPager_tv_description" />
+</LinearLayout>
+   </ScrollView>

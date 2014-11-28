@@ -6,12 +6,12 @@
         android:orderInCategory="100"
         android:showAsAction="always"
         
-        android:title="Supprimer"/>
+        android:title="@string/menu_list_delete"/>
     <item
         android:id="@+id/action_add"
         android:orderInCategory="200"
         android:showAsAction="always"
-        android:title="Ajouter">
+        android:title="@string/menu_list_add">
     </item>
 
 </menu> 

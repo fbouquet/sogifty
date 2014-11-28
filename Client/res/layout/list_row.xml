@@ -12,7 +12,6 @@
         android:layout_height="85dp"
         android:layout_alignParentRight="true"
         
-        android:src="@drawable/ic_launcher"
         android:layout_margin="5dp"
         android:paddingBottom="5dp"
          />

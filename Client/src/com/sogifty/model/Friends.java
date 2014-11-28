@@ -1,11 +1,7 @@
 package com.sogifty.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-
-import org.codehaus.jackson.annotate.JsonProperty;
 
 public class Friends {  
     private List<Friend> listFriends;  
@@ -32,6 +28,7 @@ public class Friends {
     	}
     	return null;
     }
+    
     public void addFriend(Friend f){
     	this.listFriends.add(f);
     }

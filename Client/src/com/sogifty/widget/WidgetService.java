@@ -8,17 +8,17 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
-import com.sogifty.activities.Constants;
-import com.sogifty.activities.ParserJson;
-import com.sogifty.activities.Setting;
-import com.sogifty.model.Friend;
-import com.sogifty.model.Gift;
-
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.RemoteViewsService;
+
+import com.sogifty.activities.Constants;
+import com.sogifty.activities.ParserJson;
+import com.sogifty.activities.Setting;
+import com.sogifty.model.Friend;
+import com.sogifty.model.Gift;
 
 public class WidgetService extends RemoteViewsService {
 		private ParserJson parser = new ParserJson("lala");

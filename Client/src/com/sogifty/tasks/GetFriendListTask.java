@@ -9,42 +9,38 @@ import java.net.ProtocolException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 
 import com.sogifty.R;
 import com.sogifty.activities.ParserJson;
-import com.sogifty.tasks.listeners.OnConnectionTaskListener;
+import com.sogifty.model.Friends;
+import com.sogifty.tasks.listeners.OnGetFriendListTaskListener;
 
-public class ConnectionTask extends AsyncTask<String,Integer,Boolean>{
-
-	private static final String EMAIL = "email";
-	private static final String PASSWD = "pwd";
+public class GetFriendListTask extends AsyncTask<String,Integer,Boolean>{
+	private static final String USER_ID = "user_id";
 	private static final String LOADING = "Loading..";
-	private static final String URL_SUFFIX_REGISTER = "login";
-	private static final int ALREADY_EXISTS_INTEGER = 404;
-	
+	private static final String URL_SUFFIX_REGISTER = "users/<userId>/friends";
 	
 	private ProgressDialog progressDialog;
 	private Context context;
 	private int httpStatus;
-	private int userId;
+	private Friends friendList;
 	private String errorMessage;
-	private OnConnectionTaskListener callback;
+	private OnGetFriendListTaskListener callback;
 	
-	public ConnectionTask(Context context, OnConnectionTaskListener connectionActivity) {
+	public GetFriendListTask(Context context, OnGetFriendListTaskListener callback) {
 		this.context = context;
 		this.progressDialog = new ProgressDialog(this.context);
-		this.callback = connectionActivity;
+		this.callback = callback;
 	}
 	
 	
@@ -56,28 +52,26 @@ public class ConnectionTask extends AsyncTask<String,Integer,Boolean>{
 	
 	@Override
 	protected Boolean doInBackground(String... userConnectionItems) {
-		return callServerConnectionWebService(userConnectionItems[0],userConnectionItems[1],
-				this.context.getResources().getString(R.string.web_url_init)+URL_SUFFIX_REGISTER);
+		return callServerConnectionWebService(this.context.getResources().getString(R.string.web_url_init)+URL_SUFFIX_REGISTER.replace("<userId>", String.valueOf(loadUserId())));
 	}
 	@Override
 	protected void onPostExecute(Boolean resultCall){
 		if(resultCall.booleanValue()){
-			callback.onConnectionComplete(userId);
+			callback.onGetFriendListComplete(friendList);
 		}
 		else{
-			callback.onConnectionFailed(errorMessage);
+			callback.onGetFriendListFailed(errorMessage);
 		}
 		progressDialog.dismiss();
 	}
 	
 	
-	private boolean callServerConnectionWebService(String email, String passwd, String webServiceUrlInit) {
+	private boolean callServerConnectionWebService(String webServiceUrlInit) {
 		if(isConnected()){
-			String result = POST(email,passwd,webServiceUrlInit);
+			String result = GET(webServiceUrlInit);
 			if(httpStatus == 200){
 				ParserJson parser = new ParserJson(result);
-				String id = parser.executeParseId();
-				userId =  Integer.parseInt(id);
+				friendList = parser.executeParseFriendList();
 				return true;
 			}
 			else{
@@ -95,11 +89,12 @@ public class ConnectionTask extends AsyncTask<String,Integer,Boolean>{
 	
 	private String getErrorMessage() {
 		String message = context.getResources().getString(R.string.unknown_error);
+		System.out.println(httpStatus);
 		if(httpStatus == context.getResources().getInteger(R.integer.user_http_error)){
 			message = context.getResources().getString(R.string.http_error);
 		}
-		else if(httpStatus == ALREADY_EXISTS_INTEGER){
-			message = context.getResources().getString(R.string.user_passwd_no_correspond);
+		else if(httpStatus == context.getResources().getInteger(R.integer.intern_error)){
+			message = context.getResources().getString(R.string.internal_error);
 		}
 		return message;
 	}
@@ -113,42 +108,28 @@ public class ConnectionTask extends AsyncTask<String,Integer,Boolean>{
         else
             return false;    
     }
-	public String POST(String email, String passwd, String url){
+	public String GET(String url){
         InputStream inputStream = null;
         String result = null;
         try {
         	HttpClient httpclient = new DefaultHttpClient();
         	
-        	HttpPost httpPost = new HttpPost(url);
-        	
-            String json = "";
-            JSONObject userJsonObject = new JSONObject();
-            try {
-				userJsonObject.put(EMAIL, email);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-            try {
-				userJsonObject.put(PASSWD, passwd);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-            json = userJsonObject.toString();
- 
-            StringEntity se = new StringEntity(json);
-            httpPost.setEntity(se);
-            httpPost.setHeader("Accept", "application/json");
-            httpPost.setHeader("Content-type", "application/json");
+        	HttpGet httpGet = new HttpGet(url);
+        
             
-            HttpResponse httpResponse = httpclient.execute(httpPost);
+            httpGet.setHeader("Accept", "application/json");
+            httpGet.setHeader("Content-type", "application/json");
+            
+            HttpResponse httpResponse = httpclient.execute(httpGet);
             
             inputStream = httpResponse.getEntity().getContent();
             httpStatus = httpResponse.getStatusLine().getStatusCode();
             android.util.Log.i("status",""+httpStatus);
-            if(inputStream != null)
+            if(inputStream != null){
                 result = convertInputStreamToString(inputStream);
+            }
             else{
-            	httpStatus = this.context.getResources().getInteger(R.integer.user_http_error);
+                httpStatus = this.context.getResources().getInteger(R.integer.user_http_error);
             }	
 	        } catch (MalformedURLException e){
 	        	httpStatus = this.context.getResources().getInteger(R.integer.user_http_error);
@@ -186,6 +167,10 @@ public class ConnectionTask extends AsyncTask<String,Integer,Boolean>{
         inputStream.close();
         return result;
  
-    }   
+    }
+	private int loadUserId(){
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+		return preferences.getInt(USER_ID, context.getResources().getInteger(R.integer.user_id_default));
+	}
 	
 }

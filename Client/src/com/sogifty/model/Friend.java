@@ -1,14 +1,6 @@
 package com.sogifty.model;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import org.codehaus.jackson.annotate.JsonProperty;
-
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
 
 
 public class Friend implements Comparable<Friend> {  
@@ -18,7 +10,7 @@ public class Friend implements Comparable<Friend> {
   private int age;
   private int _id;
   private String avatar;
-  private int remainingDay;
+  private long remainingDay;
 
   
 public void setAge(int age) {
@@ -76,12 +68,12 @@ public void setAge(int age) {
 	  return _id;
   }
 
-public int getRemainingDay() {
+public long getRemainingDay() {
 	return remainingDay;
 }
 
-public void setRemainingDay(int remainingDay) {
-	this.remainingDay = remainingDay;
+public void setRemainingDay(long l) {
+	this.remainingDay = l;
 }
 
 @JsonProperty("gender")
@@ -96,8 +88,8 @@ public void setGender(String gender) {
 @Override
 public int compareTo(Friend otherUser){
 
-	int dateOU = otherUser.getRemainingDay();
-	int dateU = this.getRemainingDay();
+	long dateOU = otherUser.getRemainingDay();
+	long dateU = this.getRemainingDay();
 	
 	if(dateOU > dateU){
 		return -1;

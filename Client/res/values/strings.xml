@@ -3,6 +3,11 @@
 
     <string name="app_name">Sogifty</string>
     <string name="action_settings">Settings</string>
+    <string name="menu_list_delete">Supprimer</string>
+    <string name="menu_list_add">Ajouter</string>
+    <string name="menu_modify">Modifier</string>
+    <string name="menu_delete_ok">OK</string>
+    <string name="menu_modify_ok">OK</string>
     
     <string name="deleteModeBtnTrue">OK</string>
     <string name="deleteModeBtnFalse">Supprimer</string>
@@ -15,14 +20,58 @@
     
   	<string name="connection_et_email">Enter your email address</string>
     <string name="connection_et_password">Enter your password</string>  
-  	<string name="connection_b_connection">Connect</string>  
+  	<string name="connection_b_connection">Connect</string>
+  	<string name="connection_b_subscription">Subscribe</string>
+  	  
+  	<string name="frienddetail_tv_nameFriend">Page</string>  
+  	<string name="frienddetail_tv_firstnameFriend">Jimmy</string>  
+  	<string name="frienddetail_tv_RemainingDate">J-</string> 
+  	<string name="frienddetail_tv_age">Age : </string> 
+  	<string name="frienddetails_tv_tags">Goûts : </string>
+  	<string name="frienddetails_actv_tags">Entrer un goût </string>
   	
-  	<string name="frienddetail_tv_nameFriend">Name</string>  
-  	<string name="frienddetail_tv_firstnameFriend">Firstname</string>  
-  	<string name="frienddetail_tv_RemainingDate">J-</string>  
+  	<string name="modify_tv_name">Nom : </string>  
+  	<string name="modify_tv_firstname">Prénom : </string>  
+  	<string name="modify_tv_birthdaydate">Date d\'anniversaire : </string> 
+    <string name="modify_tv_function">Fonction : </string>
+    <string name="modify_tv_tags">Goûts : </string>
+    <string name="modify_actv_tags">Entrer un goût </string>
+    <string name="modify_h_name">Entrer le nom. </string>
+  	<string name="modify_h_function">Entrer la fonction </string>
+  	<string name="modify_h_firstname">Entrer le prenom</string>  
+  	<string name="modify_h_birthdaydate">JJ/MM/AAAA</string> 
   	
-  	<string name="web_url_init"> http://sogifty-api-env-dritfywq7z.elasticbeanstalk.com/api/user/</string>
-  	
-  	
+  	<string name="web_url_init">http://sogifty-env-kvaj6nfpcm.elasticbeanstalk.com/api/</string>
+  	<string name="inscription_et_email">Enter your email address</string>
+    <string name="inscription_et_password">Enter your password</string>
+    <string name="inscription_et_confirmation">Confirm your password</string>
+    <string name="inscription_b_inscription">Inscription</string>
+    <string name="inscription_iv_logo">Logo</string>
     
+    
+    <string name="no_network_connection_error">Please verify your network connection</string>
+    <string name="unknown_error">Unknown error</string>
+  	<string name="internal_error">Server error</string>
+  	<string name="http_error">Impossible to connect to the URL</string>
+  	<string name="user_already_exists">User already exists</string>
+  	<string name="create_user_error">Create user error</string>
+  	<string name="user_passwd_no_correspond"> User and passwd dont correspond </string>
+  	
+  	
+  	<string name="giftPager_tv_description">Description :</string>
+  	<string name="giftPager_tv_title">Title</string>
+  	
+  	<string name="add_friend_et_name">Name</string>
+  	<string name="add_friend_et_birthdate">Birthdate dd-mm-yyyy</string>
+  	<string name="add_friend_b_add">Ajouter</string>
+  	
+  		
+  	<string name="useritem_iv_user_description">Avatar for the user</string>
+  	<string name="useritem_iv_gift_description">Gift proposed</string>
+
+  	<string name="gift_pager_iv_gift_description">One of the gift proposed</string>		
+  	
+  	<string name="activity_friend_details_iv_friend_avatar">Avatar for the user</string>
+  	
+  	
 </resources>

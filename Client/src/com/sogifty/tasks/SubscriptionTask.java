@@ -23,28 +23,28 @@ import android.os.AsyncTask;
 
 import com.sogifty.R;
 import com.sogifty.activities.ParserJson;
-import com.sogifty.tasks.listeners.OnConnectionTaskListener;
+import com.sogifty.tasks.listeners.OnSubscriptionTaskListener;
 
-public class ConnectionTask extends AsyncTask<String,Integer,Boolean>{
+public class SubscriptionTask extends AsyncTask<String,Integer,Boolean>{
 
 	private static final String EMAIL = "email";
 	private static final String PASSWD = "pwd";
 	private static final String LOADING = "Loading..";
-	private static final String URL_SUFFIX_REGISTER = "login";
-	private static final int ALREADY_EXISTS_INTEGER = 404;
-	
+	private static final String URL_SUFFIX_REGISTER = "register";
+	private static final int ALREADY_EXISTS_INTEGER = 409;
+	private static final int COULD_NOT_CREATE_USER = 418;
 	
 	private ProgressDialog progressDialog;
 	private Context context;
 	private int httpStatus;
 	private int userId;
 	private String errorMessage;
-	private OnConnectionTaskListener callback;
+	private OnSubscriptionTaskListener callback;
 	
-	public ConnectionTask(Context context, OnConnectionTaskListener connectionActivity) {
+	public SubscriptionTask(Context context, OnSubscriptionTaskListener callback) {
 		this.context = context;
 		this.progressDialog = new ProgressDialog(this.context);
-		this.callback = connectionActivity;
+		this.callback = callback;
 	}
 	
 	
@@ -62,10 +62,10 @@ public class ConnectionTask extends AsyncTask<String,Integer,Boolean>{
 	@Override
 	protected void onPostExecute(Boolean resultCall){
 		if(resultCall.booleanValue()){
-			callback.onConnectionComplete(userId);
+			callback.onSubscriptionComplete(userId);
 		}
 		else{
-			callback.onConnectionFailed(errorMessage);
+			callback.onSubscriptionFailed(errorMessage);
 		}
 		progressDialog.dismiss();
 	}
@@ -95,11 +95,17 @@ public class ConnectionTask extends AsyncTask<String,Integer,Boolean>{
 	
 	private String getErrorMessage() {
 		String message = context.getResources().getString(R.string.unknown_error);
+		System.out.println(httpStatus);
 		if(httpStatus == context.getResources().getInteger(R.integer.user_http_error)){
 			message = context.getResources().getString(R.string.http_error);
 		}
+		else if(httpStatus == context.getResources().getInteger(R.integer.intern_error)){
+			message = context.getResources().getString(R.string.internal_error);
+		}
+		else if(httpStatus == COULD_NOT_CREATE_USER)
+			message = context.getResources().getString(R.string.create_user_error);
 		else if(httpStatus == ALREADY_EXISTS_INTEGER){
-			message = context.getResources().getString(R.string.user_passwd_no_correspond);
+			message = context.getResources().getString(R.string.user_already_exists);
 		}
 		return message;
 	}
@@ -120,7 +126,7 @@ public class ConnectionTask extends AsyncTask<String,Integer,Boolean>{
         	HttpClient httpclient = new DefaultHttpClient();
         	
         	HttpPost httpPost = new HttpPost(url);
-        	
+        
             String json = "";
             JSONObject userJsonObject = new JSONObject();
             try {
@@ -145,10 +151,11 @@ public class ConnectionTask extends AsyncTask<String,Integer,Boolean>{
             inputStream = httpResponse.getEntity().getContent();
             httpStatus = httpResponse.getStatusLine().getStatusCode();
             android.util.Log.i("status",""+httpStatus);
-            if(inputStream != null)
+            if(inputStream != null){
                 result = convertInputStreamToString(inputStream);
+            }
             else{
-            	httpStatus = this.context.getResources().getInteger(R.integer.user_http_error);
+                httpStatus = this.context.getResources().getInteger(R.integer.user_http_error);
             }	
 	        } catch (MalformedURLException e){
 	        	httpStatus = this.context.getResources().getInteger(R.integer.user_http_error);
