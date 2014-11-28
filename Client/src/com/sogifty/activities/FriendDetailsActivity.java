@@ -57,13 +57,13 @@ public class FriendDetailsActivity extends Activity{
     private LinearLayout rightTagsLayout ;
     private Friend friend;
     
-    public static Intent getIntent(Context ctxt, String name, String firstname, int remainingDate, String function, int age, String avatar, int id) {
+    public static Intent getIntent(Context ctxt, String name, String firstname, long l, String function, int age, String avatar, int id) {
 		
     	Intent newActivityIntent = new Intent(ctxt, FriendDetailsActivity.class);
 		
 		newActivityIntent.putExtra(FIRTNAME, firstname);
 		newActivityIntent.putExtra(NAME, name);
-		newActivityIntent.putExtra(REMAININGDATE, remainingDate);
+		newActivityIntent.putExtra(REMAININGDATE, l);
 		newActivityIntent.putExtra(FONCTION, function);
 		newActivityIntent.putExtra(AGE, age);
 		newActivityIntent.putExtra(AVATAR, avatar);

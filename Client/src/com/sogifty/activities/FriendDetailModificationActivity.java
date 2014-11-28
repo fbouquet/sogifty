@@ -44,13 +44,13 @@ public class FriendDetailModificationActivity extends Activity {
 		friend.setId(tmp.getIntExtra(FriendDetailsActivity.ID, 0));
 	}
 
-	public static Intent getIntent(Context ctxt, String name, String firstname, int remainingDate, String function, int age, String avatar, int id) {
+	public static Intent getIntent(Context ctxt, String name, String firstname, long l, String function, int age, String avatar, int id) {
 			
 	    	Intent newActivityIntent = new Intent(ctxt, FriendDetailModificationActivity.class);
 			
 			newActivityIntent.putExtra(FriendDetailsActivity.FIRTNAME, firstname);
 			newActivityIntent.putExtra(FriendDetailsActivity.NAME, name);
-			newActivityIntent.putExtra(FriendDetailsActivity.REMAININGDATE, remainingDate);
+			newActivityIntent.putExtra(FriendDetailsActivity.REMAININGDATE, l);
 			newActivityIntent.putExtra(FriendDetailsActivity.FONCTION, function);
 			newActivityIntent.putExtra(FriendDetailsActivity.AGE, age);
 			newActivityIntent.putExtra(FriendDetailsActivity.AVATAR, avatar);
