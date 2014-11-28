@@ -1,22 +1,66 @@
 package com.sogifty.service;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.ws.rs.core.Response;
+
 import com.sogifty.dao.FriendDAO;
+import com.sogifty.dao.UserDAO;
 import com.sogifty.dao.dto.Friend;
+import com.sogifty.dao.dto.User;
 import com.sogifty.exception.SogiftyException;
 import com.sogifty.service.model.FriendModel;
 
 public class FriendService {
+	
 	private FriendDAO friendDAO = new FriendDAO();
-	
-	public FriendModel create(Friend friend) throws SogiftyException {
-		return new FriendModel(friendDAO.create(friend));
+	private UserDAO userDAO = new UserDAO();
+
+	public FriendModel create(int userId, FriendModel friend) throws SogiftyException {
+		User user = userDAO.getById(userId);
+		return new FriendModel(friendDAO.create(new Friend().setName(friend.getName())
+															.setBirthdate(friend.getBirthdate())
+															.setUser(user)));
+	}
+
+	public FriendModel update(int userId, int friendId, FriendModel friend) throws SogiftyException {
+		checkParameters(userId, friendId, friend);
+		User user = userDAO.getById(userId);
+		return new FriendModel(friendDAO.update(new Friend().setId(friendId)
+															.setName(friend.getName())
+															.setBirthdate(friend.getBirthdate())
+															.setUser(user)));
+	}
+
+	public void delete(Integer friendId) throws SogiftyException {
+		friendDAO.delete(friendId);
+	}
+
+	public List<FriendModel> getFriends(int userId) throws SogiftyException {
+		List<FriendModel> returnedFriends = new LinkedList<FriendModel>();
+		Iterator<Friend> friendsIterator = userDAO.getFriends(userId).iterator();
+		while (friendsIterator.hasNext()) {
+			returnedFriends.add(new FriendModel(friendsIterator.next()));
+		}
+		return returnedFriends;
 	}
 	
-	public FriendModel update(Friend friend) throws SogiftyException {
-		return new FriendModel(friendDAO.update(friend));
+	private void checkParameters(int userId, int friendId, FriendModel friend) throws SogiftyException {
+		if (getUserId(getFriendById(friendId)) != userId) {
+			throw new SogiftyException(Response.Status.FORBIDDEN);
+		}
+		if (friend.getName() == null || friend.getBirthdate() == null) {
+			throw new SogiftyException(Response.Status.BAD_REQUEST);
+		}
+	}
+
+	private Friend getFriendById(int friendId) throws SogiftyException {
+		return friendDAO.getById(friendId);
 	}
 	
-	public void delete(Friend friend) throws SogiftyException {
-		friendDAO.delete(friend);
+	private int getUserId(Friend friend) throws SogiftyException {
+		return friend.getUser().getId().intValue();
 	}
 }

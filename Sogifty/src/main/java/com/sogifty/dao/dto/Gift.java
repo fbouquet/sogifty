@@ -15,19 +15,19 @@ public class Gift implements DTO {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int		id;
-	
+
 	@Column(name = "name")
 	private String	name;
-	
+
 	@Column(name = "description")
 	private String	description;
-	
+
 	@Column(name = "price")
 	private String	price;
-	
+
 	@Column(name = "picture_url")
 	private String	pictureUrl;
-	
+
 	@Column(name = "url")
 	private String	url;
 
@@ -35,36 +35,41 @@ public class Gift implements DTO {
 		return name;
 	}
 
-	public void setName(String name) {
+	public Gift setName(String name) {
 		this.name = name;
+		return this;
 	}
 
 	public String getDescription() {
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public Gift setDescription(String description) {
 		this.description = description;
+		return this;
 	}
 
 	public String getPrice() {
 		return price;
 	}
 
-	public void setPrice(String price) {
+	public Gift setPrice(String price) {
 		this.price = price;
+		return this;
 	}
 
 	public String getUrl() {
 		return url;
 	}
 
-	public void setUrl(String url) {
+	public Gift setUrl(String url) {
 		this.url = url;
+		return this;
 	}
 
-	public void setId(int id) {
+	public Gift setId(int id) {
 		this.id = id;
+		return this;
 	}
 
 	public Integer getId() {
@@ -75,10 +80,11 @@ public class Gift implements DTO {
 		return pictureUrl;
 	}
 
-	public void setPictureUrl(String pictureUrl) {
+	public Gift setPictureUrl(String pictureUrl) {
 		this.pictureUrl = pictureUrl;
+		return this;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Gift [id=" + id + ", name=" + name + ", description="
@@ -86,4 +92,14 @@ public class Gift implements DTO {
 				+ pictureUrl + ", url=" + url + "]";
 	}
 
+	public Object updateFields(Object objectToUpdate, Object updatedObject) {
+		Gift giftToUpdate = (Gift) objectToUpdate;
+		Gift updatedGift = (Gift) updatedObject;
+		return giftToUpdate
+				.setName(updatedGift.getName())
+				.setDescription(updatedGift.getDescription())
+				.setPictureUrl(updatedGift.getPictureUrl())
+				.setPrice(updatedGift.getPrice())
+				.setUrl(updatedGift.getUrl());
+	}
 }

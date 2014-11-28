@@ -1,5 +1,6 @@
 package com.sogifty.webservice;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.ws.rs.Consumes;
@@ -13,71 +14,72 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.log4j.Logger;
-
-import com.sogifty.dao.dto.Friend;
 import com.sogifty.dao.dto.Gift;
 import com.sogifty.exception.SogiftyException;
 import com.sogifty.service.FriendService;
 import com.sogifty.service.GiftService;
 import com.sogifty.service.model.FriendModel;
 
-@Path("friend")
+@Path("/users/{userId}/friends")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class FriendWebService {
-	
+
 	private FriendService friendService = new FriendService();
 	private GiftService giftService = new GiftService();
-	
-	private static final Logger logger = Logger.getLogger(FriendWebService.class);
-	
-	@POST
-	public Response create(Friend friend) {
-		FriendModel returnedFriend = null;
+
+	@GET
+	public Response getFriends(@PathParam("userId") int userId) {
+		List<FriendModel> returnedFriends = null;
 
 		try {
-			returnedFriend = friendService.create(friend);
+			returnedFriends = friendService.getFriends(userId);
 		} catch (SogiftyException e) {
 			return Response.status(e.getStatus()).entity(e.getMessage()).build();
 		}
-		return Response.ok(returnedFriend).build();
+		return Response.ok(returnedFriends).build();
 	}
-	
+
+	@POST
+	public Response create(@PathParam("userId") int userId, FriendModel friend) {
+		FriendModel returnedFriend = null;
+
+		try {
+			returnedFriend = friendService.create(userId, friend);
+		} catch (SogiftyException e) {
+			return Response.status(e.getStatus()).entity(e.getMessage()).build();
+		}
+		return Response.ok(returnedFriend.getId()).build();
+	}
+
 	@Path("{friendId}")
 	@PUT
-	public Response update(@PathParam("friendId") int id, Friend friend) {
-		// Sets the right id to the friend to update
-		friend.setId(id);
+	public Response update(@PathParam("userId") int userId, @PathParam("friendId") int friendId, FriendModel friend) {
 		FriendModel returnedFriend = null;
 
 		try {
-			returnedFriend = friendService.update(friend);
+			returnedFriend = friendService.update(userId, friendId, friend);
 		} catch (SogiftyException e) {
 			return Response.status(e.getStatus()).entity(e.getMessage()).build();
 		}
-		return Response.ok(returnedFriend).build();
+		return Response.ok(returnedFriend.getId()).build();
 	}
-	
+
 	@Path("{friendId}")
 	@DELETE
-	public Response delete(@PathParam("friendId") int id, Friend friend) {
-		// Sets the right id to the friend to delete
-		friend.setId(id);
-
+	public Response delete(@PathParam("friendId") int id) {
 		try {
-			friendService.delete(friend);
+			friendService.delete(id);
 		} catch (SogiftyException e) {
 			return Response.status(e.getStatus()).entity(e.getMessage()).build();
 		}
 		return Response.ok().build();
 	}
-	
+
 	@Path("{friendId}/gifts")
 	@GET
 	public Response getGifts(@PathParam("friendId") int friendId) {
-		logger.debug("Friend id : " + friendId);
-		
+
 		Set<Gift> returnedGifts = null;
 
 		try {
@@ -85,7 +87,7 @@ public class FriendWebService {
 		} catch (SogiftyException e) {
 			return Response.status(e.getStatus()).entity(e.getMessage()).build();
 		}
-		
+
 		return Response.ok(returnedGifts).build();
 	}
 }

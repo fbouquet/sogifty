@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -42,33 +41,35 @@ public class Friend implements DTO {
 	@Temporal(TemporalType.DATE)
 	private Date birthdate;
 	
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "app_user_id")
 	@JsonBackReference
 	private User appUser;
-	
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(	name = "enjoy", 
 				joinColumns = {@JoinColumn(name = "friend_id")},
 				inverseJoinColumns = {@JoinColumn(name = "tag_id")})
 	private Set<Tag> tags = new HashSet<Tag>(0);
-			
+
 	public Friend() {};
 
 	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public Friend setId(int id) {
 		this.id = id;
+		return this;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
+	public Friend setName(String name) {
 		this.name = name;
+		return this;
 	}
 	
 	@JsonSerialize(using=JsonDateSerializer.class)
@@ -77,16 +78,25 @@ public class Friend implements DTO {
 	}
 
 	@JsonDeserialize(using=JsonDateDeserializer.class)
-	public void setBirthdate(Date birthdate) {
+	public Friend setBirthdate(Date birthdate) {
 		this.birthdate = birthdate;
+		return this;
 	}
 	
 	public User getUser() {
 		return appUser;
 	}
 
-	public void setUser(User appUser) {
+	public Friend setUser(User appUser) {
 		this.appUser = appUser;
+		return this;
+	}
+
+	public Friend updateFields(Object objectToUpdate, Object updatedObject) {
+		Friend friendToUpdate = (Friend) objectToUpdate;
+		Friend updatedFriend = (Friend) updatedObject;
+		return friendToUpdate.setName(updatedFriend.getName())
+							 .setBirthdate(updatedFriend.getBirthdate());
 	}
 	
 	public Set<Tag> getTags() {
