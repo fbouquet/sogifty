@@ -1,6 +1,7 @@
 package com.sogifty.dao.dto;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -11,14 +12,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.codehaus.jackson.annotate.JsonBackReference;
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -46,14 +46,11 @@ public class Friend implements DTO {
 	@JsonBackReference
 	private User appUser;
 	
-	@OneToMany(fetch = FetchType.EAGER)
-	@JoinTable(
-	   name = "enjoy", 
-	   joinColumns = @JoinColumn(name = "friend_id"), 
-	   inverseJoinColumns = @JoinColumn(name = "tag_id")
-	 )
-	@Column(nullable = true)
-	private Set<Tag> tags;
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(	name = "enjoy", 
+				joinColumns = {@JoinColumn(name = "friend_id")},
+				inverseJoinColumns = {@JoinColumn(name = "tag_id")})
+	private Set<Tag> tags = new HashSet<Tag>(0);
 	
 	public Friend() {};
 
@@ -95,9 +92,12 @@ public class Friend implements DTO {
 		return this;
 	}
 	
-	@JsonIgnore
 	public Set<Tag> getTags() {
 		return tags;
+	}
+	
+	public void setTags(Set<Tag> tags) {
+		this.tags = tags;
 	}
 
 	public Friend updateFields(Object objectToUpdate, Object updatedObject) {

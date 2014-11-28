@@ -1,5 +1,7 @@
 package com.sogifty.dao.dto;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,7 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -23,16 +25,12 @@ public class Tag implements DTO {
 	@Column(name = "label")
 	private String label;
 	
-	@ManyToOne(optional = true, fetch = FetchType.EAGER)
-	@JoinTable(
-	   name = "enjoy", 
-	   joinColumns = @JoinColumn(name = "tag_id"), 
-	   inverseJoinColumns = @JoinColumn(name = "friend_id")
-	 )
-	private Friend friend;
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(	name = "match", 
+				joinColumns = {@JoinColumn(name = "tag_id")},
+				inverseJoinColumns = {@JoinColumn(name = "gift_id")})
+	private Set<Gift> gifts;
 	
-	public Tag() {};
-
 	public Integer getId() {
 		return id;
 	}
@@ -51,23 +49,23 @@ public class Tag implements DTO {
 		return this;
 	}
 	
-	public Friend getFriend() {
-		return friend;
+	public Set<Gift> getGifts() {
+		return gifts;
 	}
 
-	public Tag setFriend(Friend friend) {
-		this.friend = friend;
+	public Tag setGifts(Set<Gift> gifts) {
+		this.gifts = gifts;
 		return this;
 	}
 
 	public Tag updateFields(Object objectToUpdate, Object updatedObject) {
-		Tag friendToUpdate = (Tag) objectToUpdate;
-		Tag updatedFriend = (Tag) updatedObject;
-		return friendToUpdate.setLabel(updatedFriend.getLabel());
+		Tag tagToUpdate = (Tag) objectToUpdate;
+		Tag updatedTag = (Tag) updatedObject;
+		return tagToUpdate.setLabel(updatedTag.getLabel());
 	}
 	
 	@Override
 	public String toString() {
-		return "(" + id + ") - " + label + "(friend: "+ friend.toString() +")";
+		return "(" + id + ") - " + label;
 	}
 }

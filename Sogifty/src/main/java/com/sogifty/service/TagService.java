@@ -3,6 +3,7 @@ package com.sogifty.service;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import javax.ws.rs.core.Response;
 
@@ -18,13 +19,12 @@ public class TagService {
 	private TagDAO tagDAO = new TagDAO();
 	private FriendDAO friendDAO = new FriendDAO();
 
+	public Set<Tag> getTags(int friendId) throws SogiftyException {
+		return tagDAO.getTags(friendId);
+	}
+	
 	public TagModel create(TagModel tag, Integer userId, Integer friendId) throws SogiftyException {
-		Friend friend = null;
-		if(friendId != null) {
-			friend = friendDAO.getById(friendId.intValue());
-		}
-		return new TagModel(tagDAO.create(new Tag().setLabel(tag.getLabel())
-												   .setFriend(friend)));
+		return new TagModel(tagDAO.create(new Tag().setLabel(tag.getLabel())));
 	}
 	
 	public List<TagModel> findAll(Integer friendId) throws SogiftyException {
@@ -49,8 +49,7 @@ public class TagService {
 			friend = friendDAO.getById(friendId.intValue());
 		}
 		return new TagModel(tagDAO.update(new Tag().setId(tagId)
-												   .setLabel(tag.getLabel())
-												   .setFriend(friend)));
+												   .setLabel(tag.getLabel())));
 	}
 
 	public void delete(Integer tagId) throws SogiftyException {

@@ -8,6 +8,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
 import com.sogifty.dao.dto.Friend;
+import com.sogifty.dao.dto.Gift;
 import com.sogifty.dao.dto.Tag;
 import com.sogifty.dao.dto.User;
 
@@ -30,6 +31,7 @@ public class HibernateUtil {
 		Configuration configuration = new Configuration().configure();
 		configuration.addAnnotatedClass(User.class);
 		configuration.addAnnotatedClass(Friend.class);
+		configuration.addAnnotatedClass(Gift.class);
 		configuration.addAnnotatedClass(Tag.class);
 		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
 		return configuration.buildSessionFactory(builder.build());
