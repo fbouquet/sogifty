@@ -41,7 +41,7 @@
   	<string name="modify_h_firstname">Entrer le prenom</string>  
   	<string name="modify_h_birthdaydate">JJ/MM/AAAA</string> 
   	
-  	<string name="web_url_init">http://sogifty-api-env-9wjtpmmtjk.elasticbeanstalk.com/api/</string>
+  	<string name="web_url_init">http://sogifty-env-kvaj6nfpcm.elasticbeanstalk.com/api/</string>
   	<string name="inscription_et_email">Enter your email address</string>
     <string name="inscription_et_password">Enter your password</string>
     <string name="inscription_et_confirmation">Confirm your password</string>

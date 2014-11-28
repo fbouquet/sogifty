@@ -28,7 +28,7 @@ import com.sogifty.tasks.listeners.OnGetFriendListTaskListener;
 public class GetFriendListTask extends AsyncTask<String,Integer,Boolean>{
 	private static final String USER_ID = "user_id";
 	private static final String LOADING = "Loading..";
-	private static final String URL_SUFFIX_REGISTER = "user/<userId>/friends";
+	private static final String URL_SUFFIX_REGISTER = "users/<userId>/friends";
 	
 	private ProgressDialog progressDialog;
 	private Context context;

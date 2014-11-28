@@ -29,7 +29,7 @@ import com.sogifty.tasks.listeners.OnAddFriendTaskListener;
 public class AddFriendTask extends AsyncTask<String,Integer,Boolean>{
 	private static final String USER_ID = "user_id";
 	private static final String LOADING = "Loading..";
-	private static final String URL_SUFFIX_REGISTER = "friend";
+	private static final String URL_SUFFIX_REGISTER = "users/<userId>/friends";
 	private static final String NAME = "name";
 	private static final String BIRTHDATE = "birthdate";
 	
@@ -55,7 +55,7 @@ public class AddFriendTask extends AsyncTask<String,Integer,Boolean>{
 	@Override
 	protected Boolean doInBackground(String... userConnectionItems) {
 		return callServerConnectionWebService(userConnectionItems[0],userConnectionItems[1],
-				this.context.getResources().getString(R.string.web_url_init)+URL_SUFFIX_REGISTER);
+				this.context.getResources().getString(R.string.web_url_init)+URL_SUFFIX_REGISTER.replace("<userId>", String.valueOf(loadUserId())));
 	}
 	@Override
 	protected void onPostExecute(Boolean resultCall){

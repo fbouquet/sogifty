@@ -30,7 +30,7 @@ public class SubscriptionTask extends AsyncTask<String,Integer,Boolean>{
 	private static final String EMAIL = "email";
 	private static final String PASSWD = "pwd";
 	private static final String LOADING = "Loading..";
-	private static final String URL_SUFFIX_REGISTER = "user/register";
+	private static final String URL_SUFFIX_REGISTER = "register";
 	private static final int ALREADY_EXISTS_INTEGER = 409;
 	private static final int COULD_NOT_CREATE_USER = 418;
 	

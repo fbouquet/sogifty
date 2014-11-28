@@ -30,7 +30,7 @@ public class ConnectionTask extends AsyncTask<String,Integer,Boolean>{
 	private static final String EMAIL = "email";
 	private static final String PASSWD = "pwd";
 	private static final String LOADING = "Loading..";
-	private static final String URL_SUFFIX_REGISTER = "user/login";
+	private static final String URL_SUFFIX_REGISTER = "login";
 	private static final int ALREADY_EXISTS_INTEGER = 404;
 	
 	
