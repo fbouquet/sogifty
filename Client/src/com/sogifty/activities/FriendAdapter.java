@@ -2,7 +2,6 @@ package com.sogifty.activities;
 
 
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -22,7 +21,6 @@ import android.widget.TextView;
 import com.sogifty.R;
 import com.sogifty.model.Friend;
 import com.sogifty.model.Gift;
-import com.sogifty.tools.AvatarGenerator;
 
 public class FriendAdapter extends BaseAdapter {
 

@@ -18,13 +18,13 @@
     
     <string name="empty_string">No String</string>
     
-  	<string name="connection_et_email">Enter your email address</string>
-    <string name="connection_et_password">Enter your password</string>  
-  	<string name="connection_b_connection">Connect</string>
-  	<string name="connection_b_subscription">Subscribe</string>
+  	<string name="connection_et_email">Entrer votre adresse mail</string>
+    <string name="connection_et_password">Entrer votre mot de passe</string>  
+  	<string name="connection_b_connection">Se connecter</string>
+  	<string name="connection_b_subscription">S\'inscrire</string>
   	  
-  	<string name="frienddetail_tv_nameFriend">Page</string>  
-  	<string name="frienddetail_tv_firstnameFriend">Jimmy</string>  
+  	<string name="frienddetail_tv_nameFriend">Name : </string>  
+  	<string name="frienddetail_tv_firstnameFriend">Prénom : </string>  
   	<string name="frienddetail_tv_RemainingDate">J-</string> 
   	<string name="frienddetail_tv_age">Age : </string> 
   	<string name="frienddetails_tv_tags">Goûts : </string>
@@ -35,16 +35,17 @@
   	<string name="modify_tv_birthdaydate">Date d\'anniversaire : </string> 
     <string name="modify_tv_function">Fonction : </string>
     <string name="modify_tv_tags">Goûts : </string>
+    <string name="modify_b_addtag">Ajouter</string>
     <string name="modify_actv_tags">Entrer un goût </string>
     <string name="modify_h_name">Entrer le nom. </string>
   	<string name="modify_h_function">Entrer la fonction </string>
   	<string name="modify_h_firstname">Entrer le prenom</string>  
-  	<string name="modify_h_birthdaydate">JJ/MM/AAAA</string> 
+  	<string name="modify_h_birthdaydate">JJ-MM-AAAA</string> 
   	
   	<string name="web_url_init">http://sogifty-env-kvaj6nfpcm.elasticbeanstalk.com/api/</string>
-  	<string name="inscription_et_email">Enter your email address</string>
-    <string name="inscription_et_password">Enter your password</string>
-    <string name="inscription_et_confirmation">Confirm your password</string>
+  	<string name="inscription_et_email">Entrer votre adresse mail</string>
+    <string name="inscription_et_password">Entrer votre mot de passe</string>
+    <string name="inscription_et_confirmation">Confirmer votre mot de passe</string>
     <string name="inscription_b_inscription">Inscription</string>
     <string name="inscription_iv_logo">Logo</string>
     
@@ -59,10 +60,10 @@
   	
   	
   	<string name="giftPager_tv_description">Description :</string>
-  	<string name="giftPager_tv_title">Title</string>
+  	<string name="giftPager_tv_title">Nom du Cadeau</string>
   	
-  	<string name="add_friend_et_name">Name</string>
-  	<string name="add_friend_et_birthdate">Birthdate dd-mm-yyyy</string>
+  	<string name="add_friend_et_name">Nom</string>
+  	<string name="add_friend_et_birthdate">Date d\'anniversaire jj-mm-aaaa</string>
   	<string name="add_friend_b_add">Ajouter</string>
   	
   		

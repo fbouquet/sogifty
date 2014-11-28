@@ -79,12 +79,24 @@
         android:layout_height="wrap_content"
         android:text="@string/frienddetails_tv_tags"
         android:textSize="12sp" />
-
-    <AutoCompleteTextView
-        android:id="@+id/modify_actv_edittags"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/modify_actv_tags" />
+        android:orientation="horizontal">
+
+        <AutoCompleteTextView
+            android:id="@+id/modify_actv_edittags"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/modify_actv_tags"
+            android:textColor="@color/blue" />
+
+        <Button 
+            android:id="@+id/modify_b_addtag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/modify_b_addtag"/>
+        </LinearLayout>
 
     <LinearLayout
         android:id="@+id/modify_l_tags"

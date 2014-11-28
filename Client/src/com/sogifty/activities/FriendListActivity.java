@@ -8,7 +8,6 @@ import java.util.List;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ClipData.Item;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,11 +29,8 @@ import android.widget.Toast;
 import com.sogifty.R;
 import com.sogifty.model.Friend;
 import com.sogifty.model.Friends;
-import com.sogifty.tasks.AddFriendTask;
 import com.sogifty.tasks.GetFriendListTask;
-import com.sogifty.tasks.listeners.OnAddFriendTaskListener;
 import com.sogifty.tasks.listeners.OnGetFriendListTaskListener;
-import com.sogifty.tasks.listeners.OnSubscriptionTaskListener;
 
 public class FriendListActivity extends Activity implements OnGetFriendListTaskListener{
 	private static String FRIEND_LIST = "Liste des amis";
@@ -192,7 +188,7 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 
 	}
 	protected void createAddFriendActivity() {
-		Intent intent = AddFriendActivity.getIntent(this);
+		Intent intent = FriendDetailModificationActivity.getIntent(this, "", "", 0, "", 0, "", -1, false);
 		startActivity(intent);
 	}
 	
