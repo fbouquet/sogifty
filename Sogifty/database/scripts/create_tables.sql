@@ -21,7 +21,13 @@ create table friend (
 
 create table gift (
     id serial primary key not null,
-    characteristic json not null
+    name text not null,
+    description text,
+    price text,
+    picture_url text,
+    url text not null,
+    last_update date not null,
+    creation date not null
 );
 
 create table tag (
