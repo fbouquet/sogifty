@@ -25,7 +25,7 @@
   	  
   	<string name="frienddetail_tv_nameFriend">Page</string>  
   	<string name="frienddetail_tv_firstnameFriend">Jimmy</string>  
-  	<string name="frienddetail_tv_RemainingDate">J-365</string> 
+  	<string name="frienddetail_tv_RemainingDate">J-</string> 
   	<string name="frienddetail_tv_age">Age : </string> 
   	<string name="frienddetails_tv_tags">Goûts : </string>
   	<string name="frienddetails_actv_tags">Entrer un goût </string>
