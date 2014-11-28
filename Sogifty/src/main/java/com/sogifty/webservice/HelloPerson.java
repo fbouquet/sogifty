@@ -5,8 +5,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
+import com.sogifty.dao.dto.Tag;
+import com.sogifty.exception.SogiftyException;
 import com.sogifty.service.recommendation.CdiscountConfiguration;
-import com.sogifty.service.recommendation.RecommendationEngine;
+import com.sogifty.service.recommendation.GiftsFetcher;
 
 @Path("hello")
 public class HelloPerson {
@@ -33,8 +35,12 @@ public class HelloPerson {
 //			System.out.println("Next user: " + user);
 //		}
 		
-		RecommendationEngine recommendationEngine = new RecommendationEngine();
-		recommendationEngine.runEngine(new CdiscountConfiguration());
+		GiftsFetcher fetcher = new GiftsFetcher(new CdiscountConfiguration());
+		try {
+			fetcher.fetchGifts(new Tag());
+		} catch (SogiftyException e) {
+			e.printStackTrace();
+		}
 		
 		return Response.status(200).entity("(Hibernate OK) \n Helloooo " + who).build();
 	}

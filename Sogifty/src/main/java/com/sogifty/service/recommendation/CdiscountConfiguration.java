@@ -1,25 +1,52 @@
 package com.sogifty.service.recommendation;
 
+import com.sogifty.dao.dto.Tag;
 
-public class CdiscountConfiguration extends Configuration {
 
-	private final static String BASE_URL			= "http://www.cdiscount.com/search/10/";
-	private final static String END_URL				= ".html#_his_";
-	private final static String ID_PRODUCT_LIST		= "lpBloc";
-	private final static String CLASS_PRODUCT		= "prdtBloc";
-	private final static String CLASS_TITLE			= "prdtBTit";
-	private final static String CLASS_DESCRIPTION	= "prdtBDesc";
-	private final static String CLASS_PRICE			= "price";
-	private final static String CLASS_PICTURE		= "prdtBImg";
-	private final static String ATTR_PICTURE		= "data-src";
+
+public class CdiscountConfiguration implements Configuration {
+
+	private final static String BASE_SEARCH_URL			= "http://www.cdiscount.com/search/10/";
+	private final static String END_SEARCH_URL			= ".html";
+	private final static String PRODUCTS_SELECTOR		= "#lpBloc > li[data-sku]";
+	private final static String TITLE_SELECTOR			= ".prdtBTit";
+	private final static String DESCRIPTION_SELECTOR	= "p.prdtBDesc";
+	private final static String PRICE_SELECTOR			= ".price";
+	private final static String PICTURE_SELECTOR		= ".prdtBImg";
+	private final static String PICTURE_URL_ATTRIBUTE	= "data-src";
 
 	public CdiscountConfiguration() {
-		super(	BASE_URL, END_URL, ID_PRODUCT_LIST, CLASS_PRODUCT, CLASS_TITLE, 
-				CLASS_DESCRIPTION, CLASS_PRICE, CLASS_PICTURE, ATTR_PICTURE);
+		
 	}
 	
-	@Override
-	public String getSearchUrl(String tag) {
-		return BASE_URL + tag + END_URL;
+	public String getSearchUrl(Tag tag) {
+		return BASE_SEARCH_URL + convertSpaces(tag.getLabel()) + END_SEARCH_URL;
+	}
+	
+	private String convertSpaces(String label) {
+		return label.replaceAll(" ", "\\+");
+	}
+	
+	public String getProductsSelector() {
+		return PRODUCTS_SELECTOR;
+	}
+
+	public String getTitleSelector() {
+		return TITLE_SELECTOR;
+	}
+
+	public String getDescriptionSelector() {
+		return DESCRIPTION_SELECTOR;
+	}
+
+	public String getPriceSelector() {
+		return PRICE_SELECTOR;
+	}
+	public String getPictureSelector() {
+		return PICTURE_SELECTOR;
+	}
+	
+	public String getPictureUrlAttribute() {
+		return PICTURE_URL_ATTRIBUTE;
 	}
 }
