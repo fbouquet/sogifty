@@ -1,10 +1,15 @@
 package com.sogifty.webservice;
 
+import java.util.List;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
+import org.apache.log4j.Logger;
+
+import com.sogifty.dao.dto.Gift;
 import com.sogifty.dao.dto.Tag;
 import com.sogifty.exception.SogiftyException;
 import com.sogifty.service.recommendation.CdiscountConfiguration;
@@ -13,6 +18,8 @@ import com.sogifty.service.recommendation.GiftsFetcher;
 @Path("hello")
 public class HelloPerson {
 
+	private static final Logger logger = Logger.getLogger(HelloPerson.class);
+	
 	@GET
 	@Path("/{who}")
 	public Response helloPerson(@PathParam("who") String who) {
@@ -37,7 +44,10 @@ public class HelloPerson {
 		
 		GiftsFetcher fetcher = new GiftsFetcher(new CdiscountConfiguration());
 		try {
-			fetcher.fetchGifts(new Tag());
+			List<Gift> gifts = fetcher.fetchGifts(new Tag());
+			for (Gift gift : gifts) {
+				logger.debug(gift.toString());
+			}
 		} catch (SogiftyException e) {
 			e.printStackTrace();
 		}

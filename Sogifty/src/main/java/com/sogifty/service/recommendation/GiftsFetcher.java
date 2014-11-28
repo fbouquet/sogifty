@@ -27,7 +27,7 @@ public class GiftsFetcher {
 		this.configuration = configuration;
 	}
 	
-	public void fetchGifts(Tag tag) throws SogiftyException {
+	public List<Gift> fetchGifts(Tag tag) throws SogiftyException {
 		logger.info("Starting gift Fetch for tag '" + tag.getLabel() + "'.");
 		List<Gift> gifts = new ArrayList<Gift>();
 		Document doc;
@@ -56,6 +56,8 @@ public class GiftsFetcher {
 		saveGifts(gifts);
 		
 		logger.info("End of gift fetch for tag '" + tag.getLabel() + "'.");
+		
+		return gifts;
 	}
 	
 	private Gift toGift(Element product) {
@@ -75,8 +77,6 @@ public class GiftsFetcher {
 		
 		gift.setCreation(new Date());
 		gift.setLastUpdate(new Date());
-		
-		logger.debug(gift.toString());
 		
 		return gift;
 	}
