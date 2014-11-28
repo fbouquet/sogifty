@@ -2,8 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey"
-    android:orientation="vertical" >
+    android:background="@drawable/gradient_background"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,7 +18,8 @@
             android:id="@+id/frienddetails_iv_friendAvatar"
             android:layout_width="155dp"
             android:layout_height="155dp"
-            android:src="@android:drawable/sym_def_app_icon" />
+            android:src="@drawable/noavatar"
+            android:contentDescription="@string/activity_friend_details_iv_friend_avatar" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -25,27 +30,29 @@
                 android:id="@+id/frienddetails_tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/frienddetail_tv_nameFriend" />
+                android:text="@string/frienddetail_tv_nameFriend"
+                android:textSize="28sp" />
 
             <TextView
                 android:id="@+id/frienddetails_tv_firstname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/frienddetail_tv_firstnameFriend" />
+                android:text="@string/frienddetail_tv_firstnameFriend"
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/frienddetails_tv_age"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:text="@string/frienddetail_tv_age" />
-                
-         
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/frienddetails_tv_RemainingDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/frienddetail_tv_RemainingDate" />
+                android:text="@string/frienddetail_tv_RemainingDate"
+                android:textColor="@color/red"
+                android:textSize="20sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -53,18 +60,19 @@
         android:id="@+id/frienddetails_tv_tags"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/frienddetails_tv_tags"
-        android:textSize="12sp" />
+        android:text="@string/frienddetails_tv_tags" />
 
     <AutoCompleteTextView
         android:id="@+id/frienddetails_actv_edittags"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/frienddetails_actv_tags" />
+        android:hint="@string/frienddetails_actv_tags"
+        android:textColor="@color/blue"
+        android:textCursorDrawable="@drawable/cursor_color"
+        android:imeOptions="actionDone" />
 
     <LinearLayout
         android:id="@+id/frienddetails_l_tags"
-        android:baselineAligned="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

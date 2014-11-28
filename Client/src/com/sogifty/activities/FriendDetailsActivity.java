@@ -230,7 +230,7 @@ public class FriendDetailsActivity extends Activity{
 		
 		ImageButton buttonDelete = new ImageButton(this);
 		buttonDelete.setLayoutParams(lp);
-		buttonDelete.setImageResource(R.drawable.delete_button);
+		buttonDelete.setImageResource(R.drawable.ic_action_cancel);
 		return buttonDelete;
 	}
 

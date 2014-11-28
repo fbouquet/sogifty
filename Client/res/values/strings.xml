@@ -23,10 +23,9 @@
   	<string name="connection_b_connection">Connect</string>
   	<string name="connection_b_subscription">Subscribe</string>
   	  
-  	
-  	<string name="frienddetail_tv_nameFriend">Nom : </string>  
-  	<string name="frienddetail_tv_firstnameFriend">Prénom : </string>  
-  	<string name="frienddetail_tv_RemainingDate">J-</string> 
+  	<string name="frienddetail_tv_nameFriend">Page</string>  
+  	<string name="frienddetail_tv_firstnameFriend">Jimmy</string>  
+  	<string name="frienddetail_tv_RemainingDate">J-365</string> 
   	<string name="frienddetail_tv_age">Age : </string> 
   	<string name="frienddetails_tv_tags">Goûts : </string>
   	<string name="frienddetails_actv_tags">Entrer un goût </string>
@@ -65,6 +64,14 @@
   	<string name="add_friend_et_name">Name</string>
   	<string name="add_friend_et_birthdate">Birthdate dd-mm-yyyy</string>
   	<string name="add_friend_b_add">Ajouter</string>
+  	
+  		
+  	<string name="useritem_iv_user_description">Avatar for the user</string>
+  	<string name="useritem_iv_gift_description">Gift proposed</string>
+
+  	<string name="gift_pager_iv_gift_description">One of the gift proposed</string>		
+  	
+  	<string name="activity_friend_details_iv_friend_avatar">Avatar for the user</string>
   	
   	
 </resources>
