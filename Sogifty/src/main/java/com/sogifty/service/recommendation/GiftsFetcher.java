@@ -78,6 +78,8 @@ public class GiftsFetcher {
 		gift.setCreation(new Date());
 		gift.setLastUpdate(new Date());
 		
+		Elements urlElts = product.select(configuration.getProductUrlSelector());
+		gift.setUrl(configuration.getBaseUrl() + urlElts.attr(configuration.getProductUrlAttribute()));
 		return gift;
 	}
 	

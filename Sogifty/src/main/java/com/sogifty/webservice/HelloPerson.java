@@ -44,7 +44,9 @@ public class HelloPerson {
 		
 		GiftsFetcher fetcher = new GiftsFetcher(new CdiscountConfiguration());
 		try {
-			List<Gift> gifts = fetcher.fetchGifts(new Tag());
+			Tag tag = new Tag();
+			tag.setLabel("ballon rugby");
+			List<Gift> gifts = fetcher.fetchGifts(tag);
 			for (Gift gift : gifts) {
 				logger.debug(gift.toString());
 			}
