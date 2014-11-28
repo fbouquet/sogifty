@@ -34,6 +34,7 @@
         <activity android:name="com.sogifty.activities.FriendDetailsActivity" />
         <activity android:name="com.sogifty.activities.ConnectionActivity" />
         <activity android:name="com.sogifty.activities.SubscriptionActivity" />
+        <activity android:name="com.sogifty.activities.AddFriendActivity" />
         
        
             
