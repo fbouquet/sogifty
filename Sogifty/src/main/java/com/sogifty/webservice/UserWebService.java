@@ -44,17 +44,4 @@ public class UserWebService {
 		}
 		return Response.ok(returnedUser).build();
 	}
-	
-//	@Path("test")
-//	@GET
-//	public Response testDAO() {
-//		String returnedClassName = null;
-//
-//		try {
-//			returnedClassName = userService.test();
-//		} catch (SogiftyException e) {
-//			return Response.status(e.getStatus()).entity(e.getMessage()).build();
-//		}
-//		return Response.ok(returnedClassName).build();
-//	}
 }

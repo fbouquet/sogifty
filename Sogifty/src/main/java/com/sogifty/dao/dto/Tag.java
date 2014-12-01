@@ -61,7 +61,8 @@ public class Tag implements DTO {
 	public Tag updateFields(Object objectToUpdate, Object updatedObject) {
 		Tag tagToUpdate = (Tag) objectToUpdate;
 		Tag updatedTag = (Tag) updatedObject;
-		return tagToUpdate.setLabel(updatedTag.getLabel());
+		return tagToUpdate.setLabel(updatedTag.getLabel())
+						  .setGifts(updatedTag.getGifts());
 	}
 
 	@Override

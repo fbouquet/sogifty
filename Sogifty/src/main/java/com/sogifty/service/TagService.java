@@ -9,7 +9,6 @@ import javax.ws.rs.core.Response;
 
 import com.sogifty.dao.FriendDAO;
 import com.sogifty.dao.TagDAO;
-import com.sogifty.dao.dto.Friend;
 import com.sogifty.dao.dto.Tag;
 import com.sogifty.exception.SogiftyException;
 import com.sogifty.service.model.TagModel;
@@ -23,34 +22,34 @@ public class TagService {
 		return tagDAO.getTags(friendId);
 	}
 
-	public TagModel create(TagModel tag, Integer userId, Integer friendId) throws SogiftyException {
-		return new TagModel(tagDAO.create(new Tag().setLabel(tag.getLabel())));
-	}
+//	public TagModel create(TagModel tag, Integer userId, Integer friendId) throws SogiftyException {
+//		return new TagModel(
+//				tagDAO.create(new Tag().setLabel(tag.getLabel())
+//						));
+//	}
 
-	public List<TagModel> findAll(Integer friendId) throws SogiftyException {
-		List<TagModel> returnedTags = new LinkedList<TagModel>();
+	public List<TagModel> findAll() throws SogiftyException {
+		List<TagModel> tags = new LinkedList<TagModel>();
 		Iterator<Tag> tagsIterator;
-		if(friendId != null) {
-			tagsIterator = (friendDAO.getTags(friendId.intValue())).iterator();
-		} else {
-			tagsIterator = tagDAO.findAll().iterator();
-		}
+
+		tagsIterator = tagDAO.findAll().iterator();
+
 		while (tagsIterator.hasNext()) {
-			returnedTags.add(new TagModel(tagsIterator.next()));
+			tags.add(new TagModel(tagsIterator.next()));
 		}
-		return returnedTags;
+		return tags;
 	}
 
-	public TagModel update(int tagId, TagModel tag, Integer userId, Integer friendId) throws SogiftyException {
-		// TODO: check parameters correctly (right associated friend, right user associated to friend)
-		checkParameters(tagId, tag, friendId);
-		Friend friend = null;
-		if(friendId != null) {
-			friend = friendDAO.getById(friendId.intValue());
-		}
-		return new TagModel(tagDAO.update(new Tag().setId(tagId)
-				.setLabel(tag.getLabel())));
-	}
+//	public TagModel update(int tagId, TagModel tag, Integer userId, Integer friendId) throws SogiftyException {
+//		// TODO: check parameters correctly (right associated friend, right user associated to friend)
+//		checkParameters(tagId, tag, friendId);
+//		Friend friend = null;
+//		if(friendId != null) {
+//			friend = friendDAO.getById(friendId.intValue());
+//		}
+//		return new TagModel(tagDAO.update(new Tag().setId(tagId)
+//				.setLabel(tag.getLabel())));
+//	}
 
 	public void delete(Integer tagId) throws SogiftyException {
 		tagDAO.delete(tagId);
