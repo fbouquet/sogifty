@@ -96,15 +96,17 @@ public class Friend implements DTO {
 		Friend friendToUpdate = (Friend) objectToUpdate;
 		Friend updatedFriend = (Friend) updatedObject;
 		return friendToUpdate.setName(updatedFriend.getName())
-							 .setBirthdate(updatedFriend.getBirthdate());
+							 .setBirthdate(updatedFriend.getBirthdate())
+							 .setTags(updatedFriend.getTags());
 	}
 	
 	public Set<Tag> getTags() {
 		return tags;
 	}
 
-	public void setTags(Set<Tag> tags) {
+	public Friend setTags(Set<Tag> tags) {
 		this.tags = tags;
+		return this;
 	}
 	
 	@Override

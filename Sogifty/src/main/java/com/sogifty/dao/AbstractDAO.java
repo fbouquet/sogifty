@@ -1,8 +1,11 @@
 package com.sogifty.dao;
 
+import java.util.List;
+
 import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -122,6 +125,21 @@ public abstract class AbstractDAO<T extends DTO> {
 		} catch(Exception e) {
 			rollbackTransaction(t);
 			logger.fatal("Could not delete the object: " + e);
+			throw new SogiftyException(Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			closeSession(session);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<T> findAll() throws SogiftyException {
+		Session session = null;
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Criteria criteria = session.createCriteria(getType());
+			return criteria.list();
+		} catch(HibernateException e) {
+			logger.fatal("Error while reading from database: " + e);
 			throw new SogiftyException(Response.Status.INTERNAL_SERVER_ERROR);
 		} finally {
 			closeSession(session);

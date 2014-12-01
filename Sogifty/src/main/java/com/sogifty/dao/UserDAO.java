@@ -57,29 +57,4 @@ public class UserDAO extends AbstractDAO<User> {
 		}
 		return userFoundId;
 	}
-	
-//	public User getById(Integer id) throws SogiftyException {
-//		if (id == null) {
-//			logger.fatal("Could not find User without id in database");
-//			throw new SogiftyException(Response.Status.BAD_REQUEST);
-//		}
-//		Session session = null;
-//		User found = null;
-//		try {
-//			session = HibernateUtil.getSessionFactory().openSession();
-//			Criteria criteria = session.createCriteria(User.class);
-//			criteria.add(Restrictions.eq("id", id));
-//			found = (User) criteria.uniqueResult();
-//			if (found == null) {
-//				throw new SogiftyException(Response.Status.NOT_FOUND);
-//			}
-//		} catch(HibernateException e) {
-//			logger.fatal("Error while reading user from database: " + e);
-//			throw new SogiftyException(Response.Status.INTERNAL_SERVER_ERROR);
-//		} finally {
-//			closeSession(session);
-//		}
-//
-//		return found;
-//	}
 }
