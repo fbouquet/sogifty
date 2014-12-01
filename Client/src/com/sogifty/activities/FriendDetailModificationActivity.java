@@ -29,10 +29,10 @@ import android.widget.TextView;
 
 import com.sogifty.R;
 import com.sogifty.model.Friend;
-import com.sogifty.tasks.AddFriendTask;
-import com.sogifty.tasks.listeners.OnAddFriendTaskListener;
+import com.sogifty.tasks.AddOrModifyFriendTask;
+import com.sogifty.tasks.listeners.OnAddOrModifyFriendTaskListener;
 
-public class FriendDetailModificationActivity extends Activity implements OnAddFriendTaskListener{
+public class FriendDetailModificationActivity extends Activity implements OnAddOrModifyFriendTaskListener{
 	private static final CharSequence APPLICATION_NAME = "Sogifty";
 	private static final CharSequence FRIEND_DETAIL = "Détails ami";
 	private static final String EMPTY_CONNECTION_ITEMS = "Please enter at least name and birthdate";
@@ -282,16 +282,14 @@ public class FriendDetailModificationActivity extends Activity implements OnAddF
 		case R.id.action_modify_ok:
 			updateFriend();
 			if(isModify){
-				Intent intent = FriendDetailsActivity.getIntent(this, friend.getNom(), friend.getPrenom(), friend.getRemainingDay(), friend.getFonction(), friend.getAge(), friend.getAvatar(),friend.getId());
-				startActivity(intent);
-				overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
+				callConnectionModificationTask();
 			}
 			else {
 				if(friend.getNom().equals("") && etBirthdaydate.getText().toString().equals("")){
 					loadEmptyPopUp();
 				}
 				else{
-					callConnectionTask();
+					callConnectionAddTask();
 				}
 			}
 			break;
@@ -315,11 +313,17 @@ public class FriendDetailModificationActivity extends Activity implements OnAddF
 	}
 
 	protected void createFriendListActivity() {
-		Intent intent = FriendListActivity.getIntent(this, friend.getNom(), etBirthdaydate.getText().toString());
+		Intent intent = FriendListActivity.getIntent(this);//, friend.getNom(), etBirthdaydate.getText().toString());
 		startActivity(intent);
 	}
-	private void callConnectionTask() {
-		new AddFriendTask(this,this).execute(friend.getNom(),etBirthdaydate.getText().toString());
+	private void callConnectionAddTask() {
+		String id = String.valueOf(friend.getId());
+		new AddOrModifyFriendTask(this,this,false).execute(friend.getNom(),etBirthdaydate.getText().toString(), id);
+	}
+	
+	private void callConnectionModificationTask() {
+		String id = String.valueOf(friend.getId());
+		new AddOrModifyFriendTask(this,this,true).execute(friend.getNom(),"02-12-1800",id);//etBirthdaydate.getText().toString(), id);
 	}
 	protected void loadEmptyPopUp() {
 		AlertDialog.Builder adb = new AlertDialog.Builder(this);
@@ -329,12 +333,19 @@ public class FriendDetailModificationActivity extends Activity implements OnAddF
 	}
 
 	@Override
-	public void onAddFriendComplete() {
-		createFriendListActivity();
+	public void onAddOrModifyFriendComplete() {
+		if(isModify)
+		{
+			Intent intent = FriendDetailsActivity.getIntent(this, friend.getNom(), friend.getPrenom(), friend.getRemainingDay(), friend.getFonction(), friend.getAge(), friend.getAvatar(),friend.getId());
+			startActivity(intent);
+			overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
+		}
+		else
+			createFriendListActivity();
 	}
 
 	@Override
-	public void onAddFriendFailed(String errorMessage) {
+	public void onAddOrModifyFriendFailed(String errorMessage) {
 		displayMessage(errorMessage);
 	}
 }

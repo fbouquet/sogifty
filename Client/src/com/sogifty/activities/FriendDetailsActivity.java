@@ -96,7 +96,7 @@ public class FriendDetailsActivity extends Activity{
 
 	@Override
 	public void onBackPressed() {
-		super.onBackPressed();
+		createFriendListActivity();
 		overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
 	}
 	
@@ -122,4 +122,9 @@ public class FriendDetailsActivity extends Activity{
 		}
 		return true;
 	} 
+
+	protected void createFriendListActivity() {
+		Intent intent = FriendListActivity.getIntent(this);//, friend.getNom(), etBirthdaydate.getText().toString());
+		startActivity(intent);
+	}
 }
