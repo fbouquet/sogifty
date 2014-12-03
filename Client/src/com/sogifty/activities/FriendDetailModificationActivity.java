@@ -66,31 +66,18 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 	}
 
 	private void initFriendAndMode() {
-		friend =new Friend();
+		//friend =new Friend();
 		Intent tmp = getIntent();
-		friend.setNom(tmp.getStringExtra(FriendDetailsActivity.NAME));
-		friend.setPrenom(tmp.getStringExtra(FriendDetailsActivity.FIRTNAME));
-		friend.setRemainingDay(tmp.getIntExtra(FriendDetailsActivity.REMAININGDATE, 0));
-		friend.setFonction(tmp.getStringExtra(FriendDetailsActivity.FONCTION));
-		friend.setAge(tmp.getIntExtra(FriendDetailsActivity.AGE, 0));
-		friend.setAvatar(tmp.getStringExtra(FriendDetailsActivity.AVATAR));
-		friend.setId(tmp.getIntExtra(FriendDetailsActivity.ID, 0));
+		friend = (Friend) tmp.getSerializableExtra(FriendDetailsActivity.FRIEND);
 		
 		isModify=tmp.getBooleanExtra(IS_MODIFY, true);
 	}
 
-	public static Intent getIntent(Context ctxt, String name, String firstname, long l, String function, int age, String avatar, int id, boolean ismodify) {
+	public static Intent getIntent(Context ctxt, Friend friend, boolean ismodify){
 
 		Intent newActivityIntent = new Intent(ctxt, FriendDetailModificationActivity.class);
 
-		newActivityIntent.putExtra(FriendDetailsActivity.FIRTNAME, firstname);
-		newActivityIntent.putExtra(FriendDetailsActivity.NAME, name);
-		newActivityIntent.putExtra(FriendDetailsActivity.REMAININGDATE, l);
-		newActivityIntent.putExtra(FriendDetailsActivity.FONCTION, function);
-		newActivityIntent.putExtra(FriendDetailsActivity.AGE, age);
-		newActivityIntent.putExtra(FriendDetailsActivity.AVATAR, avatar);
-		newActivityIntent.putExtra(FriendDetailsActivity.ID, id);
-
+		newActivityIntent.putExtra(FriendDetailsActivity.FRIEND, friend );
 		newActivityIntent.putExtra(IS_MODIFY, ismodify);
 
 		return newActivityIntent;
@@ -108,7 +95,7 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 		etFunction = (EditText) findViewById(R.id.modify_et_function);
 		etFunction.setText(friend.getFonction());
 		etBirthdaydate = (EditText) findViewById(R.id.modify_et_birthdaydate);
-//		etBirthdaydate.setText(friend.());
+		etBirthdaydate.setText(String.valueOf(friend.getBirthdayDate()));
 		ImageView ivAvatar = (ImageView) findViewById(R.id.modify_iv_avatar);
 
 		initButtonAddTag();
@@ -282,7 +269,12 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 		case R.id.action_modify_ok:
 			updateFriend();
 			if(isModify){
-				callConnectionModificationTask();
+				if(friend.getNom().equals("") && etBirthdaydate.getText().toString().equals("")){
+					loadEmptyPopUp();
+				}
+				else{
+					callConnectionModificationTask();
+				}
 			}
 			else {
 				if(friend.getNom().equals("") && etBirthdaydate.getText().toString().equals("")){
@@ -300,10 +292,15 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 	}
 
 	private void updateFriend() {
-		friend.setNom(etName.getText().toString());
-		friend.setPrenom(etFirstname.getText().toString());
-		friend.setFonction(etFunction.getText().toString());
-
+		String tmp ="";
+		tmp = etName.getText().toString();
+		friend.setNom(tmp);
+		tmp=etFirstname.getText().toString();
+		friend.setPrenom(tmp);
+		tmp = etFunction.getText().toString();
+		friend.setFonction(tmp);
+		tmp = etBirthdaydate.getText().toString();
+		friend.setBirthdayDate(tmp);
 	}
 
 	@Override
@@ -313,7 +310,7 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 	}
 
 	protected void createFriendListActivity() {
-		Intent intent = FriendListActivity.getIntent(this);//, friend.getNom(), etBirthdaydate.getText().toString());
+		Intent intent = FriendListActivity.getIntent(this);
 		startActivity(intent);
 	}
 	private void callConnectionAddTask() {
@@ -323,7 +320,7 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 	
 	private void callConnectionModificationTask() {
 		String id = String.valueOf(friend.getId());
-		new AddOrModifyFriendTask(this,this,true).execute(friend.getNom(),"02-12-1800",id);//etBirthdaydate.getText().toString(), id);
+		new AddOrModifyFriendTask(this,this,true).execute(friend.getNom(),friend.getBirthdayDate(),id);
 	}
 	protected void loadEmptyPopUp() {
 		AlertDialog.Builder adb = new AlertDialog.Builder(this);
@@ -336,7 +333,7 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 	public void onAddOrModifyFriendComplete() {
 		if(isModify)
 		{
-			Intent intent = FriendDetailsActivity.getIntent(this, friend.getNom(), friend.getPrenom(), friend.getRemainingDay(), friend.getFonction(), friend.getAge(), friend.getAvatar(),friend.getId());
+			Intent intent = FriendDetailsActivity.getIntent(this, friend);//friend.getNom(), friend.getPrenom(), friend.getRemainingDay(), friend.getFonction(), friend.getAge(), friend.getAvatar(),friend.getId());
 			startActivity(intent);
 			overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
 		}

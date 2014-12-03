@@ -15,14 +15,7 @@ import com.sogifty.model.Friend;
 
 public class FriendDetailsActivity extends Activity{
 	
-	static final String FIRTNAME = "firstnameFriend";
-	static final String NAME = "nameFriend";
-	static final String REMAININGDATE = "RemaingDate";
-	static final String FONCTION = "fonction";
-	static final String AGE = "age";
-	static final String AVATAR = "avatar";
-	static final String ID = "id";
-	
+	static final String FRIEND = "Friend";
 
 	TextView nameText;
 	TextView firstnameText;
@@ -34,18 +27,11 @@ public class FriendDetailsActivity extends Activity{
     
     private Friend friend;
     
-    public static Intent getIntent(Context ctxt, String name, String firstname, long l, String function, int age, String avatar, int id) {
+    public static Intent getIntent(Context ctxt, Friend friend){//String name, String firstname, long l, String function, int age, String avatar, int id) {
 		
     	Intent newActivityIntent = new Intent(ctxt, FriendDetailsActivity.class);
-		
-		newActivityIntent.putExtra(FIRTNAME, firstname);
-		newActivityIntent.putExtra(NAME, name);
-		newActivityIntent.putExtra(REMAININGDATE, l);
-		newActivityIntent.putExtra(FONCTION, function);
-		newActivityIntent.putExtra(AGE, age);
-		newActivityIntent.putExtra(AVATAR, avatar);
-		newActivityIntent.putExtra(ID, id);
-		
+		newActivityIntent.putExtra(FRIEND, friend);
+	
     	return newActivityIntent;
 	}
 	
@@ -69,8 +55,8 @@ public class FriendDetailsActivity extends Activity{
 		
 		nameText.setText(friend.getNom());
 		firstnameText.setText(friend.getPrenom());
-		remaingDate.setText(remaingDate.getText() + String.format("%d", friend.getRemainingDay()));
-		age.setText(age.getText() + String.format("%d",friend.getAge()));
+		remaingDate.setText(remaingDate.getText() + String.format("%d", ParserJson.getRemainingDay(friend.getBirthdayDate())));
+		age.setText(age.getText() + String.format("%d",ParserJson.getAge(friend.getBirthdayDate())));
 		
 		
 		giftPager = (ViewPager) findViewById(R.id.frienddetails_vp_giftPager);
@@ -83,15 +69,8 @@ public class FriendDetailsActivity extends Activity{
 	
 	
 	private void initFriendInformations() {
-		friend =new Friend();
 		Intent tmp = getIntent();
-		friend.setNom(tmp.getStringExtra(NAME));
-		friend.setPrenom(tmp.getStringExtra(FIRTNAME));
-		friend.setRemainingDay(tmp.getIntExtra(REMAININGDATE, 0));
-		friend.setFonction(tmp.getStringExtra(FONCTION));
-		friend.setAge(tmp.getIntExtra(AGE, 0));
-		friend.setAvatar(tmp.getStringExtra(AVATAR));
-		friend.setId(tmp.getIntExtra(ID, 0));
+		friend = (Friend) tmp.getSerializableExtra(FRIEND);
 	}
 
 	@Override
@@ -113,7 +92,7 @@ public class FriendDetailsActivity extends Activity{
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_modify:
-			Intent intent = FriendDetailModificationActivity.getIntent(this, friend.getNom(), friend.getPrenom(), friend.getRemainingDay(), friend.getFonction(), friend.getAge(), friend.getAvatar(),friend.getId(), true);
+			Intent intent = FriendDetailModificationActivity.getIntent(this, friend, true); 
 			startActivity(intent);
 			overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
 			break;
@@ -124,7 +103,7 @@ public class FriendDetailsActivity extends Activity{
 	} 
 
 	protected void createFriendListActivity() {
-		Intent intent = FriendListActivity.getIntent(this);//, friend.getNom(), etBirthdaydate.getText().toString());
+		Intent intent = FriendListActivity.getIntent(this);
 		startActivity(intent);
 	}
 }

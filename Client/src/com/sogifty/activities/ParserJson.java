@@ -58,6 +58,7 @@ public class ParserJson {
 				f.setAge(getAge(birthday));
 				f.setId(Integer.parseInt(id));
 				f.setRemainingDay(getRemainingDay(birthday));
+				f.setBirthdayDate(birthday);
 				friendList.addFriend(f);
 				
 			}
@@ -75,7 +76,7 @@ public class ParserJson {
 		int jour;
 	}
 	
-	public int getAge(String birthdate){
+	static public int getAge(String birthdate){
 		
 		Calendar calendar =new GregorianCalendar();
 		calendar.setTime(new Date());
@@ -106,7 +107,7 @@ public class ParserJson {
 		
 	}
 	
-	public long getRemainingDay(String birthdate){
+	static public long getRemainingDay(String birthdate){
 		
 		Date currentDate = new Date();
 		

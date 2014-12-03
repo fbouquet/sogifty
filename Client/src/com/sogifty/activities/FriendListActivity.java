@@ -182,13 +182,13 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 		//Log.i(ID_TO_REMOVE_LIST, checkedPositions.toString());
 		Friend f = (Friend) listJson.getAdapter().getItem(position);
 
-		Intent intent = FriendDetailsActivity.getIntent(this, f.getNom(), f.getPrenom(), f.getRemainingDay(), f.getFonction(), f.getAge(), f.getAvatar(),f.getId());
+		Intent intent = FriendDetailsActivity.getIntent(this, f);// f.getNom(), f.getPrenom(), f.getRemainingDay(), f.getFonction(), f.getAge(), f.getAvatar(),f.getId());
 		startActivity(intent);
 		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
 
 	}
 	protected void createAddFriendActivity() {
-		Intent intent = FriendDetailModificationActivity.getIntent(this, "", "", 0, "", 0, "", -1, false);
+		Intent intent = FriendDetailModificationActivity.getIntent(this,new Friend(), false);// "", "", 0, "", 0, "", -1, false);
 		startActivity(intent);
 	}
 	

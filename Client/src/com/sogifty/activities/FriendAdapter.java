@@ -2,7 +2,6 @@ package com.sogifty.activities;
 
 
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,7 +19,6 @@ import android.widget.TextView;
 
 import com.sogifty.R;
 import com.sogifty.model.Friend;
-import com.sogifty.model.Gift;
 
 public class FriendAdapter extends BaseAdapter {
 
@@ -169,51 +167,7 @@ public class FriendAdapter extends BaseAdapter {
 	}
 	
 	
-	 private List<Gift> createGifts(){
-		 
-		 	List<Gift> gifts = new ArrayList<Gift>();
-			Gift g = new Gift();
-				
-			g.setUrl("http://shop.uniformchanges.co.uk/index.php?main_page=index&cPath=10");
-			g.setImgUrl("http://shop.uniformchanges.co.uk/images/G%20SKT01%20box%20pleat%20skirt.jpg");
-			g.setFriendId("1");
-			
-			g.setPrice("19");
-			
-			gifts.add(g);
-			
-			g = new Gift();
-			
-			g.setUrl("http://rhone-alpes.all.biz/gant-de-boxe-adidas-g16327");
-			g.setImgUrl("http://www.fr.all.biz/img/fr/catalog/16327.jpeg");
-			g.setFriendId("2");
-			
-			g.setPrice("14");
-			
-			gifts.add(g);
-			
-			g = new Gift();
-			
-			g.setUrl("http://french.alibaba.com/product-gs/toy-car-kids-car-kids-ride-on-car-268704440.html");
-			g.setImgUrl("http://img.alibaba.com/photo/268704440/Toy_Car_Kids_Car_Kids_Ride_on_Car.jpg");
-			g.setFriendId("3");
-			
-			g.setPrice("199");
-			
-			gifts.add(g);
-			
-			g = new Gift();
-			
-			g.setUrl("http://rhone-alpes.all.biz/gant-de-boxe-adidas-g16327");
-			g.setImgUrl("http://www.fr.all.biz/img/fr/catalog/16327.jpeg");
-			g.setFriendId("2");
-			
-			g.setPrice("14");
-			
-			gifts.add(g);
-	
-			return gifts;
-	 }
+	 
 	 
 	 public void onClick(View arg){
 		 
