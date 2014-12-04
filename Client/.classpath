@@ -5,7 +5,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry kind="lib" path="D:/devellopement/adt-bundle-windows-x86_64-20140702/sdk/extras/android/support/v4/android-support-v4.jar"/>
-	<classpathentry kind="lib" path="D:/devellopement/adt-bundle-windows-x86_64-20140702/sdk/platforms/android-14/android.jar"/>
+	<classpathentry kind="lib" path="/home/esagardia/android-sdk-linux/extras/android/support/v4/android-support-v4.jar"/>
+	<classpathentry kind="lib" path="/home/esagardia/android-sdk-linux/platforms/android-19/android.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

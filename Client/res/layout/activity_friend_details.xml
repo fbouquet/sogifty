@@ -61,6 +61,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/frienddetails_tv_tags" />
+     <TextView
+        android:id="@+id/frienddetails_all_tags"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="" />
 
     <LinearLayout
         android:id="@+id/frienddetails_l_tags"

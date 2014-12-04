@@ -75,7 +75,7 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 				String idValue = id.getText().toString();
 
 				if (deleteMode) {
-					deleteFriend(idValue,position);
+					deleteFriend(position,position);
 				} 
 				else {
 					createFriendDetailsActivity(position);
@@ -165,9 +165,9 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 	
 	
 
-	private void deleteFriend(String idValue, int position) {
+	private void deleteFriend(int idValue, int position) {
 		if (!friendsToDelete.contains(idValue))
-			friendsToDelete.add(Integer.parseInt(idValue));
+			friendsToDelete.add(idValue);
 		else
 			friendsToDelete.remove(friendsToDelete.indexOf(idValue));
 

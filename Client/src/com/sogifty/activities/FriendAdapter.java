@@ -119,7 +119,7 @@ public class FriendAdapter extends BaseAdapter {
 		holder.prenom.setText(f.getPrenom());
 		holder.age.setText(String.valueOf(f.getAge()));
 		holder.remainingDate.setText("J-"+f.getRemainingDay());
-		holder.tags.setText("Préférences : \n - sport \n - cuisine \n - intelligent \n - musculation");
+		holder.tags.setText(f.getTagsinPointString());
 	
 		if(position == 0){
 
@@ -131,7 +131,7 @@ public class FriendAdapter extends BaseAdapter {
 			holder.giftImage.setVisibility(CheckBox.GONE);
 		}
 		//holder.fonction.setText("Fonction : "+ String.valueOf(users.get(position).getFonction()));
-		//holder.cb.setChecked(usersChecked.get(position));
+		holder.cb.setChecked(friendsChecked.get(position));
 		if(showCheckbox){
 			holder.cb.setVisibility(CheckBox.VISIBLE);
 			holder.ar.setVisibility(CheckBox.GONE);

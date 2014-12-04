@@ -2,9 +2,11 @@ package com.sogifty.activities;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.json.JSONArray;
@@ -44,6 +46,7 @@ public class ParserJson {
 			String name;
 			String id;
 			JSONObject friendJson;
+			JSONArray tagsJson;
 			Friend f;
 			for(int i=0;i<friends.length();++i){
 				f = new Friend();
@@ -54,6 +57,14 @@ public class ParserJson {
 				System.out.println(birthday);
 				id = friendJson.getString("id");
 				System.out.println(id);
+				tagsJson = friendJson.getJSONArray("tags");
+				List<String> tagsString = new ArrayList<String>();
+				for (int j=0;j<tagsJson.length();++j) {
+					tagsString.add(tagsJson.getJSONObject(j).getString("label"));
+					System.out.println(tagsJson.getJSONObject(j).getString("label"));
+				}
+				System.out.println(tagsString);
+				f.setTags(tagsString);
 				f.setNom(name);
 				f.setAge(getAge(birthday));
 				f.setId(Integer.parseInt(id));

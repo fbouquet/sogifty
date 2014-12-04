@@ -21,6 +21,14 @@ public class Friend implements Comparable<Friend>, Serializable {
 	protected List<String> tags;
 
 	
+	public List<String> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<String> tags) {
+		this.tags = tags;
+	}
+
 	public String getBirthdayDate() {
 		return birthdayDate;
 	}
@@ -119,6 +127,24 @@ public class Friend implements Comparable<Friend>, Serializable {
 		else{
 			return 0;
 		}
+	}
+	public String getTagsinJsonString(){
+		String tagsString = "[";
+		for (int i=0;i<tags.size();++i) {
+			tagsString+="{\"label\": \""+tags.get(i)+"\"}";
+			if(i<tags.size()-1)
+				tagsString+=",";
+		}
+		tagsString+="]";
+		return tagsString;
+	}
+	public String getTagsinPointString(){
+		String tagsString = "";
+		for (String tag : tags) {
+			tagsString+="-"+tag+"\n";
+			
+		}
+		return tagsString;
 	}
 
 }  

@@ -13,6 +13,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -33,6 +34,7 @@ public class AddOrModifyFriendTask extends AsyncTask<String,Integer,Boolean>{
 	private static final String URL_SUFFIX_REGISTER = "users/<userId>/friends";
 	private static final String NAME = "name";
 	private static final String BIRTHDATE = "birthdate";
+	private static final String TAGS = "tags";
 	
 	private ProgressDialog progressDialog;
 	private Context context;
@@ -57,7 +59,7 @@ public class AddOrModifyFriendTask extends AsyncTask<String,Integer,Boolean>{
 	
 	@Override
 	protected Boolean doInBackground(String... userConnectionItems) {
-		return callServerConnectionWebService(userConnectionItems[0],userConnectionItems[1],userConnectionItems[2],
+		return callServerConnectionWebService(userConnectionItems[0],userConnectionItems[1],userConnectionItems[2],userConnectionItems[3],
 				this.context.getResources().getString(R.string.web_url_init)+URL_SUFFIX_REGISTER.replace("<userId>", String.valueOf(loadUserId())));
 	}
 	@Override
@@ -72,10 +74,10 @@ public class AddOrModifyFriendTask extends AsyncTask<String,Integer,Boolean>{
 	}
 	
 	
-	private boolean callServerConnectionWebService(String name, String birthdate, String id, String webServiceUrlInit) {
+	private boolean callServerConnectionWebService(String name, String birthdate, String id, String tags, String webServiceUrlInit) {
 		if(isConnected()){
 
-			CreateJsonAndRequest(name,birthdate,id, webServiceUrlInit);
+			CreateJsonAndRequest(name,birthdate,id, tags, webServiceUrlInit);
 			if(httpStatus == 200){
 				return true;
 			}
@@ -114,13 +116,11 @@ public class AddOrModifyFriendTask extends AsyncTask<String,Integer,Boolean>{
         else
             return false;    
     }
-	public String CreateJsonAndRequest(String name, String birthdate,String id, String url){
+	public String CreateJsonAndRequest(String name, String birthdate,String id, String tags, String url){
         InputStream inputStream = null;
         String result = null;
         try {
-        	System.out.println(name);
-        	System.out.println(birthdate);
-        	System.out.println(url);
+        	System.out.println("id :::::::"+id);
         	HttpClient httpclient = new DefaultHttpClient();
         	
             String json = "";
@@ -132,6 +132,12 @@ public class AddOrModifyFriendTask extends AsyncTask<String,Integer,Boolean>{
 			}
             try {
 				userJsonObject.put(BIRTHDATE, birthdate);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+            try {
+            	JSONArray tagsJsonArray = new JSONArray(tags);
+                userJsonObject.put(TAGS, tagsJsonArray);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}

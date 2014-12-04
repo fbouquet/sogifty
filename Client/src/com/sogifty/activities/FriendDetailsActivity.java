@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.text.Layout;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sogifty.R;
@@ -21,6 +23,7 @@ public class FriendDetailsActivity extends Activity{
 	TextView firstnameText;
 	TextView remaingDate;
 	TextView age;
+	TextView tagsView;
 	
 	private ViewPager giftPager;
     private GiftPagerAdapter giftPagerAdapter;
@@ -52,13 +55,18 @@ public class FriendDetailsActivity extends Activity{
 		firstnameText =(TextView) findViewById(R.id.frienddetails_tv_firstname);
 		remaingDate =(TextView) findViewById(R.id.frienddetails_tv_RemainingDate);
 		age = (TextView) findViewById(R.id.frienddetails_tv_age);
+		tagsView = (TextView) findViewById(R.id.frienddetails_all_tags);
 		
 		nameText.setText(friend.getNom());
 		firstnameText.setText(friend.getPrenom());
 		remaingDate.setText(remaingDate.getText() + String.format("%d", ParserJson.getRemainingDay(friend.getBirthdayDate())));
 		age.setText(age.getText() + String.format("%d",ParserJson.getAge(friend.getBirthdayDate())));
+		tagsView.setText(friend.getTagsinPointString());
+		for (int i=0;i<friend.getTags().size();++i) {
+			System.out.println(friend.getTags());
+		}
 		
-		
+		System.out.println("+aaaaa+"+friend.getTagsinJsonString());
 		giftPager = (ViewPager) findViewById(R.id.frienddetails_vp_giftPager);
 		giftPagerAdapter = new GiftPagerAdapter(getFragmentManager());
         giftPager.setAdapter(giftPagerAdapter);

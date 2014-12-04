@@ -301,6 +301,9 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 		friend.setFonction(tmp);
 		tmp = etBirthdaydate.getText().toString();
 		friend.setBirthdayDate(tmp);
+		List<String> tags = new ArrayList<String>(leftFriendTags);
+		tags.addAll(rightFriendTags);
+		friend.setTags(tags);
 	}
 
 	@Override
@@ -315,12 +318,18 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 	}
 	private void callConnectionAddTask() {
 		String id = String.valueOf(friend.getId());
-		new AddOrModifyFriendTask(this,this,false).execute(friend.getNom(),etBirthdaydate.getText().toString(), id);
+		List<String> tags = new ArrayList<String>(leftFriendTags);
+		tags.addAll(rightFriendTags);
+		new AddOrModifyFriendTask(this,this,false)
+			.execute(friend.getNom(),etBirthdaydate.getText().toString(), id, friend.getTagsinJsonString());
 	}
 	
 	private void callConnectionModificationTask() {
 		String id = String.valueOf(friend.getId());
-		new AddOrModifyFriendTask(this,this,true).execute(friend.getNom(),friend.getBirthdayDate(),id);
+		List<String> tags = new ArrayList<String>(leftFriendTags);
+		tags.addAll(rightFriendTags);
+		new AddOrModifyFriendTask(this,this,true).
+			execute(friend.getNom(),friend.getBirthdayDate(),id,friend.getTagsinJsonString());
 	}
 	protected void loadEmptyPopUp() {
 		AlertDialog.Builder adb = new AlertDialog.Builder(this);

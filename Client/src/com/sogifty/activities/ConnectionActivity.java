@@ -21,8 +21,7 @@ public class ConnectionActivity extends Activity implements OnConnectionTaskList
 	private static final String EMPTY_CONNECTION_ITEMS = "Please enter email and password";
 	private static final String USER_ID = "user_id";
 	private static final CharSequence USER_NOT_EXISTING = "User not found";
-	
-	
+		
 	Button connectButton;
 	Button subscribeButton;
 	EditText emailText;
