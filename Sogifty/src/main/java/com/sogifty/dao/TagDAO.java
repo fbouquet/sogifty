@@ -46,6 +46,7 @@ public class TagDAO extends AbstractDAO<Tag> {
 			logger.fatal("Could not find object without label in database");
 			throw new SogiftyException(Response.Status.BAD_REQUEST);
 		}
+		label = label.toLowerCase();
 		Session session = null;
 		Tag found = null;
 		try {
