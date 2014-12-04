@@ -1,5 +1,6 @@
 package com.sogifty.dao.dto;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -8,8 +9,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -25,10 +24,7 @@ public class Tag implements DTO {
 	@Column(name = "label")
 	private String label;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(	name = "match", 
-	joinColumns = {@JoinColumn(name = "tag_id")},
-	inverseJoinColumns = {@JoinColumn(name = "gift_id")})
+	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "tags")
 	private Set<Gift> gifts;
 
 	public Integer getId() {
@@ -58,11 +54,17 @@ public class Tag implements DTO {
 		return this;
 	}
 
+	public void addGift(Gift gift) {
+		if(gifts == null)
+			gifts = new HashSet<Gift>();
+		gifts.add(gift);
+	}
+
 	public Tag updateFields(Object objectToUpdate, Object updatedObject) {
 		Tag tagToUpdate = (Tag) objectToUpdate;
 		Tag updatedTag = (Tag) updatedObject;
 		return tagToUpdate.setLabel(updatedTag.getLabel())
-						  .setGifts(updatedTag.getGifts());
+				.setGifts(updatedTag.getGifts());
 	}
 
 	@Override

@@ -6,21 +6,29 @@ import java.util.Set;
 import com.sogifty.dao.dto.Gift;
 import com.sogifty.dao.dto.Tag;
 import com.sogifty.exception.SogiftyException;
+import com.sogifty.service.model.GiftModel;
+import com.sogifty.service.recommendation.CdiscountConfiguration;
+import com.sogifty.service.recommendation.GiftsFetcher;
 
 public class GiftService {
 
 	private TagService tagService = new TagService();
+	private GiftsFetcher giftsFetcher = new GiftsFetcher(new CdiscountConfiguration());
 	
-	public Set<Gift> getGifts(int friendId) throws SogiftyException {
-		Set<Gift> gifts = new HashSet<Gift>();
+	public Set<GiftModel> getGifts(int friendId) throws SogiftyException {
+		Set<GiftModel> gifts	= new HashSet<GiftModel>();
+		Set<Tag> tags			= tagService.getTags(friendId);
 		
-		Set<Tag> tags = tagService.getTags(friendId);
 		for (Tag tag : tags) {
 			if(tag.getGifts().size() == 0) {
-				// call the recommendation engine
+				for(Gift gift : giftsFetcher.fetchGifts(tag)) {
+					gifts.add(new GiftModel(gift));
+				}
 			}
 			else {
-				gifts.addAll(tag.getGifts());
+				for(Gift gift : tag.getGifts()) {
+					gifts.add(new GiftModel(gift));
+				}
 			}
 		}
 		

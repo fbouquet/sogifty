@@ -20,7 +20,7 @@ import com.sogifty.util.persistance.HibernateUtil;
 public abstract class AbstractDAO<T extends DTO> {
 
 	protected final Logger logger = Logger.getLogger(getClass());
-	private SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+	protected SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 	private Class<T> type;
 	
 	public Class<T> getType() {

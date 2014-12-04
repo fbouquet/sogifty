@@ -1,12 +1,19 @@
 package com.sogifty.dao.dto;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -38,6 +45,12 @@ public class Gift implements DTO {
 	
 	@Column(name = "last_update")
 	private Date lastUpdate;
+	
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(	name = "match", 
+	joinColumns = {@JoinColumn(name = "gift_id", nullable = false, updatable = false)},
+	inverseJoinColumns = {@JoinColumn(name = "tag_id", nullable = false, updatable = false)})
+	private List<Tag> tags;
 
 	public String getName() {
 		return name;
@@ -111,6 +124,22 @@ public class Gift implements DTO {
 		return this;
 	}
 
+	public List<Tag> getTags() {
+		return tags;
+	}
+
+	public Gift setTags(List<Tag> tags) {
+		this.tags = tags;
+		return this;
+	}
+	
+	public void addTag(Tag tag) {
+		tag.addGift(this);
+		if(tags == null)
+			tags = new ArrayList<Tag>();
+		tags.add(tag);
+	}
+
 	@Override
 	public String toString() {
 		return "Gift [id=" + id + ", name=" + name + ", description="
@@ -129,6 +158,7 @@ public class Gift implements DTO {
 				.setPrice(updatedGift.getPrice())
 				.setUrl(updatedGift.getUrl())
 				.setLastUpdate(updatedGift.getLastUpdate())
-				.setCreation(updatedGift.getCreation());
+				.setCreation(updatedGift.getCreation())
+				.setTags(updatedGift.getTags());
 	}
 }

@@ -14,11 +14,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.sogifty.dao.dto.Gift;
 import com.sogifty.exception.SogiftyException;
 import com.sogifty.service.FriendService;
 import com.sogifty.service.GiftService;
 import com.sogifty.service.model.FriendModel;
+import com.sogifty.service.model.GiftModel;
 
 @Path("/users/{userId}/friends")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -80,7 +80,7 @@ public class FriendWebService {
 	@GET
 	public Response getGifts(@PathParam("friendId") int friendId) {
 
-		Set<Gift> returnedGifts = null;
+		Set<GiftModel> returnedGifts = null;
 
 		try {
 			returnedGifts = giftService.getGifts(friendId);
