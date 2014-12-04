@@ -29,10 +29,12 @@ import android.widget.Toast;
 import com.sogifty.R;
 import com.sogifty.model.Friend;
 import com.sogifty.model.Friends;
+import com.sogifty.tasks.DeleteFriendTask;
 import com.sogifty.tasks.GetFriendListTask;
+import com.sogifty.tasks.listeners.DeleteFriendTaskListener;
 import com.sogifty.tasks.listeners.OnGetFriendListTaskListener;
 
-public class FriendListActivity extends Activity implements OnGetFriendListTaskListener{
+public class FriendListActivity extends Activity implements OnGetFriendListTaskListener, DeleteFriendTaskListener{
 	private static String FRIEND_LIST = "Liste des amis";
 	private static String APPLICATION_NAME = "Sogifti";
 	private static final String FRIENDS_DELETED = " amis supprimés";
@@ -101,23 +103,23 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 
 		
 		
-		deleteBtn.setText(R.string.deleteModeBtnFalse);
-		deleteBtn.setOnClickListener(new View.OnClickListener() {
-
-			public void onClick(View view) {
-
-				deleteMode = !deleteMode;
-
-				if (deleteMode) {
-					listJson.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-					friendsToDelete.clear();
-				} else {
-					deleteBtn.setText(R.string.deleteModeBtnFalse);
-					removeCheckedElementFromList();
-					listJson.setChoiceMode(ListView.CHOICE_MODE_NONE);
-				}
-			}
-		});
+//		deleteBtn.setText(R.string.deleteModeBtnFalse);
+//		deleteBtn.setOnClickListener(new View.OnClickListener() {
+//
+//			public void onClick(View view) {
+//
+//				deleteMode = !deleteMode;
+//
+//				if (deleteMode) {
+//					listJson.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+//					friendsToDelete.clear();
+//				} else {
+//					//deleteBtn.setText(R.string.deleteModeBtnFalse);
+//					removeCheckedElementFromList();
+//					listJson.setChoiceMode(ListView.CHOICE_MODE_NONE);
+//				}
+//			}
+//		});
 		
 
 	}
@@ -191,6 +193,10 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 		Intent intent = FriendDetailModificationActivity.getIntent(this,new Friend(), false);// "", "", 0, "", 0, "", -1, false);
 		startActivity(intent);
 	}
+	protected void createFriendListActivity() {
+		Intent intent = FriendListActivity.getIntent(this);
+		startActivity(intent);
+	}
 	
 	private void longClickFonction(AdapterView<?> parent,int position) {
 		//utility to determine
@@ -230,23 +236,24 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_delete:
+			deleteMode = !deleteMode;
 			userAdapter.initChecked();
 			friendsToDelete.clear();
 			invalidateOptionsMenu();
-			deleteMode = !deleteMode;
+			//deleteMode = !deleteMode;
 			userAdapter.showCheckbox();
 			
 
 			break;
 		case R.id.action_delete_stop:
-			invalidateOptionsMenu();
-			deleteMode = !deleteMode;
+			//invalidateOptionsMenu();
+			//deleteMode = !deleteMode;
 
 			//Log.i("Friends to Delete", friendsToDelete.toString());
 			removeCheckedElementFromList();
-			userAdapter.showCheckbox();
-			userAdapter.initChecked();
-			
+//			userAdapter.showCheckbox();
+//			userAdapter.initChecked();
+//			
 			break;
 		case R.id.action_add:
 			createAddFriendActivity();
@@ -259,21 +266,21 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 	} 
 
 	private void removeCheckedElementFromList() {
-
-		for (Integer id : friendsToDelete) {
-			List<Friend> f = friendsList.getListFriends();
-			for (int i = 0; i < f.size(); i++) {
-				if (f.get(i).getId() == id) {
-					f.remove(i);
-				}
-			}
-		}
-
-		userAdapter.notifyDataSetChanged();
-		Toast.makeText(this,
-				String.valueOf(friendsToDelete.size()) + FRIENDS_DELETED,
-				Toast.LENGTH_SHORT).show();
-		friendsToDelete.clear();
+		new DeleteFriendTask(this, this).execute(friendsToDelete);
+//		for (Integer id : friendsToDelete) {
+//			List<Friend> f = friendsList.getListFriends();
+//			for (int i = 0; i < f.size(); i++) {
+//				if (f.get(i).getId() == id) {
+//					f.remove(i);
+//				}
+//			}
+//		}
+//
+//		userAdapter.notifyDataSetChanged();
+//		Toast.makeText(this,
+//				String.valueOf(friendsToDelete.size()) + FRIENDS_DELETED,
+//				Toast.LENGTH_SHORT).show();
+//		friendsToDelete.clear();
 	}
 	
 		
@@ -369,6 +376,19 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 		adb.setMessage(message);
 		AlertDialog ad = adb.create();
 		ad.show();
+	}
+
+
+	@Override
+	public void deleteFriendComplete() {
+		createFriendListActivity();
+	}
+
+
+	@Override
+	public void deleteFriendFailed(String errorMessage) {
+		displayMessage(errorMessage);
+		createFriendListActivity();
 	}
 
 
