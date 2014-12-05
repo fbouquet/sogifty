@@ -9,6 +9,7 @@
         <item name="android:textCursorDrawable">@drawable/cursor_color</item>
         <item name="android:editTextStyle">@style/MyEditText</item>
         <item name="android:buttonStyle">@style/MyButtonStyle</item>
+        <item name="android:checkboxStyle">@style/MyCheckboxStyle</item>
     </style>
 
     <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
@@ -29,6 +30,10 @@
     
     <style name="MyTheme.ActionBar.TitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
         <item name="android:textColor">@color/red</item>
+    </style>
+    
+    <style name="MyCheckboxStyle" parent="@android:style/Widget.Holo.Light.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/checkbox_selector</item>
     </style>
 
 </resources>
