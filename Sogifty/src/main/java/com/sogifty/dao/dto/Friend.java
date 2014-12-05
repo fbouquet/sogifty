@@ -37,6 +37,12 @@ public class Friend implements DTO {
 	@Column(name = "name")
 	private String name;
 	
+	@Column(name = "first_name")
+	private String firstName;
+	
+	@Column(name = "avatar_path")
+	private String avatarPath;
+	
 	@Column(name = "birthdate")
 	@Temporal(TemporalType.DATE)
 	private Date birthdate;
@@ -71,6 +77,24 @@ public class Friend implements DTO {
 		this.name = name;
 		return this;
 	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public Friend setFirstName(String firstName) {
+		this.firstName = firstName;
+		return this;
+	}
+
+	public String getAvatarPath() {
+		return avatarPath;
+	}
+
+	public Friend setAvatarPath(String avatarPath) {
+		this.avatarPath = avatarPath;
+		return this;
+	}
 	
 	@JsonSerialize(using=JsonDateSerializer.class)
 	public Date getBirthdate() {
@@ -96,6 +120,8 @@ public class Friend implements DTO {
 		Friend friendToUpdate = (Friend) objectToUpdate;
 		Friend updatedFriend = (Friend) updatedObject;
 		return friendToUpdate.setName(updatedFriend.getName())
+							 .setFirstName(updatedFriend.getFirstName())
+							 .setAvatarPath(updatedFriend.getAvatarPath())
 							 .setBirthdate(updatedFriend.getBirthdate())
 							 .setTags(updatedFriend.getTags());
 	}
@@ -111,6 +137,6 @@ public class Friend implements DTO {
 	
 	@Override
 	public String toString() {
-		return "(" + id + ") - " + name + " - " + birthdate + " - "+ "(appUser: "+ appUser.toString() +")";
+		return String.format("(%d) - %s - %s - %s - (appUser: %s)", id, name, firstName, birthdate, appUser);
 	}
 }

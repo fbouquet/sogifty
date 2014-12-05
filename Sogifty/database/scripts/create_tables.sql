@@ -15,6 +15,8 @@ create table app_user (
 create table friend (
     id serial primary key not null,
     name text not null,
+    first_name text not null,
+    avatar_path text null,
     birthdate date not null,
     app_user_id integer references app_user(id)
 );

@@ -29,6 +29,8 @@ public class FriendService {
 		Set<Tag> tags = toTags(friend.getTags());
 
 		return new FriendModel(friendDAO.create(new Friend().setName(friend.getName())
+				.setFirstName(friend.getFirstName())
+				.setAvatarPath(friend.getAvatarPath())
 				.setBirthdate(friend.getBirthdate())
 				.setUser(user)
 				.setTags(tags)));
@@ -41,6 +43,8 @@ public class FriendService {
 
 		return new FriendModel(friendDAO.update(new Friend().setId(friendId)
 				.setName(friend.getName())
+				.setFirstName(friend.getFirstName())
+				.setAvatarPath(friend.getAvatarPath())
 				.setBirthdate(friend.getBirthdate())
 				.setUser(user)
 				.setTags(tags)));
