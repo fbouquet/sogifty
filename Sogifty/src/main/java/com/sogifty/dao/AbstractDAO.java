@@ -1,6 +1,7 @@
 package com.sogifty.dao;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.ws.rs.core.Response;
 
@@ -132,12 +133,12 @@ public abstract class AbstractDAO<T extends DTO> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<T> findAll() throws SogiftyException {
+	public Set<T> findAll() throws SogiftyException {
 		Session session = null;
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Criteria criteria = session.createCriteria(getType());
-			return criteria.list();
+			return new HashSet<T>(criteria.list());
 		} catch(HibernateException e) {
 			logger.fatal("Error while reading from database: " + e);
 			throw new SogiftyException(Response.Status.INTERNAL_SERVER_ERROR);

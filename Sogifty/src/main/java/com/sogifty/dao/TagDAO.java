@@ -54,9 +54,6 @@ public class TagDAO extends AbstractDAO<Tag> {
 			Criteria criteria = session.createCriteria(Tag.class);
 			criteria.add(Restrictions.eq("label", label));
 			found = (Tag) criteria.uniqueResult();
-			if (found == null) {
-				return null;
-			}
 		} catch(HibernateException e) {
 			logger.fatal("Error while reading object from database: " + e);
 			throw new SogiftyException(Response.Status.INTERNAL_SERVER_ERROR);
