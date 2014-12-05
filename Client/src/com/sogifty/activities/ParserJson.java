@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.content.Context;
 
 import com.sogifty.model.Friend;
 import com.sogifty.model.Friends;
-
-import android.content.Context;
 
 
 public class ParserJson {
@@ -52,18 +52,13 @@ public class ParserJson {
 				f = new Friend();
 				friendJson = friends.getJSONObject(i);
 				name = friendJson.getString("name");
-				System.out.println(name);
 				birthday = friendJson.getString("birthdate");
-				System.out.println(birthday);
 				id = friendJson.getString("id");
-				System.out.println(id);
 				tagsJson = friendJson.getJSONArray("tags");
 				List<String> tagsString = new ArrayList<String>();
 				for (int j=0;j<tagsJson.length();++j) {
 					tagsString.add(tagsJson.getJSONObject(j).getString("label"));
-					System.out.println(tagsJson.getJSONObject(j).getString("label"));
 				}
-				System.out.println(tagsString);
 				f.setTags(tagsString);
 				f.setNom(name);
 				f.setAge(getAge(birthday));
@@ -106,14 +101,6 @@ public class ParserJson {
 			e.printStackTrace();
 		}
 		age = currentYear - birthYear;
-//		
-//		
-//		persoDate pD = new persoDate();
-//		
-//		pD.annee =calendar.get(Calendar.YEAR);
-//		pD.mois =calendar.get(Calendar.MONTH);
-//		pD.jour =calendar.get(Calendar.DAY_OF_MONTH);
-//		
 		return age;
 		
 	}
@@ -146,17 +133,6 @@ public class ParserJson {
 		}
 		
 		
-//		
-//		
-//		Calendar calendar =new GregorianCalendar();
-//		calendar.setTime(new Date());
-//		
-//		String[] dateItems = date.split("-");
-//		persoDate pD = new persoDate();
-//		pD.jour = Integer.parseInt(dateItems[0]);
-//		pD.mois = Integer.parseInt(dateItems[1]);		
-//		pD.annee = calendar.get(Calendar.YEAR);
-//		return pD;
 		return remainingDay;
 	}
 	

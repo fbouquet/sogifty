@@ -97,7 +97,6 @@ public class AddOrModifyFriendTask extends AsyncTask<String,Integer,Boolean>{
 	
 	private String getErrorMessage() {
 		String message = context.getResources().getString(R.string.unknown_error);
-		System.out.println(httpStatus);
 		if(httpStatus == context.getResources().getInteger(R.integer.user_http_error)){
 			message = context.getResources().getString(R.string.http_error);
 		}
