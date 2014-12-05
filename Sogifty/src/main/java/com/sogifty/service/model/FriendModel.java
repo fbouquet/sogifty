@@ -15,6 +15,8 @@ import com.sogifty.util.serialization.JsonDateSerializer;
 public class FriendModel {
 	private Integer id;
 	private String name;
+	private String firstName;
+	private String avatarPath;
 	private Date birthdate;
 	private Set<TagModel> tags;
 	
@@ -23,6 +25,8 @@ public class FriendModel {
 	public FriendModel(Friend friend) {
 		this.id = friend.getId();
 		this.name = friend.getName();
+		this.firstName = friend.getFirstName();
+		this.avatarPath = friend.getAvatarPath();
 		this.birthdate = friend.getBirthdate();
 		
 		Set<TagModel> tags = new HashSet<TagModel>(0);
@@ -40,16 +44,36 @@ public class FriendModel {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public FriendModel setId(Integer id) {
 		this.id = id;
+		return this;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
+	public FriendModel setName(String name) {
 		this.name = name;
+		return this;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public FriendModel setFirstName(String firstName) {
+		this.firstName = firstName;
+		return this;
+	}
+
+	public String getAvatarPath() {
+		return avatarPath;
+	}
+
+	public FriendModel setAvatarPath(String avatarPath) {
+		this.avatarPath = avatarPath;
+		return this;
 	}
 	
 	@JsonSerialize(using=JsonDateSerializer.class)
@@ -58,15 +82,17 @@ public class FriendModel {
 	}
 
 	@JsonDeserialize(using=JsonDateDeserializer.class)
-	public void setBirthdate(Date birthdate) {
+	public FriendModel setBirthdate(Date birthdate) {
 		this.birthdate = birthdate;
+		return this;
 	}
 
 	public Set<TagModel> getTags() {
 		return tags;
 	}
 
-	public void setTags(Set<TagModel> tags) {
+	public FriendModel setTags(Set<TagModel> tags) {
 		this.tags = tags;
+		return this;
 	}
 }
