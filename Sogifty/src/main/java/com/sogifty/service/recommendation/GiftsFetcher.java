@@ -13,6 +13,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.sogifty.dao.GiftDAO;
 import com.sogifty.dao.dto.Gift;
 import com.sogifty.dao.dto.Tag;
 import com.sogifty.exception.SogiftyException;
@@ -22,6 +23,8 @@ public class GiftsFetcher {
 	private final String USER_AGENT = "Mozilla";
 	private static final Logger logger = Logger.getLogger(GiftsFetcher.class);
 	private Configuration configuration;
+	
+	private GiftDAO giftDao = new GiftDAO();
 	
 	public GiftsFetcher(Configuration configuration) {
 		this.configuration = configuration;
@@ -45,6 +48,7 @@ public class GiftsFetcher {
 				}
 				
 				if (gift != null) {
+					gift.addTag(tag);
 					gifts.add(gift);
 				}
 			}
@@ -83,9 +87,7 @@ public class GiftsFetcher {
 		return gift;
 	}
 	
-	private void saveGifts(List<Gift> gifts) {
-		/* GiftDAO giftDao = new GiftDAO();
-		 * giftDao.createGifts(gifts);
-		 */
+	private void saveGifts(List<Gift> gifts) throws SogiftyException {
+		 giftDao.createGifts(gifts);
 	}
 }

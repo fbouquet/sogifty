@@ -38,6 +38,7 @@ public class HibernateUtil {
 	}
 
 	public static SessionFactory getSessionFactory() {
+		logger.info("Creating Hibernate session ...");
 		return sessionFactory;
 	}
 
