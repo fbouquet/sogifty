@@ -93,7 +93,7 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 		etFirstname = (EditText) findViewById(R.id.modify_et_firstname);
 		etFirstname.setText(friend.getPrenom());
 		etFunction = (EditText) findViewById(R.id.modify_et_function);
-		etFunction.setText(friend.getFonction());
+		//etFunction.setText(friend.getFonction());
 		etBirthdaydate = (EditText) findViewById(R.id.modify_et_birthdaydate);
 		etBirthdaydate.setText(String.valueOf(friend.getBirthdayDate()));
 		ImageView ivAvatar = (ImageView) findViewById(R.id.modify_iv_avatar);
@@ -104,8 +104,16 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 		rightTagsLayout= (LinearLayout) findViewById(R.id.modify_l_rtags);
 	    	
 		initAutoCompleteTags();
+		initTagsList();
+		
 		//UrlImageViewHelper.setUrlDrawable(iv, user.getAvatar());
 		//		 iv.setImageBitmap(AvatarGenerator.generate(friend.getNom(), "M", this));
+	}
+
+	private void initTagsList() {
+		for (int i=0;i<friend.getTags().size();++i) {
+			addTag(friend.getTags().get(i));
+		}
 	}
 
 	private void initButtonAddTag() {
@@ -298,7 +306,7 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 		tmp=etFirstname.getText().toString();
 		friend.setPrenom(tmp);
 		tmp = etFunction.getText().toString();
-		friend.setFonction(tmp);
+		//friend.setFonction(tmp);
 		tmp = etBirthdaydate.getText().toString();
 		friend.setBirthdayDate(tmp);
 		List<String> tags = new ArrayList<String>(leftFriendTags);

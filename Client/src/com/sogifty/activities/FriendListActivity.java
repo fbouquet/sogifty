@@ -74,10 +74,10 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 			
 				TextView id = (TextView) findViewById(R.id._id);
 			
-				String idValue = id.getText().toString();
+				//String idValue = id.getText().toString();
 
 				if (deleteMode) {
-					deleteFriend(position,position);
+					deleteFriend(adapter,position);
 				} 
 				else {
 					createFriendDetailsActivity(position);
@@ -167,9 +167,18 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 	
 	
 
-	private void deleteFriend(int idValue, int position) {
-		if (!friendsToDelete.contains(idValue))
+	private void deleteFriend(AdapterView<?> parent,int position) {
+		FriendAdapter f = (FriendAdapter) parent.getAdapter();
+		Friend o = (Friend) f.getItem(position);
+		int idValue = o.getId();
+//		Toast.makeText(
+//				FriendListActivity.this,
+//				ITEM_POSITION + o.getId()
+//						+ CLICKED, Toast.LENGTH_LONG).show();
+		if (!friendsToDelete.contains(idValue)){
 			friendsToDelete.add(idValue);
+			System.out.println(idValue);
+		}
 		else
 			friendsToDelete.remove(friendsToDelete.indexOf(idValue));
 

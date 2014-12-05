@@ -12,7 +12,7 @@ public class Friend implements Comparable<Friend>, Serializable {
 	private static final long serialVersionUID = 1L;
 	private String nom;  
 	private String prenom;
-	private String fonction;
+//	private String fonction;
 	private int age;
 	private int _id;
 	private String avatar;
@@ -60,9 +60,9 @@ public class Friend implements Comparable<Friend>, Serializable {
 		this.prenom = prenom;
 	}
 
-	public String getFonction() {
-		return fonction;
-	}
+//	public String getFonction() {
+//		return fonction;
+//	}
 
 	public void setAvatar(String avatar) {
 		this.avatar = avatar;
@@ -73,9 +73,9 @@ public class Friend implements Comparable<Friend>, Serializable {
 		return avatar;
 	}
 
-	public void setFonction(String fonction) {
-		this.fonction = fonction;
-	}
+//	public void setFonction(String fonction) {
+//		this.fonction = fonction;
+//	}
 
 	public String getNom() {
 		return nom;
