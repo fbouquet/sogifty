@@ -84,10 +84,11 @@ public class FriendService {
 		Set<Tag> tags = new HashSet<Tag>(0);
 		for (TagModel tagModel : tagModels) {
 			// If the tag is not in the database, create it
-			Tag dbTag = tagDAO.getByLabel(tagModel.getLabel());
+			String tagLabel = tagModel.getLabel().toLowerCase();
+			Tag dbTag = tagDAO.getByLabel(tagLabel);
 			if (dbTag == null) {
-				Integer createdId = tagDAO.create(new Tag().setLabel(tagModel.getLabel()));
-				tags.add(new Tag().setId(createdId).setLabel(tagModel.getLabel()));
+				Integer createdId = tagDAO.create(new Tag().setLabel(tagLabel));
+				tags.add(new Tag().setId(createdId).setLabel(tagLabel));
 			}
 			else {
 				// Add the existing database tag
