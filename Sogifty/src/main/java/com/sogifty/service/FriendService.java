@@ -85,16 +85,29 @@ public class FriendService {
 		for (TagModel tagModel : tagModels) {
 			// If the tag is not in the database, create it
 			String tagLabel = tagModel.getLabel().toLowerCase();
-			Tag dbTag = tagDAO.getByLabel(tagLabel);
-			if (dbTag == null) {
-				Integer createdId = tagDAO.create(new Tag().setLabel(tagLabel));
-				tags.add(new Tag().setId(createdId).setLabel(tagLabel));
-			}
-			else {
-				// Add the existing database tag
-				tags.add(dbTag);
+			if (!tagLabel.equals("")) {
+				Tag dbTag = tagDAO.getByLabel(tagLabel);
+				if (dbTag == null) {
+					Integer createdId = tagDAO.create(new Tag().setLabel(tagLabel));
+					tags.add(new Tag().setId(createdId).setLabel(tagLabel));
+				}
+				else {
+					if (!containsLabel(tags, tagLabel)) {
+						// Add the existing database tag
+						tags.add(dbTag);
+					}
+				}
 			}
 		}
 		return tags;
+	}
+	
+	private boolean containsLabel(Set<Tag> tags, String label) {
+		for (Tag tag : tags) {
+			if(tag.getLabel().equals(label)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
