@@ -4,12 +4,15 @@ package com.sogifty.activities;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Matrix;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,6 +26,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
@@ -177,10 +181,11 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 			if(leftFriendTags.size()>rightFriendTags.size())
 				position = 1 ;
 
-
-			final TextView newTag = createAndAddTag (lp, tagValue, position);
-
-			ImageButton buttonDelete = createAndAddButtonDelete(lp, position);
+			LinearLayout.LayoutParams lpTextView = new LinearLayout.LayoutParams(
+					LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+			final TextView newTag = createAndAddTag (lpTextView, tagValue, position);
+			LinearLayout.LayoutParams lpButton = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+			ImageButton buttonDelete = createAndAddButtonDelete(lpButton, position);
 
 			tagLayout.addView(newTag);
 			tagLayout.addView(buttonDelete);
@@ -233,6 +238,7 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 	private TextView createAndAddTag(LayoutParams lp, String tagValue, int position) {
 
 		TextView newTag = new TextView(this);
+		lp.gravity = Gravity.CENTER;
 		newTag.setLayoutParams(lp);
 		newTag.setText(tagValue);
 
@@ -248,11 +254,14 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 	}
 
 
+	@SuppressLint("ResourceAsColor")
 	private ImageButton createAndAddButtonDelete(LayoutParams lp, int position) {
 
 		ImageButton buttonDelete = new ImageButton(this);
 		buttonDelete.setLayoutParams(lp);
 		buttonDelete.setImageResource(R.drawable.ic_action_cancel);
+		buttonDelete.setScaleType(ScaleType.CENTER_INSIDE);
+		buttonDelete.setBackgroundColor(getResources().getColor(R.color.globalBackground));
 		return buttonDelete;
 	}
 
