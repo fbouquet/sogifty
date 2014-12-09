@@ -10,7 +10,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.sogifty.R;
 import com.sogifty.model.Gift;
+import com.sogifty.tasks.DownloadImageTask;
 
 
 public class GiftAdapter extends BaseAdapter {
@@ -43,8 +45,9 @@ public class GiftAdapter extends BaseAdapter {
 	
 	private class ViewHolder {
 		TextView price;
-
 		ImageView iv;
+		TextView title;
+		TextView description;
 		
 	}
 	
@@ -60,8 +63,8 @@ public class GiftAdapter extends BaseAdapter {
 //			convertView = inflater.inflate(R.layout.giftitem, null);
 //
 //			holder.price = (TextView)convertView.findViewById(R.id.priceGift);
-//			holder.iv = (ImageView)convertView.findViewById(R.id.imageGift);
-//			
+			holder.iv = (ImageView)convertView.findViewById(R.id.giftitem_iv_gift);
+			
 			
 			convertView.setTag(holder);
 		} else {
@@ -73,17 +76,13 @@ public class GiftAdapter extends BaseAdapter {
 		holder.price.setText(g.getPrice());
 		
 		
-//		String imgUrl = g.getImgUrl();
-//		
-//		if(imgUrl != null){
-//			UrlImageViewHelper.setUrlDrawable(holder.iv, imgUrl);
-//			
-//		}
-//		else
-//			
-		holder.iv.setImageResource(android.R.drawable.ic_menu_gallery);
+		String imgUrl = g.getImgUrl();
 		
-		
+		if(imgUrl != null){
+			new DownloadImageTask(holder.iv);
+		}
+		else
+			holder.iv.setImageResource(android.R.drawable.ic_menu_gallery);
 		
 
 		return convertView;

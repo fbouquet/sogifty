@@ -29,12 +29,15 @@ import android.widget.Toast;
 import com.sogifty.R;
 import com.sogifty.model.Friend;
 import com.sogifty.model.Friends;
+import com.sogifty.model.Gift;
 import com.sogifty.tasks.DeleteFriendTask;
 import com.sogifty.tasks.GetFriendListTask;
-import com.sogifty.tasks.listeners.DeleteFriendTaskListener;
+import com.sogifty.tasks.GetGiftsTask;
+import com.sogifty.tasks.listeners.OnDeleteFriendTaskListener;
 import com.sogifty.tasks.listeners.OnGetFriendListTaskListener;
+import com.sogifty.tasks.listeners.OnGetGiftsTaskListener;
 
-public class FriendListActivity extends Activity implements OnGetFriendListTaskListener, DeleteFriendTaskListener{
+public class FriendListActivity extends Activity implements OnGetFriendListTaskListener, OnDeleteFriendTaskListener, OnGetGiftsTaskListener{
 	private static String FRIEND_LIST = "Liste des amis";
 	private static String APPLICATION_NAME = "Sogifti";
 	private static final String FRIENDS_DELETED = " amis supprimés";
@@ -55,6 +58,7 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 	private ListAdapter adapter = null;
 	private List<Integer> friendsToDelete = null;
 	private FriendAdapter userAdapter = null;
+	private List<Gift> firstFriendGifts = null;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -148,14 +152,21 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 
 	}
 	@Override
-	public void onGetFriendListComplete(Friends friendsList) {
-		listJson.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-		//createFalseList();
-		if(friendsList.getListFriends().isEmpty())
-			displayMessage("you have no friend, add one");
-		adapter = new FriendAdapter(this, friendsList.getListFriends());
-		listJson.setAdapter(adapter);
-		userAdapter = ((FriendAdapter) listJson.getAdapter());
+	public void onGetFriendListComplete(Friends friendsListparam) {
+		friendsList = friendsListparam;
+		if(friendsList.getListFriends() != null)
+			new GetGiftsTask(this, this).execute(String.valueOf(friendsList.getListFriends().get(0).getId()));
+		else{
+			if(friendsList.getListFriends().isEmpty())
+				displayMessage("you have no friend, add one");
+		}
+//		listJson.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+//		//createFalseList();
+//		if(friendsList.getListFriends().isEmpty())
+//			displayMessage("you have no friend, add one");
+//		adapter = new FriendAdapter(this, friendsList.getListFriends(), firstFriendGifts);
+//		listJson.setAdapter(adapter);
+//		userAdapter = ((FriendAdapter) listJson.getAdapter());
 	}
 	
 	@Override
@@ -163,7 +174,25 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 		displayMessage(message);
 	}
 	
-	
+
+
+	@Override
+	public void onGetGiftsComplete(List<Gift> giftList) {
+		firstFriendGifts = giftList;
+		listJson.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+		//createFalseList();
+		adapter = new FriendAdapter(this, friendsList.getListFriends(), firstFriendGifts);
+		listJson.setAdapter(adapter);
+		userAdapter = ((FriendAdapter) listJson.getAdapter());
+	}
+
+
+	@Override
+	public void onGetGiftsFailed(String message) {
+		displayMessage(message);
+	}
+
+
 	
 	
 
@@ -249,20 +278,13 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 			userAdapter.initChecked();
 			friendsToDelete.clear();
 			invalidateOptionsMenu();
-			//deleteMode = !deleteMode;
 			userAdapter.showCheckbox();
 			
 
 			break;
 		case R.id.action_delete_stop:
-			//invalidateOptionsMenu();
-			//deleteMode = !deleteMode;
-
-			//Log.i("Friends to Delete", friendsToDelete.toString());
 			removeCheckedElementFromList();
-//			userAdapter.showCheckbox();
-//			userAdapter.initChecked();
-//			
+		
 			break;
 		case R.id.action_add:
 			createAddFriendActivity();
@@ -276,110 +298,12 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 
 	private void removeCheckedElementFromList() {
 		new DeleteFriendTask(this, this).execute(friendsToDelete);
-//		for (Integer id : friendsToDelete) {
-//			List<Friend> f = friendsList.getListFriends();
-//			for (int i = 0; i < f.size(); i++) {
-//				if (f.get(i).getId() == id) {
-//					f.remove(i);
-//				}
-//			}
-//		}
-//
-//		userAdapter.notifyDataSetChanged();
-//		Toast.makeText(this,
-//				String.valueOf(friendsToDelete.size()) + FRIENDS_DELETED,
-//				Toast.LENGTH_SHORT).show();
-//		friendsToDelete.clear();
+
 	}
 	
 		
-//	public void createFalseList(){
-//		friendsList = new Friends();
-//		
-//		Friend f = new Friend();
-//		f.setAvatar("u");
-//		f.setFonction("b");
-//		f.setGender("male");
-//		f.setId(Integer.parseInt("0"));
-//		f.setNom("Villalba");
-//		f.setPrenom("Léo");
-//		f.setAge(21);
-//		f.setRemainingDay(Integer.parseInt("3"));
-//		friendsList.addFriend(f);
-//		
-//		Friend v = new Friend();
-//		v.setAvatar("blabl");
-//		v.setFonction("b");
-//		v.setGender("b");
-//		v.setId(Integer.parseInt("1"));
-//		v.setAge(22);
-//		v.setNom("Sagardia");
-//		v.setPrenom("Elorri");
-//		v.setRemainingDay(Integer.parseInt("8"));
-//		friendsList.addFriend(v);
-//		
-//		Friend w = new Friend();
-//		w.setAvatar("blabl");
-//		w.setFonction("b");
-//		w.setGender("b");
-//		w.setId(Integer.parseInt("2"));
-//		w.setAge(22);
-//		w.setNom("Folliot");
-//		w.setPrenom("Thomas");
-//		w.setRemainingDay(Integer.parseInt("144"));
-//		friendsList.addFriend(w);
-//		
-//		Friend x = new Friend();
-//		x.setAvatar("blabl");
-//		x.setFonction("b");
-//		x.setGender("b");
-//		x.setId(Integer.parseInt("3"));
-//		x.setAge(1000);
-//		x.setNom("JOMARD");
-//		x.setPrenom("ARnauuuud");
-//		x.setRemainingDay(Integer.parseInt("70000"));
-//		friendsList.addFriend(x);
-//		
-//		Friend y = new Friend();
-//		y.setAvatar("blabl");
-//		y.setFonction("b");
-//		y.setGender("b");
-//		y.setId(Integer.parseInt("5"));
-//		y.setAge(2);
-//		y.setNom("Jouuu");
-//		y.setPrenom("Valouuuuuuve");
-//		y.setRemainingDay(Integer.parseInt("4"));
-//		friendsList.addFriend(y);
-//		
-//		Friend z = new Friend();
-//		z.setAvatar("blabl");
-//		z.setFonction("b");
-//		z.setGender("b");
-//		z.setId(Integer.parseInt("4"));
-//		z.setAge(27);
-//		z.setNom("Bouquet");
-//		z.setPrenom("Fleur");
-//		z.setRemainingDay(Integer.parseInt("80"));
-//		friendsList.addFriend(z);
-//		
-//		Friend e = new Friend();
-//		e.setAvatar("blabl");
-//		e.setFonction("b");
-//		e.setGender("b");
-//		e.setId(Integer.parseInt("6"));
-//		e.setAge(22);
-//		e.setNom("Garbage");
-//		e.setPrenom("Yvonne");
-//		e.setRemainingDay(Integer.parseInt("57"));
-//		friendsList.addFriend(e);
-//		
-//		
-//	}
+
 	
-	private int loadUserId(){
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-		return preferences.getInt(USER_ID, getResources().getInteger(R.integer.user_id_default));
-	}
 	private void displayMessage(String message) {
 		AlertDialog.Builder adb = new AlertDialog.Builder(this);
 		adb.setMessage(message);
@@ -399,7 +323,6 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 		displayMessage(errorMessage);
 		createFriendListActivity();
 	}
-
 
 	
 

@@ -35,6 +35,7 @@ public class AddOrModifyFriendTask extends AsyncTask<String,Integer,Boolean>{
 	private static final String NAME = "name";
 	private static final String BIRTHDATE = "birthdate";
 	private static final String TAGS = "tags";
+	private static final String FIRSTNAME = "firstName";
 	
 	private ProgressDialog progressDialog;
 	private Context context;
@@ -59,7 +60,7 @@ public class AddOrModifyFriendTask extends AsyncTask<String,Integer,Boolean>{
 	
 	@Override
 	protected Boolean doInBackground(String... userConnectionItems) {
-		return callServerConnectionWebService(userConnectionItems[0],userConnectionItems[1],userConnectionItems[2],userConnectionItems[3],
+		return callServerConnectionWebService(userConnectionItems[0],userConnectionItems[1],userConnectionItems[2],userConnectionItems[3],userConnectionItems[4],
 				this.context.getResources().getString(R.string.web_url_init)+URL_SUFFIX_REGISTER.replace("<userId>", String.valueOf(loadUserId())));
 	}
 	@Override
@@ -74,10 +75,10 @@ public class AddOrModifyFriendTask extends AsyncTask<String,Integer,Boolean>{
 	}
 	
 	
-	private boolean callServerConnectionWebService(String name, String birthdate, String id, String tags, String webServiceUrlInit) {
+	private boolean callServerConnectionWebService(String name, String firstname, String birthdate, String id, String tags, String webServiceUrlInit) {
 		if(isConnected()){
 
-			CreateJsonAndRequest(name,birthdate,id, tags, webServiceUrlInit);
+			CreateJsonAndRequest(name,firstname,birthdate,id, tags, webServiceUrlInit);
 			if(httpStatus == 200){
 				return true;
 			}
@@ -115,7 +116,7 @@ public class AddOrModifyFriendTask extends AsyncTask<String,Integer,Boolean>{
         else
             return false;    
     }
-	public String CreateJsonAndRequest(String name, String birthdate,String id, String tags, String url){
+	public String CreateJsonAndRequest(String name, String firstname, String birthdate,String id, String tags, String url){
         InputStream inputStream = null;
         String result = null;
         try {
@@ -126,6 +127,11 @@ public class AddOrModifyFriendTask extends AsyncTask<String,Integer,Boolean>{
             JSONObject userJsonObject = new JSONObject();
             try {
 				userJsonObject.put(NAME, name);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+            try {
+				userJsonObject.put(FIRSTNAME, firstname);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -160,6 +166,7 @@ public class AddOrModifyFriendTask extends AsyncTask<String,Integer,Boolean>{
             }
             else {
             	httpPost= new HttpPost(url);
+            	System.out.println(url);
             	httpPost.setEntity(se);
                 httpPost.setHeader("Accept", "application/json");
                 httpPost.setHeader("Content-type", "application/json");

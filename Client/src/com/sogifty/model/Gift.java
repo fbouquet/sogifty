@@ -2,13 +2,20 @@ package com.sogifty.model;
 
 public class Gift {
 	private String id;
-	private String userId;
+	private String userId; //for widget
 	private String url;
 	private String imgUrl;
-	private String friendId;
+	private String friendId; //for widget
 	private String price;
+	private String decription;
 	
 	
+	public String getDecription() {
+		return decription;
+	}
+	public void setDecription(String decription) {
+		this.decription = decription;
+	}
 	public String getId() {
 		return id;
 	}
@@ -40,7 +47,7 @@ public class Gift {
 		this.friendId = friendId;
 	}
 	public String getPrice() {
-		return price + "€";
+		return price;
 	}
 	public void setPrice(String price) {
 		this.price = price;

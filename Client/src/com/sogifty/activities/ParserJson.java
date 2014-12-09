@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -17,6 +19,7 @@ import android.content.Context;
 
 import com.sogifty.model.Friend;
 import com.sogifty.model.Friends;
+import com.sogifty.model.Gift;
 
 
 public class ParserJson {
@@ -38,12 +41,39 @@ public class ParserJson {
 			return ERROR;
 		}
 	}
+	public List<Gift> executeParseGift(){
+		try {
+			System.out.println("try to parse"+stringToParse);
+			JSONArray giftsJsonArray = new JSONArray(stringToParse);
+			List<Gift> giftList = new ArrayList<Gift>();
+			JSONObject giftJson;
+			Gift g;
+			for(int i=0;i<giftsJsonArray.length();++i){
+				g = new Gift();
+				giftJson = giftsJsonArray.getJSONObject(i);
+				g.setId(giftJson.getString("id"));
+				g.setImgUrl(giftJson.getString("pictureUrl"));
+				g.setPrice(giftJson.getString("price"));
+				g.setUrl(giftJson.getString("url"));
+				g.setDecription(giftJson.getString("description"));
+				giftList.add(g);
+			}
+			return giftList;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
 	public Friends executeParseFriendList(){
 		try{
+			System.out.println(stringToParse);
 			JSONArray friends = new JSONArray(stringToParse);
-			Friends friendList = new Friends();
+			List<Friend> friendList = new ArrayList<Friend>();
 			String birthday;
 			String name;
+			String firstname;
 			String id;
 			JSONObject friendJson;
 			JSONArray tagsJson;
@@ -52,6 +82,7 @@ public class ParserJson {
 				f = new Friend();
 				friendJson = friends.getJSONObject(i);
 				name = friendJson.getString("name");
+				firstname = friendJson.getString("firstName");
 				birthday = friendJson.getString("birthdate");
 				id = friendJson.getString("id");
 				tagsJson = friendJson.getJSONArray("tags");
@@ -61,14 +92,18 @@ public class ParserJson {
 				}
 				f.setTags(tagsString);
 				f.setNom(name);
+				f.setPrenom(firstname);
 				f.setAge(getAge(birthday));
 				f.setId(Integer.parseInt(id));
 				f.setRemainingDay(getRemainingDay(birthday));
 				f.setBirthdayDate(birthday);
-				friendList.addFriend(f);
+				friendList.add(f);
 				
 			}
-			return friendList;
+			Collections.sort(friendList);
+			Friends friendsToReturn = new Friends();
+			friendsToReturn.setListFriends(friendList);
+			return friendsToReturn;
 			
 		}catch (JSONException e) {
 			e.printStackTrace();

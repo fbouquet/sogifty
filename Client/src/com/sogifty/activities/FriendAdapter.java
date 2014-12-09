@@ -19,10 +19,15 @@ import android.widget.TextView;
 
 import com.sogifty.R;
 import com.sogifty.model.Friend;
+import com.sogifty.model.Gift;
+import com.sogifty.tasks.DownloadImageTask;
 
 public class FriendAdapter extends BaseAdapter {
 
+	private static final int IO_BUFFER_SIZE = 50;
+	private static final String TAG = null;
 	List<Friend> friends;
+	List<Gift> gifts = null;
 	boolean deleteMode = false;
 	LayoutInflater inflater;
 	SparseBooleanArray friendsChecked = null;
@@ -30,12 +35,13 @@ public class FriendAdapter extends BaseAdapter {
 
 	boolean showCheckbox = false;
 	
-	public FriendAdapter(Context context,List<Friend> friends) {
+	public FriendAdapter(Context context,List<Friend> friends, List<Gift> gifts) {
 		inflater = (LayoutInflater)
                 context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.context = context;
 		Collections.sort(friends);
 		this.friends = friends;
+		this.gifts = gifts;
 		friendsChecked = new SparseBooleanArray();
 	}
 	
@@ -124,6 +130,8 @@ public class FriendAdapter extends BaseAdapter {
 		if(position == 0){
 
 			holder.tags.setVisibility(CheckBox.VISIBLE);
+			new DownloadImageTask(holder.giftImage)
+	         .execute(gifts.get((int)(Math.random())%gifts.size()).getImgUrl());
 			holder.giftImage.setVisibility(CheckBox.VISIBLE);
 		}
 		else{
@@ -165,11 +173,15 @@ public class FriendAdapter extends BaseAdapter {
 		
 		return convertView;
 	}
-	
-	
-	 
-	 
-	 public void onClick(View arg){
+	public void onClick(View arg){
 		 
 	 }
+	
+	
+	
+	 
+		
+	
+	 
+	 
 }

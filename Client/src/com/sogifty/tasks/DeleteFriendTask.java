@@ -28,7 +28,7 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
 import com.sogifty.R;
-import com.sogifty.tasks.listeners.DeleteFriendTaskListener;
+import com.sogifty.tasks.listeners.OnDeleteFriendTaskListener;
 import com.sogifty.tasks.listeners.OnAddOrModifyFriendTaskListener;
 
 public class DeleteFriendTask extends AsyncTask<List<Integer>,String,Boolean>{
@@ -40,9 +40,9 @@ public class DeleteFriendTask extends AsyncTask<List<Integer>,String,Boolean>{
 	private Context context;
 	private int httpStatus;
 	private String errorMessage;
-	private DeleteFriendTaskListener callback;
+	private OnDeleteFriendTaskListener callback;
 	
-	public DeleteFriendTask(Context context, DeleteFriendTaskListener callback) { 
+	public DeleteFriendTask(Context context, OnDeleteFriendTaskListener callback) { 
 		this.context = context;
 		this.progressDialog = new ProgressDialog(this.context);
 		this.callback = callback;

@@ -1,6 +1,9 @@
 package com.sogifty.activities;
 
+import java.util.List;
+
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,8 +15,11 @@ import android.widget.TextView;
 
 import com.sogifty.R;
 import com.sogifty.model.Friend;
+import com.sogifty.model.Gift;
+import com.sogifty.tasks.GetGiftsTask;
+import com.sogifty.tasks.listeners.OnGetGiftsTaskListener;
 
-public class FriendDetailsActivity extends Activity{
+public class FriendDetailsActivity extends Activity implements OnGetGiftsTaskListener{
 	
 	static final String FRIEND = "Friend";
 
@@ -25,6 +31,7 @@ public class FriendDetailsActivity extends Activity{
 	
 	private ViewPager giftPager;
     private GiftPagerAdapter giftPagerAdapter;
+    private List<Gift> gifts;
     
     private Friend friend;
     
@@ -41,6 +48,7 @@ public class FriendDetailsActivity extends Activity{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_friend_details);
+		new GetGiftsTask(this, this);
 		initActivity();
 	}
     
@@ -106,5 +114,24 @@ public class FriendDetailsActivity extends Activity{
 	protected void createFriendListActivity() {
 		Intent intent = FriendListActivity.getIntent(this);
 		startActivity(intent);
+	}
+
+
+	@Override
+	public void onGetGiftsComplete(List<Gift> giftList) {
+		gifts = giftList;
+	}
+
+
+	@Override
+	public void onGetGiftsFailed(String message) {
+		displayMessage(message);
+	}
+	
+	private void displayMessage(String message) {
+		AlertDialog.Builder adb = new AlertDialog.Builder(this);
+		adb.setMessage(message);
+		AlertDialog ad = adb.create();
+		ad.show();
 	}
 }

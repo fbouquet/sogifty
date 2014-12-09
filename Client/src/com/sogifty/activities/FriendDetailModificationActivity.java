@@ -111,9 +111,10 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 	}
 
 	private void initTagsList() {
-		for (int i=0;i<friend.getTags().size();++i) {
+		if(friend.getTags() != null)
+			for (int i=0;i<friend.getTags().size();++i) {
 			addTag(friend.getTags().get(i));
-		}
+			}
 	}
 
 	private void initButtonAddTag() {
@@ -329,7 +330,7 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 		List<String> tags = new ArrayList<String>(leftFriendTags);
 		tags.addAll(rightFriendTags);
 		new AddOrModifyFriendTask(this,this,false)
-			.execute(friend.getNom(),etBirthdaydate.getText().toString(), id, friend.getTagsinJsonString());
+			.execute(friend.getNom(),friend.getPrenom(),etBirthdaydate.getText().toString(), id, friend.getTagsinJsonString());
 	}
 	
 	private void callConnectionModificationTask() {
@@ -337,7 +338,7 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 		List<String> tags = new ArrayList<String>(leftFriendTags);
 		tags.addAll(rightFriendTags);
 		new AddOrModifyFriendTask(this,this,true).
-			execute(friend.getNom(),friend.getBirthdayDate(),id,friend.getTagsinJsonString());
+			execute(friend.getNom(),friend.getPrenom(),friend.getBirthdayDate(),id,friend.getTagsinJsonString());
 	}
 	protected void loadEmptyPopUp() {
 		AlertDialog.Builder adb = new AlertDialog.Builder(this);
