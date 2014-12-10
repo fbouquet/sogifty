@@ -9,19 +9,19 @@ public interface Configuration {
 	
 	public String getSearchUrl(Tag tag);
 	
-	public String getProductsSelector();
+	public String getProductListProductsSelector();
 
-	public String getTitleSelector();
+	public String getProductListProductUrlSelector();
 
-	public String getDescriptionSelector();
+	public String getProductListProductUrlAttribute();
 
-	public String getPriceSelector();
-	
-	public String getPictureSelector();
-	
-	public String getPictureUrlAttribute();
-	
-	public String getProductUrlSelector();
+	public String getProductDetailTitleSelector();
 
-	public String getProductUrlAttribute();
+	public String getProductDetailDescriptionSelector();
+
+	public String getProductDetailPriceSelector();
+
+	public String getProductDetailPictureSelector();
+
+	public String getProductDetailPictureUrlAttribute();
 }

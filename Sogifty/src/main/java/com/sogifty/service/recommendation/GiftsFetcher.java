@@ -33,11 +33,11 @@ public class GiftsFetcher {
 	public List<Gift> fetchGifts(Tag tag) throws SogiftyException {
 		logger.info("Starting gift Fetch for tag '" + tag.getLabel() + "'.");
 		List<Gift> gifts = new ArrayList<Gift>();
-		Document doc;
+		Document fetchedProductList;
 		try {
-			doc = Jsoup.connect(configuration.getSearchUrl(tag)).userAgent(USER_AGENT).get();
+			fetchedProductList = Jsoup.connect(configuration.getSearchUrl(tag)).userAgent(USER_AGENT).get();
 			
-			Elements products = doc.select(configuration.getProductsSelector());
+			Elements products = fetchedProductList.select(configuration.getProductListProductsSelector());
 			
 			for (Element product : products) {
 				Gift gift = null;
@@ -64,26 +64,31 @@ public class GiftsFetcher {
 		return gifts;
 	}
 	
-	private Gift toGift(Element product) {
+	private Gift toGift(Element product) throws IOException {
 		Gift gift = new Gift();
 		
-		Elements titleElts = product.select(configuration.getTitleSelector());
+		Elements urlElts = product.select(configuration.getProductListProductUrlSelector());
+		String productUrl = configuration.getBaseUrl() + urlElts.attr(configuration.getProductListProductUrlAttribute());
+		
+		Document productDetails = Jsoup.connect(productUrl).userAgent(USER_AGENT).get();
+		
+		
+		Elements titleElts = productDetails.select(configuration.getProductDetailTitleSelector());
 		gift.setName(titleElts.get(0).text());
 		
-		Elements descriptionElts = product.select(configuration.getDescriptionSelector());
+		Elements descriptionElts = productDetails.select(configuration.getProductDetailDescriptionSelector());
 		gift.setDescription(descriptionElts.get(0).text());
 		
-		Elements priceElts = product.select(configuration.getPriceSelector());
+		Elements priceElts = productDetails.select(configuration.getProductDetailPriceSelector());
 		gift.setPrice(priceElts.get(0).text());
 		
-		Elements pictureElts = product.select(configuration.getPictureSelector());
-		gift.setPictureUrl(pictureElts.get(0).attr(configuration.getPictureUrlAttribute()));
+		Elements pictureElts = productDetails.select(configuration.getProductDetailPictureSelector());
+		gift.setPictureUrl(pictureElts.get(0).attr(configuration.getProductDetailPictureUrlAttribute()));
 		
+		gift.setUrl(productUrl);
 		gift.setCreation(new Date());
 		gift.setLastUpdate(new Date());
 		
-		Elements urlElts = product.select(configuration.getProductUrlSelector());
-		gift.setUrl(configuration.getBaseUrl() + urlElts.attr(configuration.getProductUrlAttribute()));
 		return gift;
 	}
 	
