@@ -9,14 +9,9 @@ public class CdiscountConfiguration implements Configuration {
 	private final static String BASE_URL								= "http://www.cdiscount.com";
 	private final static String SEARCH_URL_SUFFIX						= "/search/10";
 	private final static String END_SEARCH_URL							= ".html";
-	private final static String PRODUCT_LIST_PRODUCTS_SELECTOR			= "#lpBloc > li[data-sku]";
-	private final static String PRODUCT_LIST_PRODUCT_URL_SELECTOR		= "a:first-child";
-	private final static String PRODUCT_LIST_PRODUCT_URL_ATTRIBUTE		= "href";
-//	private final static String TITLE_SELECTOR			= ".prdtBTit";
-//	private final static String DESCRIPTION_SELECTOR	= "p.prdtBDesc";
-//	private final static String PRICE_SELECTOR			= ".price";
-//	private final static String PICTURE_SELECTOR		= ".prdtBImg";
-//	private final static String PICTURE_URL_ATTRIBUTE	= "data-src";
+	private final static String PRODUCT_LIST_PRODUCTS_SELECTOR			= "#lpBloc > li[data-sku] ";
+	private final static String PRODUCT_LIST_PRODUCT_URL_SELECTOR		= "a:first-child ";
+	private final static String PRODUCT_LIST_PRODUCT_URL_ATTRIBUTE		= "href"; 
 	private final static String PRODUCT_DETAIL_BASE_SELECTOR 			= "#fpContent ";
 	private final static String PRODUCT_DETAIL_TITLE_SELECTOR			= PRODUCT_DETAIL_BASE_SELECTOR + "[itemprop=name]";
 	private final static String PRODUCT_DETAIL_DESCRIPTION_SELECTOR		= PRODUCT_DETAIL_BASE_SELECTOR + "[itemprop=description]";

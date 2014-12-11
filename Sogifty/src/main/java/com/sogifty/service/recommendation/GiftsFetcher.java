@@ -22,6 +22,8 @@ public class GiftsFetcher {
 	
 	private final String USER_AGENT = "Mozilla";
 	private static final Logger logger = Logger.getLogger(GiftsFetcher.class);
+	private static final int NB_GIFTS_TO_FETCH = 3;
+	
 	private Configuration configuration;
 	
 	private GiftDAO giftDao = new GiftDAO();
@@ -37,12 +39,15 @@ public class GiftsFetcher {
 		try {
 			fetchedProductList = Jsoup.connect(configuration.getSearchUrl(tag)).userAgent(USER_AGENT).get();
 			
-			Elements products = fetchedProductList.select(configuration.getProductListProductsSelector());
-			
-			for (Element product : products) {
+			Elements productsUrlElts = fetchedProductList.select(configuration.getProductListProductsSelector()
+														  + configuration.getProductListProductUrlSelector());
+
+			for (int i = 0; i < productsUrlElts.size() && gifts.size() < NB_GIFTS_TO_FETCH; ++i) {
 				Gift gift = null;
+				Element product = productsUrlElts.get(i);
+				String productUrl = configuration.getBaseUrl() + product.attr(configuration.getProductListProductUrlAttribute());
 				try {
-					gift = toGift(product);
+					gift = toGift(productUrl);
 				} catch (Exception e) {
 					continue;
 				}
@@ -64,13 +69,23 @@ public class GiftsFetcher {
 		return gifts;
 	}
 	
-	private Gift toGift(Element product) throws IOException {
+	public Gift updateGift(Gift gift) throws SogiftyException {
+		Gift updatedGift = null;
+		
+		try {
+			updatedGift = toGift(gift.getUrl());
+		} catch (Exception e) {
+			return null;
+		}
+		
+		updatedGift.setCreation(gift.getCreation());
+		return updatedGift;	
+	}
+	
+	private Gift toGift(String giftUrl) throws IOException {
 		Gift gift = new Gift();
 		
-		Elements urlElts = product.select(configuration.getProductListProductUrlSelector());
-		String productUrl = configuration.getBaseUrl() + urlElts.attr(configuration.getProductListProductUrlAttribute());
-		
-		Document productDetails = Jsoup.connect(productUrl).userAgent(USER_AGENT).get();
+		Document productDetails = Jsoup.connect(giftUrl).userAgent(USER_AGENT).get();
 		
 		
 		Elements titleElts = productDetails.select(configuration.getProductDetailTitleSelector());
@@ -85,7 +100,7 @@ public class GiftsFetcher {
 		Elements pictureElts = productDetails.select(configuration.getProductDetailPictureSelector());
 		gift.setPictureUrl(pictureElts.get(0).attr(configuration.getProductDetailPictureUrlAttribute()));
 		
-		gift.setUrl(productUrl);
+		gift.setUrl(giftUrl);
 		gift.setCreation(new Date());
 		gift.setLastUpdate(new Date());
 		
