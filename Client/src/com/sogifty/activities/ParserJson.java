@@ -56,6 +56,7 @@ public class ParserJson {
 				g.setPrice(giftJson.getString("price"));
 				g.setUrl(giftJson.getString("url"));
 				g.setDecription(giftJson.getString("description"));
+				g.setName(giftJson.getString("name"));
 				giftList.add(g);
 			}
 			return giftList;

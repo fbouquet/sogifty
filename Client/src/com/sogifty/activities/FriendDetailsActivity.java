@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import com.sogifty.R;
 import com.sogifty.model.Friend;
 import com.sogifty.model.Gift;
+import com.sogifty.model.Gifts;
 import com.sogifty.tasks.GetGiftsTask;
 import com.sogifty.tasks.listeners.OnGetGiftsTaskListener;
 
@@ -48,15 +50,13 @@ public class FriendDetailsActivity extends Activity implements OnGetGiftsTaskLis
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_friend_details);
-		new GetGiftsTask(this, this);
-		initActivity();
+		initFriendInformations();
+		new GetGiftsTask(this, this).execute(String.valueOf(friend.getId()));
+		
 	}
     
     
 	private void initActivity() {
-		
-		initFriendInformations();
-	       
 		nameText = (TextView) findViewById(R.id.frienddetails_tv_name);
 		firstnameText =(TextView) findViewById(R.id.frienddetails_tv_firstname);
 		remaingDate =(TextView) findViewById(R.id.frienddetails_tv_RemainingDate);
@@ -67,9 +67,15 @@ public class FriendDetailsActivity extends Activity implements OnGetGiftsTaskLis
 		firstnameText.setText(friend.getPrenom());
 		remaingDate.setText(remaingDate.getText() + String.format("%d", ParserJson.getRemainingDay(friend.getBirthdayDate())));
 		age.setText(age.getText() + String.format("%d",ParserJson.getAge(friend.getBirthdayDate())));
-		tagsView.setText(friend.getTagsinPointString());
+		if(friend.getTagsinPointString().compareTo("") != 0){
+			tagsView.setText(friend.getTagsinPointString());
+		}
+		else{
+			tagsView.setText(getResources().getString(R.string.frienddetails_no_taste));
+			tagsView.setTypeface(null, Typeface.ITALIC);
+		}
 		giftPager = (ViewPager) findViewById(R.id.frienddetails_vp_giftPager);
-		giftPagerAdapter = new GiftPagerAdapter(getFragmentManager());
+		giftPagerAdapter = new GiftPagerAdapter(getFragmentManager(),new Gifts(gifts));
         giftPager.setAdapter(giftPagerAdapter);
         
        
@@ -120,6 +126,8 @@ public class FriendDetailsActivity extends Activity implements OnGetGiftsTaskLis
 	@Override
 	public void onGetGiftsComplete(List<Gift> giftList) {
 		gifts = giftList;
+		initActivity();
+		
 	}
 
 

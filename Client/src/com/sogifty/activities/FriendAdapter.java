@@ -7,6 +7,9 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Typeface;
+import android.net.Uri;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -88,6 +91,8 @@ public class FriendAdapter extends BaseAdapter {
 		ImageView ar;
 		TextView tags;
 		ImageView giftImage;
+		TextView giftPrice;
+		public TextView giftName;
 	}
 	
 	
@@ -101,37 +106,53 @@ public class FriendAdapter extends BaseAdapter {
 		if(convertView == null) {
 			holder = new ViewHolder();
 			convertView = inflater.inflate(R.layout.useritem, null);
-
-			holder.nom = (TextView)convertView.findViewById(R.id.nom);
-			holder.prenom = (TextView)convertView.findViewById(R.id.prenom);
-			holder.age = (TextView)convertView.findViewById(R.id.age);
-			holder.iv = (ImageView)convertView.findViewById(R.id.imageViewUser);
-			holder.remainingDate = (TextView)convertView.findViewById(R.id.remainingDate);
-			holder.tags = (TextView)convertView.findViewById(R.id.tvLikes);
-			holder.giftImage = (ImageView)convertView.findViewById(R.id.imageViewGift);
-			//holder.fonction = (TextView)convertView.findViewById(R.id.fonction);
-			holder.cb = (CheckBox)convertView.findViewById(R.id.checkBox);
-			holder.ar = (ImageView)convertView.findViewById(R.id.arrow);
-			holder.layout = (LinearLayout)convertView.findViewById(R.id.main_ll_itemUserList);
-			
+			initHolder(holder, convertView);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
+		setFriendItem(holder, position);
 		
 		
+		
+		return convertView;
+	}
+	private void setFriendItem(ViewHolder holder, int position) {
 		Friend f = friends.get(position);
 		holder.nom.setText(f.getNom());
 		holder.prenom.setText(f.getPrenom());
 		holder.age.setText(String.valueOf(f.getAge()));
 		holder.remainingDate.setText("J-"+f.getRemainingDay());
-		holder.tags.setText(f.getTagsinPointString());
+		if(f.getTagsinPointString().compareTo("") != 0){
+			holder.tags.setText(f.getTagsinPointString());
+		}
+		else{
+			holder.tags.setText(context.getResources().getString(R.string.frienddetails_no_taste));
+			holder.tags.setTypeface(null, Typeface.ITALIC);
+		}
 	
 		if(position == 0){
-
 			holder.tags.setVisibility(CheckBox.VISIBLE);
-			new DownloadImageTask(holder.giftImage)
-	         .execute(gifts.get((int)(Math.random())%gifts.size()).getImgUrl());
+			if (gifts != null && gifts.size() != 0){
+				int i = (int)(Math.random())%gifts.size();
+				new DownloadImageTask(holder.giftImage)
+		         .execute(gifts.get(i).getImgUrl());
+				holder.giftPrice.setText(gifts.get(i).getPrice());
+				holder.giftName.setText(gifts.get(i).getName());
+				
+			}
+			else{
+				holder.giftImage.setVisibility(IGNORE_ITEM_VIEW_TYPE);
+			}
+//			holder.giftImage.setOnClickListener(new View.OnClickListener(){
+//			    public void onClick(View v){
+//			        Intent intent = new Intent();
+//			        intent.setAction(Intent.ACTION_VIEW);
+//			        intent.addCategory(Intent.CATEGORY_BROWSABLE);
+//			        intent.setData(Uri.parse(g.getUrl()));
+//			        startActivity(intent);
+//			    }
+//			});
 			holder.giftImage.setVisibility(CheckBox.VISIBLE);
 		}
 		else{
@@ -169,13 +190,29 @@ public class FriendAdapter extends BaseAdapter {
 //		} catch (IOException e) {
 //			e.printStackTrace();
 //		}
-		
-		
-		return convertView;
 	}
+
+
+	private void initHolder(ViewHolder holder, View convertView) {
+		holder.nom = (TextView)convertView.findViewById(R.id.nom);
+		holder.prenom = (TextView)convertView.findViewById(R.id.prenom);
+		holder.age = (TextView)convertView.findViewById(R.id.age);
+		holder.iv = (ImageView)convertView.findViewById(R.id.imageViewUser);
+		holder.remainingDate = (TextView)convertView.findViewById(R.id.remainingDate);
+		holder.tags = (TextView)convertView.findViewById(R.id.tvLikes);
+		holder.giftImage = (ImageView)convertView.findViewById(R.id.imageViewGift);
+		holder.giftPrice = (TextView)convertView.findViewById(R.id.useritem_tv_price);
+		holder.giftName = (TextView)convertView.findViewById(R.id.useritem_tv_title);
+		//holder.fonction = (TextView)convertView.findViewById(R.id.fonction);
+		holder.cb = (CheckBox)convertView.findViewById(R.id.checkBox);
+		holder.ar = (ImageView)convertView.findViewById(R.id.arrow);
+		holder.layout = (LinearLayout)convertView.findViewById(R.id.main_ll_itemUserList);
+	}
+
+
 	public void onClick(View arg){
 		 
-	 }
+	}
 	
 	
 	

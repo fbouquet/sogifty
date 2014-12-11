@@ -1,6 +1,12 @@
 package com.sogifty.model;
 
-public class Gift {
+import java.io.Serializable;
+
+public class Gift implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String id;
 	private String userId; //for widget
 	private String url;
@@ -8,6 +14,7 @@ public class Gift {
 	private String friendId; //for widget
 	private String price;
 	private String decription;
+	private String name;
 	
 	
 	public String getDecription() {
@@ -51,6 +58,12 @@ public class Gift {
 	}
 	public void setPrice(String price) {
 		this.price = price;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 
 

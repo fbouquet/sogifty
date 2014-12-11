@@ -154,11 +154,12 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 	@Override
 	public void onGetFriendListComplete(Friends friendsListparam) {
 		friendsList = friendsListparam;
-		if(friendsList.getListFriends() != null)
+		if(friendsList.getListFriends() != null && friendsList.getListFriends().size() != 0){
 			new GetGiftsTask(this, this).execute(String.valueOf(friendsList.getListFriends().get(0).getId()));
+		}
 		else{
 			if(friendsList.getListFriends().isEmpty())
-				displayMessage("you have no friend, add one");
+				displayMessage(getResources().getString(R.string.friendlist_no_friend));
 		}
 //		listJson.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 //		//createFalseList();

@@ -99,21 +99,39 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="@+strings/tagsFriend" /> 
-		<ImageView
-            android:id="@+id/imageViewGift"
-	        android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:numColumns="1" 
-            android:layout_toRightOf="@id/tvLikes"
-            android:layout_margin="0sp"
-	        android:paddingLeft="10sp"
-	        android:paddingRight="10sp"
-	        android:scaleType="fitStart"
-	        android:src="@drawable/cadeau"
-	        android:contentDescription="@string/useritem_iv_gift_description"
-            >
-        </ImageView>
-	     
+		  <LinearLayout
+	           android:id="@+id/giftPager_l_giftpager" 
+	           android:layout_width="match_parent"
+	           android:layout_height="wrap_content"
+	           android:layout_toRightOf="@id/tvLikes"
+	           android:layout_toEndOf="@id/tvLikes"
+	           android:orientation="vertical">
+		      <TextView
+	           android:id="@+id/useritem_tv_title"
+	           android:layout_width="match_parent"
+	           android:layout_height="wrap_content"
+	           android:layout_gravity="center_horizontal"
+	           android:textColor="@color/red" />
+			<ImageView
+	            android:id="@+id/imageViewGift"
+		        android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:numColumns="1" 
+	             android:layout_margin="0sp"
+		        android:paddingLeft="10sp"
+		        android:paddingRight="10sp"
+		        android:scaleType="fitStart"
+		        android:src="@drawable/cadeau"
+		        android:contentDescription="@string/useritem_iv_gift_description"
+	            >
+	        </ImageView>
+	        <TextView
+	           android:id="@+id/useritem_tv_price"
+	           android:layout_width="match_parent"
+	           android:layout_height="wrap_content"
+	           android:layout_gravity="center_horizontal"
+	           android:textColor="@color/red" />
+	     </LinearLayout>
     </RelativeLayout>
     
 	 
