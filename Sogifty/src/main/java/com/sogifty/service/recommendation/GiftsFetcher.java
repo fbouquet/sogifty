@@ -22,6 +22,8 @@ public class GiftsFetcher {
 	
 	private final String USER_AGENT = "Mozilla";
 	private static final Logger logger = Logger.getLogger(GiftsFetcher.class);
+	private static final int NB_GIFTS_FETCHED = 3;
+	
 	private Configuration configuration;
 	
 	private GiftDAO giftDao = new GiftDAO();
@@ -39,9 +41,10 @@ public class GiftsFetcher {
 			
 			Elements productsUrlElts = fetchedProductList.select(configuration.getProductListProductsSelector()
 														  + configuration.getProductListProductUrlSelector());
-			
-			for (Element product : productsUrlElts) {
+
+			for (int i = 0; i < productsUrlElts.size() && gifts.size() < NB_GIFTS_FETCHED; ++i) {
 				Gift gift = null;
+				Element product = productsUrlElts.get(i);
 				String productUrl = configuration.getBaseUrl() + product.attr(configuration.getProductListProductUrlAttribute());
 				try {
 					gift = toGift(productUrl);
