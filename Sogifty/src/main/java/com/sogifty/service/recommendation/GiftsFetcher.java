@@ -22,7 +22,7 @@ public class GiftsFetcher {
 	
 	private final String USER_AGENT = "Mozilla";
 	private static final Logger logger = Logger.getLogger(GiftsFetcher.class);
-	private static final int NB_GIFTS_FETCHED = 3;
+	private static final int NB_GIFTS_TO_FETCH = 3;
 	
 	private Configuration configuration;
 	
@@ -42,7 +42,7 @@ public class GiftsFetcher {
 			Elements productsUrlElts = fetchedProductList.select(configuration.getProductListProductsSelector()
 														  + configuration.getProductListProductUrlSelector());
 
-			for (int i = 0; i < productsUrlElts.size() && gifts.size() < NB_GIFTS_FETCHED; ++i) {
+			for (int i = 0; i < productsUrlElts.size() && gifts.size() < NB_GIFTS_TO_FETCH; ++i) {
 				Gift gift = null;
 				Element product = productsUrlElts.get(i);
 				String productUrl = configuration.getBaseUrl() + product.attr(configuration.getProductListProductUrlAttribute());
