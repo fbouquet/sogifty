@@ -5,12 +5,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
+import com.sogifty.exception.SogiftyException;
+
 @Path("hello")
 public class HelloPerson {
 
 	@GET
 	@Path("/{who}")
-	public Response helloPerson(@PathParam("who") String who) {
+	public Response helloPerson(@PathParam("who") String who) throws SogiftyException {
 		return Response.status(200).entity("Hello " + who + "!").build();
 	}
 }
