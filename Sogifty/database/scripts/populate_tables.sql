@@ -11,4 +11,7 @@ values
        ('Dupont', 'Jacques', '1997-10-15', 2),
        ('Orange', 'Casimir', '1993-08-12', 2);
 
+insert into preferences(nb_tags, nb_gifts)
+values
+       (10, 10);
 

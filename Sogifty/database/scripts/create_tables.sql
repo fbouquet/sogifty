@@ -5,6 +5,7 @@ drop table if exists tag cascade;
 drop table if exists enjoy;
 drop table if exists correspond;
 drop table if exists match;
+drop table if exists preferences;
 
 create table app_user (
     id serial primary key not null,
@@ -53,4 +54,10 @@ create table match (
      tag_id integer references tag(id),
      gift_id integer references gift(id),
      constraint "match_PK" primary key(tag_id, gift_id)
+);
+
+create table preferences (
+    id serial primary key not null,
+    nb_tags integer not null,
+    nb_gifts integer not null
 );
