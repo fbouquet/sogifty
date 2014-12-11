@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ws.rs.core.Response;
 
 import org.hibernate.Session;
+import org.hibernate.StaleStateException;
 import org.hibernate.Transaction;
 import org.hibernate.exception.ConstraintViolationException;
 
@@ -34,6 +35,32 @@ public class GiftDAO extends AbstractDAO<Gift> {
 		catch(Exception e) {
 			rollbackTransaction(t);
 			logger.fatal("Could not create the object: " + e);
+			throw new SogiftyException(Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			closeSession(session);
+		}
+	}
+	
+	public void deleteGifts(List<Gift> gifts) throws SogiftyException {
+		Session session = null;
+		Transaction t = null;
+
+		try {
+			session = sessionFactory.openSession();
+			t = session.beginTransaction();
+			
+			for (Gift gift : gifts) {
+				session.delete(gift);
+			}
+
+			t.commit();
+		} catch(StaleStateException e) {
+			rollbackTransaction(t);
+			logger.fatal("The object to delete doesn't exist: " + e);
+			throw new SogiftyException(Response.Status.NOT_FOUND);
+		} catch(Exception e) {
+			rollbackTransaction(t);
+			logger.fatal("Could not delete the object: " + e);
 			throw new SogiftyException(Response.Status.INTERNAL_SERVER_ERROR);
 		} finally {
 			closeSession(session);

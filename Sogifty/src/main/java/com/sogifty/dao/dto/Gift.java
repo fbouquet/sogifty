@@ -46,10 +46,10 @@ public class Gift implements DTO {
 	@Column(name = "last_update")
 	private Date lastUpdate;
 	
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(	name = "match", 
-	joinColumns = {@JoinColumn(name = "gift_id", nullable = false, updatable = false)},
-	inverseJoinColumns = {@JoinColumn(name = "tag_id", nullable = false, updatable = false)})
+				joinColumns = {@JoinColumn(name = "gift_id", nullable = false, updatable = false)},
+				inverseJoinColumns = {@JoinColumn(name = "tag_id", nullable = false, updatable = false)})
 	private List<Tag> tags;
 
 	public String getName() {

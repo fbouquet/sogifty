@@ -79,6 +79,8 @@ public class GiftsFetcher {
 		}
 		
 		updatedGift.setCreation(gift.getCreation());
+		//giftDao.update(updatedGift);
+		
 		return updatedGift;	
 	}
 	
