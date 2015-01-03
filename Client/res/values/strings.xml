@@ -40,6 +40,7 @@
     <string name="modify_tv_function">Fonction : </string>
     <string name="modify_tv_tags">Goûts : </string>
     <string name="modify_b_addtag">Ajouter</string>
+    <string name="modify_b_avatar">Modifier avatar</string>
     <string name="modify_actv_tags">Entrer un goût </string>
     <string name="modify_h_name">Entrer le nom. </string>
   	<string name="modify_h_function">Entrer la fonction </string>

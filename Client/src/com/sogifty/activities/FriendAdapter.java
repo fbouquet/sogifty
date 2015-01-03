@@ -2,14 +2,17 @@ package com.sogifty.activities;
 
 
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Typeface;
-import android.net.Uri;
+import android.media.ExifInterface;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -123,6 +126,7 @@ public class FriendAdapter extends BaseAdapter {
 		holder.prenom.setText(f.getPrenom());
 		holder.age.setText(String.valueOf(f.getAge()));
 		holder.remainingDate.setText("J-"+f.getRemainingDay());
+		initAvatar(f,holder);
 		if(f.getTagsinPointString().compareTo("") != 0){
 			holder.tags.setText(f.getTagsinPointString());
 		}
@@ -190,6 +194,66 @@ public class FriendAdapter extends BaseAdapter {
 //		} catch (IOException e) {
 //			e.printStackTrace();
 //		}
+	}
+
+
+	private void initAvatar (Friend friend, ViewHolder holder) {
+    
+		Bitmap bitmap   = null;
+        String path = friend.getAvatar();
+        if (path !=null){
+        	bitmap = BitmapFactory.decodeFile(path);
+        	if (bitmap != null){
+        		int imgHeight = bitmap.getHeight();
+        		int imgWidth = bitmap.getWidth();
+        		int rotate = getOrientation(path);
+        		if(imgHeight<imgWidth){
+        			bitmap = changeImgOrientation(bitmap, rotate);
+        			imgHeight = bitmap.getHeight();
+        			imgWidth = bitmap.getWidth();
+        		}
+        		float fixedWidth = dpToPx(68);
+        		float rate = fixedWidth/imgWidth;
+        		Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, Math.round(fixedWidth), Math.round(imgHeight*rate), true);
+        		holder.iv.setImageBitmap(resizedBitmap);
+        	}
+        }
+        
+    }
+ 
+	private int getOrientation(String path) {
+		int orientation = 0 ;
+		try {
+			orientation = (new ExifInterface(path)).getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+			switch (orientation) {
+			case ExifInterface.ORIENTATION_ROTATE_270:
+				return -90;
+			case ExifInterface.ORIENTATION_ROTATE_180:
+				return 180;
+			case ExifInterface.ORIENTATION_ROTATE_90:
+				return 90;
+			default:
+				return 0;
+			}
+		} 
+		catch (IOException e) {
+
+			e.printStackTrace();
+			return 0;
+		}
+	}
+
+	private Bitmap changeImgOrientation(Bitmap bitmap, int rotate) {
+		Matrix matrix = new Matrix();
+		matrix.postRotate(rotate);
+	    return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+	}
+		
+
+	private int dpToPx(int dp)
+	{
+	    float density = context.getResources().getDisplayMetrics().density;
+	    return Math.round((float)dp * density);
 	}
 
 

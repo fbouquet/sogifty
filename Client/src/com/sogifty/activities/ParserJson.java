@@ -76,6 +76,7 @@ public class ParserJson {
 			String name;
 			String firstname;
 			String id;
+			String pathAvatar;
 			JSONObject friendJson;
 			JSONArray tagsJson;
 			Friend f;
@@ -86,6 +87,7 @@ public class ParserJson {
 				firstname = friendJson.getString("firstName");
 				birthday = friendJson.getString("birthdate");
 				id = friendJson.getString("id");
+				pathAvatar = friendJson.getString("avatarPath");
 				tagsJson = friendJson.getJSONArray("tags");
 				List<String> tagsString = new ArrayList<String>();
 				for (int j=0;j<tagsJson.length();++j) {
@@ -98,6 +100,7 @@ public class ParserJson {
 				f.setId(Integer.parseInt(id));
 				f.setRemainingDay(getRemainingDay(birthday));
 				f.setBirthdayDate(birthday);
+				f.setAvatar(pathAvatar);
 				friendList.add(f);
 				
 			}

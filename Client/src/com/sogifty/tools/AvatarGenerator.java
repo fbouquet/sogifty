@@ -35,4 +35,8 @@ public class AvatarGenerator {
 		
 			return BitmapFactory.decodeStream(context.getAssets().open(generateUrlAvatar(name, gender)));
 	}
+	
+	
+	
+	
 }
