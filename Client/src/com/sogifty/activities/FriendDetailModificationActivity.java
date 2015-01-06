@@ -136,18 +136,20 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 		String path = friend.getAvatar();
 		if (path !=null){
 			bitmap = BitmapFactory.decodeFile(path);
-			int rotate = getOrientation(path);
-			int imgHeight = bitmap.getHeight();
-			int imgWidth = bitmap.getWidth();
-			if(imgHeight<imgWidth){
-				bitmap = changeImgOrientation(bitmap, rotate);
-				imgHeight = bitmap.getHeight();
-				imgWidth = bitmap.getWidth();
+			if(bitmap!=null){
+				int rotate = getOrientation(path);
+				int imgHeight = bitmap.getHeight();
+				int imgWidth = bitmap.getWidth();
+				if(imgHeight<imgWidth){
+					bitmap = changeImgOrientation(bitmap, rotate);
+					imgHeight = bitmap.getHeight();
+					imgWidth = bitmap.getWidth();
+				}
+				float fixedHeight = dpToPx(155);
+				float rate = fixedHeight/imgHeight;
+				Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, Math.round(imgWidth*rate), Math.round(fixedHeight), true);
+				ivAvatar.setImageBitmap(resizedBitmap);
 			}
-			float fixedHeight = dpToPx(155);
-			float rate = fixedHeight/imgHeight;
-			Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, Math.round(imgWidth*rate), Math.round(fixedHeight), true);
-			ivAvatar.setImageBitmap(resizedBitmap);
 		}
 
 	}
