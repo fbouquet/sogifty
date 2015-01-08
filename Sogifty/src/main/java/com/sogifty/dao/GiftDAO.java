@@ -14,6 +14,10 @@ import com.sogifty.exception.SogiftyException;
 
 public class GiftDAO extends AbstractDAO<Gift> {
 
+	public GiftDAO() {
+		this.setType(Gift.class);
+	}
+	
 	public void createGifts(List<Gift> gifts) throws SogiftyException {
 		Session session = null;
 		Transaction t = null;

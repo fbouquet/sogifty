@@ -8,9 +8,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import com.sogifty.dao.GiftDAO;
-import com.sogifty.dao.TagDAO;
 import com.sogifty.dao.dto.Gift;
-import com.sogifty.dao.dto.Tag;
 import com.sogifty.exception.SogiftyException;
 import com.sogifty.service.recommendation.CdiscountConfiguration;
 import com.sogifty.service.recommendation.GiftsFetcher;
@@ -27,45 +25,44 @@ public class PeriodicGiftService implements Runnable {
 	private static final int GIFT_LIFE_TIME		= 30;
 
 	private GiftDAO	giftDAO = new GiftDAO();
-	private TagDAO tagDAO = new TagDAO();
 	private GiftsFetcher giftsFetcher = new GiftsFetcher(new CdiscountConfiguration());
 
 	private static final Logger logger = Logger.getLogger(PeriodicGiftService.class);
 
 	public void run(){
-		Set<Tag> tags = null;
 
 		List<Gift> giftsToDelete = new ArrayList<Gift>();
 
+		Set<Gift> gifts = null;
+		
 		try {
-			tags = tagDAO.findAll();
+			gifts = giftDAO.findAll();
 		} catch (SogiftyException e) {
-			logger.fatal("Exception getting the tags : " + e.getStatus() + " " + e.getMessage());
+			logger.fatal("Exception getting the gifts : " + e.getStatus() + " " + e.getMessage());
 		}
 
-		for(Tag tag : tags)
-			for (Gift gift : tag.getGifts()) {
-				Date creationDate	= gift.getCreation();
-				Date lastUpdate		= gift.getLastUpdate();
-				Date todayDate		= new Date();
+		for(Gift gift : gifts) {
+			Date creationDate	= gift.getCreation();
+			Date lastUpdate		= gift.getLastUpdate();
+			Date todayDate		= new Date();
 
-				if(DateUtils.getDateDiff(creationDate, todayDate) > GIFT_LIFE_TIME) {
-					giftsToDelete.add(gift);
-				} else if(DateUtils.getDateDiff(lastUpdate, todayDate) > GIFT_UPDATE_TIME) {
+			if(DateUtils.getDateDiff(creationDate, todayDate) > GIFT_LIFE_TIME) {
+				giftsToDelete.add(gift);
+			} else if(DateUtils.getDateDiff(lastUpdate, todayDate) > GIFT_UPDATE_TIME) {
+				try {
+					logger.info("This gift has to be updated : " + gift);
+					giftsFetcher.updateGift(gift);
+				} catch (SogiftyException e) {
+					logger.error("The gift is detected as problematic, we will delete it : " + e.getMessage());
 					try {
-						logger.info("This gift has to be uptdated : " + gift);
-						giftsFetcher.updateGift(gift);
-					} catch (SogiftyException e) {
-						logger.error("The gift is detected as problematic, we will delete it.");
-						try {
-							giftDAO.delete(gift.getId());
-						} catch (SogiftyException e1) {
-							logger.fatal("Can't delete te problematic gift.");
-						}
+						giftDAO.delete(gift.getId());
+					} catch (SogiftyException e1) {
+						logger.fatal("Can't delete te problematic gift.");
 					}
 				}
-			}
-
+			}	
+		}
+		
 		// Delete the gifts too old
 		logger.info(giftsToDelete.size() + " gift(s), too old, are going to be deleted from the database.");
 		if(!giftsToDelete.isEmpty()) {
