@@ -48,7 +48,7 @@ public abstract class AbstractGiftsFetcher {
 			
 			Elements productsUrlElts = fetchedProductList.select(getProductUrlSelector());
 
-			for (int i = 0; i < productsUrlElts.size() && gifts.size() < NB_GIFTS_TO_FETCH; ++i) {
+			for (int i = 0; i < productsUrlElts.size() && i < NB_GIFTS_TO_FETCH; ++i) {
 				Gift gift = null;
 				Element product = productsUrlElts.get(i);
 				String productUrl = getProductUrl(product);
