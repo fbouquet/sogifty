@@ -1,12 +1,9 @@
 package com.sogifty.activities;
 
-import java.util.List;
-
-import com.sogifty.model.Gift;
-import com.sogifty.model.Gifts;
-
 import android.app.FragmentManager;
 import android.support.v13.app.FragmentStatePagerAdapter;
+
+import com.sogifty.model.Gifts;
 
 public class GiftPagerAdapter extends FragmentStatePagerAdapter {
 	

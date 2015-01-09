@@ -36,6 +36,7 @@ public class AddOrModifyFriendTask extends AsyncTask<String,Integer,Boolean>{
 	private static final String BIRTHDATE = "birthdate";
 	private static final String TAGS = "tags";
 	private static final String FIRSTNAME = "firstName";
+	private static final String AVATAR = "avatarPath";
 	
 	private ProgressDialog progressDialog;
 	private Context context;
@@ -60,7 +61,7 @@ public class AddOrModifyFriendTask extends AsyncTask<String,Integer,Boolean>{
 	
 	@Override
 	protected Boolean doInBackground(String... userConnectionItems) {
-		return callServerConnectionWebService(userConnectionItems[0],userConnectionItems[1],userConnectionItems[2],userConnectionItems[3],userConnectionItems[4],
+		return callServerConnectionWebService(userConnectionItems[0],userConnectionItems[1],userConnectionItems[2],userConnectionItems[3],userConnectionItems[4],userConnectionItems[5],
 				this.context.getResources().getString(R.string.web_url_init)+URL_SUFFIX_REGISTER.replace("<userId>", String.valueOf(loadUserId())));
 	}
 	@Override
@@ -75,10 +76,10 @@ public class AddOrModifyFriendTask extends AsyncTask<String,Integer,Boolean>{
 	}
 	
 	
-	private boolean callServerConnectionWebService(String name, String firstname, String birthdate, String id, String tags, String webServiceUrlInit) {
+	private boolean callServerConnectionWebService(String name, String firstname, String birthdate, String id, String tags, String avatarUri, String webServiceUrlInit) {
 		if(isConnected()){
 
-			CreateJsonAndRequest(name,firstname,birthdate,id, tags, webServiceUrlInit);
+			CreateJsonAndRequest(name,firstname,birthdate,id, tags, avatarUri, webServiceUrlInit);
 			if(httpStatus == 200){
 				return true;
 			}
@@ -116,7 +117,7 @@ public class AddOrModifyFriendTask extends AsyncTask<String,Integer,Boolean>{
         else
             return false;    
     }
-	public String CreateJsonAndRequest(String name, String firstname, String birthdate,String id, String tags, String url){
+	public String CreateJsonAndRequest(String name, String firstname, String birthdate,String id, String tags, String avatarUri, String url){
         InputStream inputStream = null;
         String result = null;
         try {
@@ -137,6 +138,11 @@ public class AddOrModifyFriendTask extends AsyncTask<String,Integer,Boolean>{
 			}
             try {
 				userJsonObject.put(BIRTHDATE, birthdate);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+            try {
+				userJsonObject.put(AVATAR, avatarUri);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
