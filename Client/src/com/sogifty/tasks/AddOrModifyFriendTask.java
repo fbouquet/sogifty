@@ -10,8 +10,10 @@ import java.net.ProtocolException;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,25 +26,30 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
 import com.sogifty.R;
-import com.sogifty.tasks.listeners.OnAddFriendTaskListener;
+import com.sogifty.tasks.listeners.OnAddOrModifyFriendTaskListener;
 
-public class AddFriendTask extends AsyncTask<String,Integer,Boolean>{
+public class AddOrModifyFriendTask extends AsyncTask<String,Integer,Boolean>{
 	private static final String USER_ID = "user_id";
 	private static final String LOADING = "Loading..";
 	private static final String URL_SUFFIX_REGISTER = "users/<userId>/friends";
 	private static final String NAME = "name";
 	private static final String BIRTHDATE = "birthdate";
+	private static final String TAGS = "tags";
+	private static final String FIRSTNAME = "firstName";
+	private static final String AVATAR = "avatarPath";
 	
 	private ProgressDialog progressDialog;
 	private Context context;
 	private int httpStatus;
 	private String errorMessage;
-	private OnAddFriendTaskListener callback;
+	private OnAddOrModifyFriendTaskListener callback;
+	private boolean isModify;
 	
-	public AddFriendTask(Context context, OnAddFriendTaskListener callback) {
+	public AddOrModifyFriendTask(Context context, OnAddOrModifyFriendTaskListener callback,boolean isModify) { 
 		this.context = context;
 		this.progressDialog = new ProgressDialog(this.context);
 		this.callback = callback;
+		this.isModify = isModify;
 	}
 	
 	
@@ -54,24 +61,25 @@ public class AddFriendTask extends AsyncTask<String,Integer,Boolean>{
 	
 	@Override
 	protected Boolean doInBackground(String... userConnectionItems) {
-		return callServerConnectionWebService(userConnectionItems[0],userConnectionItems[1],
+		return callServerConnectionWebService(userConnectionItems[0],userConnectionItems[1],userConnectionItems[2],userConnectionItems[3],userConnectionItems[4],userConnectionItems[5],
 				this.context.getResources().getString(R.string.web_url_init)+URL_SUFFIX_REGISTER.replace("<userId>", String.valueOf(loadUserId())));
 	}
 	@Override
 	protected void onPostExecute(Boolean resultCall){
 		if(resultCall.booleanValue()){
-			callback.onAddFriendComplete();
+			callback.onAddOrModifyFriendComplete();
 		}
 		else{
-			callback.onAddFriendFailed(errorMessage);
+			callback.onAddOrModifyFriendFailed(errorMessage);
 		}
 		progressDialog.dismiss();
 	}
 	
 	
-	private boolean callServerConnectionWebService(String name, String birthdate, String webServiceUrlInit) {
+	private boolean callServerConnectionWebService(String name, String firstname, String birthdate, String id, String tags, String avatarUri, String webServiceUrlInit) {
 		if(isConnected()){
-			POST(name,birthdate,webServiceUrlInit);
+
+			CreateJsonAndRequest(name,firstname,birthdate,id, tags, avatarUri, webServiceUrlInit);
 			if(httpStatus == 200){
 				return true;
 			}
@@ -79,6 +87,7 @@ public class AddFriendTask extends AsyncTask<String,Integer,Boolean>{
 				errorMessage = getErrorMessage();
 				return false;
 			}
+
 		}
 		else{
 			errorMessage =  this.context.getResources().getString(R.string.no_network_connection_error);
@@ -90,7 +99,6 @@ public class AddFriendTask extends AsyncTask<String,Integer,Boolean>{
 	
 	private String getErrorMessage() {
 		String message = context.getResources().getString(R.string.unknown_error);
-		System.out.println(httpStatus);
 		if(httpStatus == context.getResources().getInteger(R.integer.user_http_error)){
 			message = context.getResources().getString(R.string.http_error);
 		}
@@ -109,16 +117,12 @@ public class AddFriendTask extends AsyncTask<String,Integer,Boolean>{
         else
             return false;    
     }
-	public String POST(String name, String birthdate, String url){
+	public String CreateJsonAndRequest(String name, String firstname, String birthdate,String id, String tags, String avatarUri, String url){
         InputStream inputStream = null;
         String result = null;
         try {
-        	System.out.println(name);
-        	System.out.println(birthdate);
-        	System.out.println(url);
+        	System.out.println("id :::::::"+id);
         	HttpClient httpclient = new DefaultHttpClient();
-        	
-        	HttpPost httpPost = new HttpPost(url);
         	
             String json = "";
             JSONObject userJsonObject = new JSONObject();
@@ -128,23 +132,58 @@ public class AddFriendTask extends AsyncTask<String,Integer,Boolean>{
 				e.printStackTrace();
 			}
             try {
+				userJsonObject.put(FIRSTNAME, firstname);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+            try {
 				userJsonObject.put(BIRTHDATE, birthdate);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+            try {
+				userJsonObject.put(AVATAR, avatarUri);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+            try {
+            	JSONArray tagsJsonArray = new JSONArray(tags);
+                userJsonObject.put(TAGS, tagsJsonArray);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
             json = userJsonObject.toString();
             System.out.println(userJsonObject.toString());
             StringEntity se = new StringEntity(json);
-            httpPost.setEntity(se);
-            httpPost.setHeader("Accept", "application/json");
-            httpPost.setHeader("Content-type", "application/json");
+            HttpResponse httpResponse;
+            HttpPost httpPost;
+            HttpPut httpPut;
             
-            HttpResponse httpResponse = httpclient.execute(httpPost);
+            if(isModify){
+            	url+=("/"+id);
+            	System.out.println(url);
+            	httpPut = new HttpPut(url);
+            	httpPut.setEntity(se);
+            	httpPut.setHeader("Accept", "application/json");
+            	httpPut.setHeader("Content-type", "application/json");
+
+            	httpResponse = httpclient.execute(httpPut);
+                System.out.println("Modify");
+            }
+            else {
+            	httpPost= new HttpPost(url);
+            	System.out.println(url);
+            	httpPost.setEntity(se);
+                httpPost.setHeader("Accept", "application/json");
+                httpPost.setHeader("Content-type", "application/json");
+            	httpResponse = httpclient.execute(httpPost);
+                System.out.println("Add");
+            }
             
             inputStream = httpResponse.getEntity().getContent();
             httpStatus = httpResponse.getStatusLine().getStatusCode();
             android.util.Log.i("status",""+httpStatus);
-            System.out.println("add");
+     
             if(inputStream != null){
                 result = convertInputStreamToString(inputStream);
             }

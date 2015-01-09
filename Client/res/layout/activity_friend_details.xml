@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/gradient_background"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp"
-    android:orientation="vertical"
     android:focusable="true"
-    android:focusableInTouchMode="true" >
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,8 +18,8 @@
             android:id="@+id/frienddetails_iv_friendAvatar"
             android:layout_width="155dp"
             android:layout_height="155dp"
-            android:src="@drawable/noavatar"
-            android:contentDescription="@string/activity_friend_details_iv_friend_avatar" />
+            android:contentDescription="@string/activity_friend_details_iv_friend_avatar"
+            android:src="@drawable/noavatar" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -61,20 +61,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/frienddetails_tv_tags" />
-
-    <AutoCompleteTextView
-        android:id="@+id/frienddetails_actv_edittags"
+     <TextView
+        android:id="@+id/frienddetails_all_tags"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/frienddetails_actv_tags"
-        android:textColor="@color/blue"
-        android:textCursorDrawable="@drawable/cursor_color"
-        android:imeOptions="actionDone" />
+        android:text="" />
 
     <LinearLayout
         android:id="@+id/frienddetails_l_tags"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:baselineAligned="false"
         android:orientation="horizontal"
         android:weightSum="2" >
 
@@ -94,7 +91,8 @@
             android:orientation="vertical" >
         </LinearLayout>
     </LinearLayout>
-<LinearLayout
+
+    <LinearLayout
         android:id="@+id/frienddetails_l_viewPager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

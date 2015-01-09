@@ -2,19 +2,28 @@ package com.sogifty.activities;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 import org.json.JSONException;
-
-import com.sogifty.model.Friend;
-import com.sogifty.model.Friends;
+import org.json.JSONObject;
 
 import android.content.Context;
+
+import com.sogifty.model.Config;
+import com.sogifty.model.Friend;
+import com.sogifty.model.Friends;
+import com.sogifty.model.Gift;
 
 
 public class ParserJson {
@@ -36,32 +45,96 @@ public class ParserJson {
 			return ERROR;
 		}
 	}
+	public Config executeParseConfig(){
+		try {
+			JSONObject configJsonObject = new JSONObject(stringToParse);
+			JSONArray tagsJsonArray = configJsonObject.getJSONArray("tags");
+			JSONObject preferencesJsonObject = configJsonObject.getJSONObject("preferences");
+			int nbTags = preferencesJsonObject.getInt("numberOfTags");
+			int nbGifts = preferencesJsonObject.getInt("numberOfGifts");
+			Set<String> tags = new HashSet<String>();
+			for(int i=0;i<tagsJsonArray.length();++i){
+				tags.add(tagsJsonArray.getJSONObject(i).getString("label"));
+			}
+			Config c = new Config();
+			c.setNbGifts(nbGifts);
+			c.setNbTags(nbTags);
+			c.setTags(tags);
+			return c;
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	public List<Gift> executeParseGift(){
+		try {
+			System.out.println("try to parse"+stringToParse);
+			JSONArray giftsJsonArray = new JSONArray(stringToParse);
+			List<Gift> giftList = new ArrayList<Gift>();
+			JSONObject giftJson;
+			Gift g;
+			for(int i=0;i<giftsJsonArray.length();++i){
+				g = new Gift();
+				giftJson = giftsJsonArray.getJSONObject(i);
+				g.setId(giftJson.getString("id"));
+				g.setImgUrl(giftJson.getString("pictureUrl"));
+				g.setPrice(giftJson.getString("price"));
+				g.setUrl(giftJson.getString("url"));
+				g.setDecription(giftJson.getString("description"));
+				g.setName(giftJson.getString("name"));
+				giftList.add(g);
+			}
+			return giftList;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
 	public Friends executeParseFriendList(){
 		try{
+			System.out.println(stringToParse);
 			JSONArray friends = new JSONArray(stringToParse);
-			Friends friendList = new Friends();
+			List<Friend> friendList = new ArrayList<Friend>();
 			String birthday;
 			String name;
+			String firstname;
 			String id;
+			String pathAvatar;
 			JSONObject friendJson;
+			JSONArray tagsJson;
 			Friend f;
 			for(int i=0;i<friends.length();++i){
 				f = new Friend();
 				friendJson = friends.getJSONObject(i);
 				name = friendJson.getString("name");
-				System.out.println(name);
+				firstname = friendJson.getString("firstName");
 				birthday = friendJson.getString("birthdate");
-				System.out.println(birthday);
 				id = friendJson.getString("id");
-				System.out.println(id);
+				pathAvatar = friendJson.getString("avatarPath");
+				tagsJson = friendJson.getJSONArray("tags");
+				List<String> tagsString = new ArrayList<String>();
+				for (int j=0;j<tagsJson.length();++j) {
+					tagsString.add(tagsJson.getJSONObject(j).getString("label"));
+				}
+				f.setTags(tagsString);
 				f.setNom(name);
+				f.setPrenom(firstname);
 				f.setAge(getAge(birthday));
 				f.setId(Integer.parseInt(id));
 				f.setRemainingDay(getRemainingDay(birthday));
-				friendList.addFriend(f);
+				f.setBirthdayDate(birthday);
+				f.setAvatar(pathAvatar);
+				friendList.add(f);
 				
 			}
-			return friendList;
+			Collections.sort(friendList);
+			Friends friendsToReturn = new Friends();
+			friendsToReturn.setListFriends(friendList);
+			return friendsToReturn;
 			
 		}catch (JSONException e) {
 			e.printStackTrace();
@@ -75,7 +148,7 @@ public class ParserJson {
 		int jour;
 	}
 	
-	public int getAge(String birthdate){
+	static public int getAge(String birthdate){
 		
 		Calendar calendar =new GregorianCalendar();
 		calendar.setTime(new Date());
@@ -94,19 +167,11 @@ public class ParserJson {
 			e.printStackTrace();
 		}
 		age = currentYear - birthYear;
-//		
-//		
-//		persoDate pD = new persoDate();
-//		
-//		pD.annee =calendar.get(Calendar.YEAR);
-//		pD.mois =calendar.get(Calendar.MONTH);
-//		pD.jour =calendar.get(Calendar.DAY_OF_MONTH);
-//		
 		return age;
 		
 	}
 	
-	public long getRemainingDay(String birthdate){
+	static public long getRemainingDay(String birthdate){
 		
 		Date currentDate = new Date();
 		
@@ -134,17 +199,6 @@ public class ParserJson {
 		}
 		
 		
-//		
-//		
-//		Calendar calendar =new GregorianCalendar();
-//		calendar.setTime(new Date());
-//		
-//		String[] dateItems = date.split("-");
-//		persoDate pD = new persoDate();
-//		pD.jour = Integer.parseInt(dateItems[0]);
-//		pD.mois = Integer.parseInt(dateItems[1]);		
-//		pD.annee = calendar.get(Calendar.YEAR);
-//		return pD;
 		return remainingDay;
 	}
 	

@@ -15,7 +15,15 @@
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:gravity="center_horizontal"
-           android:text="@string/giftPager_tv_title" />
+           android:text="@string/giftPager_tv_title" 
+           android:textColor="@color/red"/>       
+       <TextView
+           android:id="@+id/giftPager_tv_price"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:gravity="center_horizontal" 
+           android:text="@string/giftPager_tv_price"
+           android:textColor="@color/red" />
        
        <ImageView
             android:id="@+id/giftitem_iv_gift"
@@ -30,6 +38,7 @@
            android:id="@+id/giftPager_tv_description"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           android:text="@string/giftPager_tv_description" />
+           android:text="@string/giftPager_tv_description" /> 
+			
 </LinearLayout>
    </ScrollView>
