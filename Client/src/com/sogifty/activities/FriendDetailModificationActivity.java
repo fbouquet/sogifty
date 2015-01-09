@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
@@ -13,6 +14,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,6 +23,7 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.Menu;
@@ -59,6 +62,11 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 	private static final String IS_MODIFY = "is modify";	
 
 	private static final String ALREADY_IN_ERROR = "Goût déjà attribué";
+	private static final String TAGS = "tag_list";
+	private static final Set<String> DEFAULT_TAGS = null;
+	private static final String NB_TAGS_MAX = "nb_tags";
+	private static final int NB_TAGS_MAX_DEFAULT = 10;
+	protected static final String TOO_MUCH_TAG = "Vous avez atteint le nombre maximum de tags";
 	private Friend friend = null;
 	private EditText etName = null ;
 	private EditText etFirstname = null ;
@@ -73,6 +81,7 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 	private LinearLayout leftTagsLayout ;
 	private LinearLayout rightTagsLayout ;
 	private boolean isModify = true;
+	private int nbTagsMax;
 
 
 	@Override
@@ -296,21 +305,30 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 	}
 
 	private void initButtonAddTag() {
-
+		nbTagsMax = loadNbTagsMax();
 		bAddTag = (Button) findViewById(R.id.modify_b_addtag);
 
 		bAddTag.setOnClickListener(new OnClickListener() {
-
+			
 			@Override
 			public void onClick(View v) {
-
-				String tagValue = autoCompleteTagsTextView.getText().toString();
-				addTag(tagValue);	
+				if(leftFriendTags.size()+rightFriendTags.size() >= nbTagsMax){
+					displayMessage(TOO_MUCH_TAG);
+				}
+				else{
+					String tagValue = autoCompleteTagsTextView.getText().toString();
+					addTag(tagValue);
+				}
 			}
+
+			
 		});
 
 	}
-
+	private int loadNbTagsMax() {
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+		return preferences.getInt(NB_TAGS_MAX, NB_TAGS_MAX_DEFAULT);
+	}
 	private void initActionBar() {
 		ActionBar actionBar = getActionBar();
 		actionBar.setSubtitle(FRIEND_DETAIL);
@@ -320,8 +338,10 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 
 
 	private void initAutoCompleteTags() {
-		if (autoCompleteExistingsTagsAdapter==null)
-			autoCompleteExistingsTagsAdapter= new ArrayAdapter<String> (this, android.R.layout.simple_dropdown_item_1line);
+		if (autoCompleteExistingsTagsAdapter==null){
+			autoCompleteExistingsTagsAdapter = loadTags();
+			//autoCompleteExistingsTagsAdapter= new ArrayAdapter<String> (this, android.R.layout.simple_dropdown_item_1line);
+		}
 		autoCompleteTagsTextView = (AutoCompleteTextView) findViewById(R.id.modify_actv_edittags);
 		autoCompleteTagsTextView.setAdapter(autoCompleteExistingsTagsAdapter);
 
@@ -336,6 +356,14 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 		});
 	}
 
+
+	private ArrayAdapter<String> loadTags() {
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+		Set<String> tags = preferences.getStringSet(TAGS, DEFAULT_TAGS);
+		ArrayAdapter<String> tagsArrayAdapter = new ArrayAdapter<String> (this, android.R.layout.simple_dropdown_item_1line);
+		tagsArrayAdapter.addAll(tags);
+		return tagsArrayAdapter;
+	}
 
 	protected void addTag(String tagValue) {
 

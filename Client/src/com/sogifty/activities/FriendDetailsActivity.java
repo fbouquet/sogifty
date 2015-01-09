@@ -83,7 +83,7 @@ public class FriendDetailsActivity extends Activity implements OnGetGiftsTaskLis
 		}
 		initAvatar();
 		giftPager = (ViewPager) findViewById(R.id.frienddetails_vp_giftPager);
-		giftPagerAdapter = new GiftPagerAdapter(getFragmentManager(),new Gifts(gifts));
+		giftPagerAdapter = new GiftPagerAdapter(getFragmentManager(),new Gifts(gifts), this);
         giftPager.setAdapter(giftPagerAdapter);
         
        

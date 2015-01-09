@@ -4,10 +4,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.json.JSONArray;
@@ -16,6 +20,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 
+import com.sogifty.model.Config;
 import com.sogifty.model.Friend;
 import com.sogifty.model.Friends;
 import com.sogifty.model.Gift;
@@ -39,6 +44,29 @@ public class ParserJson {
 			e.printStackTrace();
 			return ERROR;
 		}
+	}
+	public Config executeParseConfig(){
+		try {
+			JSONObject configJsonObject = new JSONObject(stringToParse);
+			JSONArray tagsJsonArray = configJsonObject.getJSONArray("tags");
+			JSONObject preferencesJsonObject = configJsonObject.getJSONObject("preferences");
+			int nbTags = preferencesJsonObject.getInt("numberOfTags");
+			int nbGifts = preferencesJsonObject.getInt("numberOfGifts");
+			Set<String> tags = new HashSet<String>();
+			for(int i=0;i<tagsJsonArray.length();++i){
+				tags.add(tagsJsonArray.getJSONObject(i).getString("label"));
+			}
+			Config c = new Config();
+			c.setNbGifts(nbGifts);
+			c.setNbTags(nbTags);
+			c.setTags(tags);
+			return c;
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
 	}
 	public List<Gift> executeParseGift(){
 		try {
