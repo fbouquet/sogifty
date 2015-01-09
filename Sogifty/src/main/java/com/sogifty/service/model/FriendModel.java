@@ -31,7 +31,7 @@ public class FriendModel {
 		
 		Set<TagModel> tags = new HashSet<TagModel>(0);
 		for (Tag tag : friend.getTags()) {
-			tags.add(new TagModel(tag));
+			tags.add(new TagModel(tag.getLabel()));
 		}
 		this.setTags(tags);
 	}
