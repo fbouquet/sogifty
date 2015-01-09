@@ -23,6 +23,8 @@ public class StartActivity extends Activity{
 		}
 		finish();
 	}
+	
+	
 	protected void startFriendListActivty() {
 		Intent intent = FriendListActivity.getIntent(this);
 		startActivity(intent);

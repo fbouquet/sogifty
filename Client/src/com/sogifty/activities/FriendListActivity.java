@@ -10,9 +10,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,7 +38,6 @@ import com.sogifty.tasks.listeners.OnGetGiftsTaskListener;
 public class FriendListActivity extends Activity implements OnGetFriendListTaskListener, OnDeleteFriendTaskListener, OnGetGiftsTaskListener{
 	private static String FRIEND_LIST = "Liste des amis";
 	private static String APPLICATION_NAME = "Sogifti";
-	private static final String FRIENDS_DELETED = " amis supprimés";
 	private static final String ITEM_POSITION = "Item in position " ;
 	private static final String CLICKED = " clicked";
 	private static final String EMAIL = "EmailUser";
@@ -275,12 +272,16 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_delete:
-			deleteMode = !deleteMode;
-			userAdapter.initChecked();
-			friendsToDelete.clear();
-			invalidateOptionsMenu();
-			userAdapter.showCheckbox();
-			
+			if(friendsList == null || friendsList.getListFriends().isEmpty()){
+				displayMessage(getResources().getString(R.string.friendlist_no_friend));
+			}
+			else{
+				deleteMode = !deleteMode;
+				userAdapter.initChecked();
+				friendsToDelete.clear();
+				invalidateOptionsMenu();
+				userAdapter.showCheckbox();
+			}	
 
 			break;
 		case R.id.action_delete_stop:
