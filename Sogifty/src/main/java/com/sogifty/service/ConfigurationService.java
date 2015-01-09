@@ -28,7 +28,7 @@ public class ConfigurationService {
 
 	private Set<TagModel> getServerTags() throws SogiftyException {
 		Set<TagModel> tags = new HashSet<TagModel>(0);
-		Iterator<Tag> tagsIterator = tagDAO.findAll().iterator();
+		Iterator<String> tagsIterator = tagDAO.getAllLabels().iterator();
 
 		while (tagsIterator.hasNext()) {
 			tags.add(new TagModel(tagsIterator.next()));

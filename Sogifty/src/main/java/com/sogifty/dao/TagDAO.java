@@ -1,5 +1,6 @@
 package com.sogifty.dao;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.ws.rs.core.Response;
@@ -7,6 +8,7 @@ import javax.ws.rs.core.Response;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import com.sogifty.dao.dto.Friend;
@@ -62,5 +64,20 @@ public class TagDAO extends AbstractDAO<Tag> {
 		}
 
 		return found;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Set<String> getAllLabels() throws SogiftyException {
+		Session session = null;
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Criteria criteria = session.createCriteria(getType());
+			return new HashSet<String>(criteria.setProjection(Projections.groupProperty("label")).list());
+		} catch(HibernateException e) {
+			logger.fatal("Error while reading Tags from database: " + e);
+			throw new SogiftyException(Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			closeSession(session);
+		}
 	}
 }
