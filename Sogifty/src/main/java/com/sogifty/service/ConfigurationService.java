@@ -7,7 +7,6 @@ import java.util.Set;
 import com.sogifty.dao.PreferencesDAO;
 import com.sogifty.dao.TagDAO;
 import com.sogifty.dao.dto.Preferences;
-import com.sogifty.dao.dto.Tag;
 import com.sogifty.exception.SogiftyException;
 import com.sogifty.service.model.ConfigurationModel;
 import com.sogifty.service.model.PreferencesModel;

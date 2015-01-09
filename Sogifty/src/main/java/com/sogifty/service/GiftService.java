@@ -7,13 +7,13 @@ import com.sogifty.dao.dto.Gift;
 import com.sogifty.dao.dto.Tag;
 import com.sogifty.exception.SogiftyException;
 import com.sogifty.service.model.GiftModel;
-import com.sogifty.service.recommendation.CdiscountConfiguration;
-import com.sogifty.service.recommendation.GiftsFetcher;
+import com.sogifty.service.recommendation.AbstractGiftsFetcher;
+import com.sogifty.service.recommendation.CDiscountGiftsFetcher;
 
 public class GiftService {
 
 	private TagService tagService = new TagService();
-	private GiftsFetcher giftsFetcher = new GiftsFetcher(new CdiscountConfiguration());
+	private AbstractGiftsFetcher giftsFetcher = new CDiscountGiftsFetcher();
 	
 	public Set<GiftModel> getGifts(int friendId) throws SogiftyException {
 		Set<GiftModel> gifts	= new HashSet<GiftModel>();

@@ -1,18 +1,10 @@
 package com.sogifty.service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 
 import com.sogifty.dao.GiftDAO;
-import com.sogifty.dao.dto.Gift;
-import com.sogifty.exception.SogiftyException;
-import com.sogifty.service.recommendation.CdiscountConfiguration;
-import com.sogifty.service.recommendation.GiftsFetcher;
-import com.sogifty.util.DateUtils;
+import com.sogifty.service.recommendation.AbstractGiftsFetcher;
+import com.sogifty.service.recommendation.CDiscountGiftsFetcher;
 
 
 /*
@@ -25,12 +17,12 @@ public class PeriodicGiftService implements Runnable {
 	private static final int GIFT_LIFE_TIME		= 30;
 
 	private GiftDAO	giftDAO = new GiftDAO();
-	private GiftsFetcher giftsFetcher = new GiftsFetcher(new CdiscountConfiguration());
+	private AbstractGiftsFetcher giftsFetcher = new CDiscountGiftsFetcher();
 
 	private static final Logger logger = Logger.getLogger(PeriodicGiftService.class);
 
 	public void run(){
-		logger.debug("Par nécessité, le service récurrent est commenté pour le moment.");
+		logger.debug("Par necessite, le service recurrent est commente pour le moment.");
 //		List<Gift> giftsToDelete = new ArrayList<Gift>();
 //
 //		Set<Gift> gifts = null;

@@ -18,34 +18,40 @@ import com.sogifty.dao.dto.Gift;
 import com.sogifty.dao.dto.Tag;
 import com.sogifty.exception.SogiftyException;
 
-public class GiftsFetcher {
+public abstract class AbstractGiftsFetcher {
 	
 	private final String USER_AGENT = "Mozilla";
-	private static final Logger logger = Logger.getLogger(GiftsFetcher.class);
+	private static final Logger logger = Logger.getLogger(AbstractGiftsFetcher.class);
 	private static final int NB_GIFTS_TO_FETCH = 3;
-	
-	private Configuration configuration;
 	
 	private GiftDAO giftDao = new GiftDAO();
 	
-	public GiftsFetcher(Configuration configuration) {
-		this.configuration = configuration;
-	}
+	protected abstract String getSearchUrl(Tag tag);
+	protected abstract String getProductUrlSelector();
+	protected abstract String getProductNameSelector();
+	protected abstract String getProductDescriptionSelector();
+	protected abstract String getProductPriceSelector();
+	protected abstract String getProductPictureSelector();
+	
+	protected abstract String getProductUrl(Element element);
+	protected abstract String getProductName(Element element);
+	protected abstract String getProductDescription(Element element);
+	protected abstract String getProductPrice(Element element);
+	protected abstract String getProductPictureUrl(Element element);
 	
 	public List<Gift> fetchGifts(Tag tag) throws SogiftyException {
 		logger.info("Starting gift Fetch for tag '" + tag.getLabel() + "'.");
 		List<Gift> gifts = new ArrayList<Gift>();
 		Document fetchedProductList;
 		try {
-			fetchedProductList = Jsoup.connect(configuration.getSearchUrl(tag)).userAgent(USER_AGENT).get();
+			fetchedProductList = Jsoup.connect(getSearchUrl(tag)).userAgent(USER_AGENT).get();
 			
-			Elements productsUrlElts = fetchedProductList.select(configuration.getProductListProductsSelector()
-														  + configuration.getProductListProductUrlSelector());
+			Elements productsUrlElts = fetchedProductList.select(getProductUrlSelector());
 
 			for (int i = 0; i < productsUrlElts.size() && gifts.size() < NB_GIFTS_TO_FETCH; ++i) {
 				Gift gift = null;
 				Element product = productsUrlElts.get(i);
-				String productUrl = configuration.getBaseUrl() + product.attr(configuration.getProductListProductUrlAttribute());
+				String productUrl = getProductUrl(product);
 				try {
 					gift = toGift(productUrl);
 				} catch (Exception e) {
@@ -91,18 +97,17 @@ public class GiftsFetcher {
 		
 		Document productDetails = Jsoup.connect(giftUrl).userAgent(USER_AGENT).get();
 		
+		Elements nameElts = productDetails.select(getProductNameSelector());
+		gift.setName(getProductName(nameElts.get(0)));
 		
-		Elements titleElts = productDetails.select(configuration.getProductDetailTitleSelector());
-		gift.setName(titleElts.get(0).text());
+		Elements descriptionElts = productDetails.select(getProductDescriptionSelector());
+		gift.setDescription(getProductDescription(descriptionElts.get(0)));
 		
-		Elements descriptionElts = productDetails.select(configuration.getProductDetailDescriptionSelector());
-		gift.setDescription(descriptionElts.get(0).text());
+		Elements priceElts = productDetails.select(getProductPriceSelector());
+		gift.setPrice(getProductPrice(priceElts.get(0)));
 		
-		Elements priceElts = productDetails.select(configuration.getProductDetailPriceSelector());
-		gift.setPrice(priceElts.get(0).text());
-		
-		Elements pictureElts = productDetails.select(configuration.getProductDetailPictureSelector());
-		gift.setPictureUrl(pictureElts.get(0).attr(configuration.getProductDetailPictureUrlAttribute()));
+		Elements pictureElts = productDetails.select(getProductPictureSelector());
+		gift.setPictureUrl(getProductPictureUrl(pictureElts.get(0)));
 		
 		gift.setUrl(giftUrl);
 		gift.setCreation(new Date());
