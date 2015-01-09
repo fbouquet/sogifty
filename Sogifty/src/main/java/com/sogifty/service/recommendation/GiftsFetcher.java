@@ -78,6 +78,8 @@ public class GiftsFetcher {
 			return null;
 		}
 		
+		updatedGift.setId(gift.getId());
+		updatedGift.setTags(gift.getTags());
 		updatedGift.setCreation(gift.getCreation());
 		giftDao.update(updatedGift);
 		
