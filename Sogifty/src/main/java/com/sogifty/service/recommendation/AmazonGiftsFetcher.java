@@ -9,7 +9,7 @@ public class AmazonGiftsFetcher extends AbstractGiftsFetcher {
 
 	private final static String BASE_URL								= "http://www.amazon.fr";
 	private final static String SEARCH_URL_SUFFIX						= "/s/ref=nb_sb_noss?url=field-keywords=";
-	private final static String PRODUCTS_SELECTOR						= "#s-results-list-atf > li[data-asin] ";
+	private final static String PRODUCTS_SELECTOR						= "#resultsCol li[data-asin] ";
 	private final static String PRODUCT_URL_SELECTOR					= PRODUCTS_SELECTOR + "a.s-access-detail-page ";
 	private final static String PRODUCT_URL_ATTRIBUTE					= "href"; 
 	private final static String PRODUCT_NAME_SELECTOR					= "#productTitle ";

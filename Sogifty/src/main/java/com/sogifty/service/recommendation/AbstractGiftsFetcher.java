@@ -23,6 +23,7 @@ public abstract class AbstractGiftsFetcher {
 	private final String USER_AGENT = "Mozilla";
 	private static final Logger logger = Logger.getLogger(AbstractGiftsFetcher.class);
 	private static final int NB_GIFTS_TO_FETCH = 3;
+	private static final String DEFAULT_DESCRIPTION = "Pas de description";
 	
 	private GiftDAO giftDao = new GiftDAO();
 	
@@ -47,7 +48,6 @@ public abstract class AbstractGiftsFetcher {
 			fetchedProductList = Jsoup.connect(getSearchUrl(tag)).userAgent(USER_AGENT).get();
 			
 			Elements productsUrlElts = fetchedProductList.select(getProductUrlSelector());
-
 			for (int i = 0; i < productsUrlElts.size() && i < NB_GIFTS_TO_FETCH; ++i) {
 				Gift gift = null;
 				Element product = productsUrlElts.get(i);
@@ -101,7 +101,11 @@ public abstract class AbstractGiftsFetcher {
 		gift.setName(getProductName(nameElts.get(0)));
 		
 		Elements descriptionElts = productDetails.select(getProductDescriptionSelector());
-		gift.setDescription(getProductDescription(descriptionElts.get(0)));
+		if (descriptionElts.size() > 0) {
+			gift.setDescription(getProductDescription(descriptionElts.get(0)));
+		} else {
+			gift.setDescription(DEFAULT_DESCRIPTION);
+		}
 		
 		Elements priceElts = productDetails.select(getProductPriceSelector());
 		gift.setPrice(getProductPrice(priceElts.get(0)));
