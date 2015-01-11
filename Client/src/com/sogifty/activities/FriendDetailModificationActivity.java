@@ -165,7 +165,7 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 
 	private void initButtonModifyAvatar() {
 
-		final String [] items           = new String [] {"From Camera", "From SD Card"};
+		final String [] items           = new String [] {"From Camera", "From SD Card","From Application's Avatar"};
 		ArrayAdapter<String> adapter  = new ArrayAdapter<String> (this, android.R.layout.select_dialog_item,items);
 		AlertDialog.Builder builder     = new AlertDialog.Builder(this);
 
@@ -188,13 +188,16 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 					}
 
 					dialog.cancel();
-				} else {
+				} else if(item == 1){
 					Intent intent = new Intent();
 
 					intent.setType("image/*");
 					intent.setAction(Intent.ACTION_GET_CONTENT);
 
 					startActivityForResult(Intent.createChooser(intent, "Complete action using"), PICK_FROM_FILE);
+				}
+				else{
+					displayMessage("ToDo");
 				}
 			}
 		} );
@@ -309,7 +312,7 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 		bAddTag = (Button) findViewById(R.id.modify_b_addtag);
 
 		bAddTag.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				if(leftFriendTags.size()+rightFriendTags.size() >= nbTagsMax){
@@ -321,7 +324,7 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 				}
 			}
 
-			
+
 		});
 
 	}

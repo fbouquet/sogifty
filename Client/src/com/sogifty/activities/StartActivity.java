@@ -77,7 +77,7 @@ public class StartActivity extends Activity implements OnGetConfigTaskListener{
 
 		System.out.println("On resume start activity");
 		//SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		int minutes = 60*24;//prefs.getInt("interval");
+		int minutes = 6*60;//prefs.getInt("interval");
 		AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
 		Intent i = new Intent(this, NotificationService.class);
 		
