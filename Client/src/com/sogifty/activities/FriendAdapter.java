@@ -3,6 +3,7 @@ package com.sogifty.activities;
 
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,6 +33,8 @@ public class FriendAdapter extends BaseAdapter {
 
 	private static final int IO_BUFFER_SIZE = 50;
 	private static final String TAG = null;
+	private static final String WOMAN = "woman";
+	private static final String MAN = "man";
 	List<Friend> friends;
 	List<Gift> gifts = null;
 	boolean deleteMode = false;
@@ -40,18 +43,18 @@ public class FriendAdapter extends BaseAdapter {
 	Context context = null;
 
 	boolean showCheckbox = false;
-	
+
 	public FriendAdapter(Context context,List<Friend> friends, List<Gift> gifts) {
 		inflater = (LayoutInflater)
-                context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.context = context;
 		Collections.sort(friends);
 		this.friends = friends;
 		this.gifts = gifts;
 		friendsChecked = new SparseBooleanArray();
 	}
-	
-	
+
+
 	public int getCount() {
 		return friends.size();
 	}
@@ -63,11 +66,11 @@ public class FriendAdapter extends BaseAdapter {
 	public long getItemId(int position) {
 		return friends.get(position).getId();
 	}
-	
+
 	public void initChecked() {
 		friendsChecked.clear();
 	}
-	
+
 	public void toggleCheckBox(int position) {
 		//If the element is not in the array we put it with true value but if it is already in, we just take the opposite value
 		if(friendsChecked.indexOfKey(position) < 0)
@@ -75,12 +78,12 @@ public class FriendAdapter extends BaseAdapter {
 		else
 			friendsChecked.put(position, !friendsChecked.get(position));
 	}
-	
+
 	public void showCheckbox() {
 		showCheckbox = !showCheckbox;
 		notifyDataSetChanged();
 	}
-	
+
 	private class ViewHolder {
 		LinearLayout layout;
 		TextView nom;
@@ -97,9 +100,9 @@ public class FriendAdapter extends BaseAdapter {
 		TextView giftPrice;
 		public TextView giftName;
 	}
-	
-	
-	
+
+
+
 
 
 	@SuppressLint("NewApi")
@@ -115,9 +118,9 @@ public class FriendAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		setFriendItem(holder, position);
-		
-		
-		
+
+
+
 		return convertView;
 	}
 	private void setFriendItem(ViewHolder holder, int position) {
@@ -134,29 +137,29 @@ public class FriendAdapter extends BaseAdapter {
 			holder.tags.setText(context.getResources().getString(R.string.frienddetails_no_taste));
 			holder.tags.setTypeface(null, Typeface.ITALIC);
 		}
-	
+
 		if(position == 0){
 			holder.tags.setVisibility(CheckBox.VISIBLE);
 			if (gifts != null && gifts.size() != 0){
 				int i = (int)(Math.random())%gifts.size();
 				new DownloadImageTask(holder.giftImage)
-		         .execute(gifts.get(i).getImgUrl());
+				.execute(gifts.get(i).getImgUrl());
 				holder.giftPrice.setText(gifts.get(i).getPrice());
 				holder.giftName.setText(gifts.get(i).getName());
-				
+
 			}
 			else{
 				holder.giftImage.setVisibility(IGNORE_ITEM_VIEW_TYPE);
 			}
-//			holder.giftImage.setOnClickListener(new View.OnClickListener(){
-//			    public void onClick(View v){
-//			        Intent intent = new Intent();
-//			        intent.setAction(Intent.ACTION_VIEW);
-//			        intent.addCategory(Intent.CATEGORY_BROWSABLE);
-//			        intent.setData(Uri.parse(g.getUrl()));
-//			        startActivity(intent);
-//			    }
-//			});
+			//			holder.giftImage.setOnClickListener(new View.OnClickListener(){
+			//			    public void onClick(View v){
+			//			        Intent intent = new Intent();
+			//			        intent.setAction(Intent.ACTION_VIEW);
+			//			        intent.addCategory(Intent.CATEGORY_BROWSABLE);
+			//			        intent.setData(Uri.parse(g.getUrl()));
+			//			        startActivity(intent);
+			//			    }
+			//			});
 			holder.giftImage.setVisibility(CheckBox.VISIBLE);
 		}
 		else{
@@ -173,54 +176,67 @@ public class FriendAdapter extends BaseAdapter {
 			holder.cb.setVisibility(CheckBox.GONE);
 			holder.ar.setVisibility(CheckBox.VISIBLE);
 		}
-		
+
 		/*String imgUrl = users.get(position).getAvatar();
-		
-		
+
+
 		if(imgUrl != null){
 			Log.i("URL", imgUrl);
 			UrlImageViewHelper.setUrlDrawable(holder.iv, imgUrl);
 			//UrlImageViewHelper.loadUrlDrawable(context, imgUrl);
-			
+
 			//Ne marche pas
 			//holder.iv.setImageBitmap(UrlImageViewHelper.getCachedBitmap(imgUrl));
 		}
 		else
 			holder.iv.setImageResource(android.R.drawable.ic_menu_gallery);
-		*/
-		
-//		try {
-//			holder.iv.setImageBitmap(AvatarGenerator.generate(f.getNom(), f.getGender() ,context));
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
+		 */
+
+		//		try {
+		//			holder.iv.setImageBitmap(AvatarGenerator.generate(f.getNom(), f.getGender() ,context));
+		//		} catch (IOException e) {
+		//			e.printStackTrace();
+		//		}
 	}
 
 
 	private void initAvatar (Friend friend, ViewHolder holder) {
-    
+
 		Bitmap bitmap   = null;
-        String path = friend.getAvatar();
-        if (path !=null){
-        	bitmap = BitmapFactory.decodeFile(path);
-        	if (bitmap != null){
-        		int imgHeight = bitmap.getHeight();
-        		int imgWidth = bitmap.getWidth();
-        		int rotate = getOrientation(path);
-        		if(imgHeight<imgWidth){
-        			bitmap = changeImgOrientation(bitmap, rotate);
-        			imgHeight = bitmap.getHeight();
-        			imgWidth = bitmap.getWidth();
-        		}
-        		float fixedWidth = dpToPx(68);
-        		float rate = fixedWidth/imgWidth;
-        		Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, Math.round(fixedWidth), Math.round(imgHeight*rate), true);
-        		holder.iv.setImageBitmap(resizedBitmap);
-        	}
-        }
-        
-    }
- 
+		String path = friend.getAvatar();
+		if (path !=null){
+			if (path.equals(WOMAN) || path.equals(MAN)){
+				if (path.equals(MAN)){
+					InputStream is = context.getResources().openRawResource(R.drawable.man);
+					bitmap = BitmapFactory.decodeStream(is);
+				}
+				else if (path.equals(WOMAN)){
+					InputStream is = context.getResources().openRawResource(R.drawable.woman);
+					bitmap = BitmapFactory.decodeStream(is);
+				}
+			}
+			else {
+				bitmap = BitmapFactory.decodeFile(path);
+			}
+			if (bitmap != null){
+				int imgHeight = bitmap.getHeight();
+				int imgWidth = bitmap.getWidth();
+				int rotate = getOrientation(path);
+				if(imgHeight<imgWidth){
+					bitmap = changeImgOrientation(bitmap, rotate);
+					imgHeight = bitmap.getHeight();
+					imgWidth = bitmap.getWidth();
+				}
+				float fixedWidth = dpToPx(68);
+				float rate = fixedWidth/imgWidth;
+				Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, Math.round(fixedWidth), Math.round(imgHeight*rate), true);
+				holder.iv.setImageBitmap(resizedBitmap);
+			}
+		}
+
+
+	}
+
 	private int getOrientation(String path) {
 		int orientation = 0 ;
 		try {
@@ -246,14 +262,14 @@ public class FriendAdapter extends BaseAdapter {
 	private Bitmap changeImgOrientation(Bitmap bitmap, int rotate) {
 		Matrix matrix = new Matrix();
 		matrix.postRotate(rotate);
-	    return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+		return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 	}
-		
+
 
 	private int dpToPx(int dp)
 	{
-	    float density = context.getResources().getDisplayMetrics().density;
-	    return Math.round((float)dp * density);
+		float density = context.getResources().getDisplayMetrics().density;
+		return Math.round((float)dp * density);
 	}
 
 
@@ -275,14 +291,14 @@ public class FriendAdapter extends BaseAdapter {
 
 
 	public void onClick(View arg){
-		 
+
 	}
-	
-	
-	
-	 
-		
-	
-	 
-	 
+
+
+
+
+
+
+
+
 }

@@ -3,6 +3,7 @@ package com.sogifty.activities;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -55,7 +56,7 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 	private static final String EMPTY_CONNECTION_ITEMS = "Please enter at least name and birthdate";
 	private static final int PICK_FROM_CAMERA = 1;
 	private static final int PICK_FROM_FILE = 2;
-
+	protected static final int PICK_FROM_APPLICATION = 3;
 
 	private static ArrayAdapter<String> autoCompleteExistingsTagsAdapter = null;
 
@@ -67,6 +68,9 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 	private static final String NB_TAGS_MAX = "nb_tags";
 	private static final int NB_TAGS_MAX_DEFAULT = 10;
 	protected static final String TOO_MUCH_TAG = "Vous avez atteint le nombre maximum de tags";
+	private static final String WOMAN = "woman";
+	private static final String MAN = "man";
+
 	private Friend friend = null;
 	private EditText etName = null ;
 	private EditText etFirstname = null ;
@@ -144,7 +148,19 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 		Bitmap bitmap   = null;
 		String path = friend.getAvatar();
 		if (path !=null){
-			bitmap = BitmapFactory.decodeFile(path);
+			if (path.equals(WOMAN) || path.equals(MAN)){
+    			if (path.equals(MAN)){
+    				InputStream is = getResources().openRawResource(R.drawable.man);
+    				bitmap = BitmapFactory.decodeStream(is);
+    			}
+    			else if (path.equals(WOMAN)){
+    				InputStream is = getResources().openRawResource(R.drawable.woman);
+    				bitmap = BitmapFactory.decodeStream(is);
+    							}
+    		}
+        	else {
+        		bitmap = BitmapFactory.decodeFile(path);
+        	}
 			if(bitmap!=null){
 				int rotate = getOrientation(path);
 				int imgHeight = bitmap.getHeight();
@@ -197,7 +213,9 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 					startActivityForResult(Intent.createChooser(intent, "Complete action using"), PICK_FROM_FILE);
 				}
 				else{
-					displayMessage("ToDo");
+					Intent intent = ChooseAvatarActivity.getIntent(FriendDetailModificationActivity.this);
+
+					startActivityForResult(intent, PICK_FROM_APPLICATION);
 				}
 			}
 		} );
@@ -217,7 +235,6 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode != RESULT_OK) return;
-
 		Bitmap bitmap   = null;
 		String path     = "";
 		int rotate = 0;
@@ -232,7 +249,22 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 				bitmap  = BitmapFactory.decodeFile(path);
 				rotate = getOrientation(path);
 			}
-		} else {
+		} else if (requestCode == PICK_FROM_APPLICATION){
+			path = data.getStringExtra(ChooseAvatarActivity.RESULT);
+			if (path.equals(MAN)){
+				InputStream is = this.getResources().openRawResource(R.drawable.man);
+				bitmap = BitmapFactory.decodeStream(is);
+			}
+			else if (path.equals(WOMAN)){
+				InputStream is = this.getResources().openRawResource(R.drawable.woman);
+				bitmap = BitmapFactory.decodeStream(is);
+							}
+			if (bitmap == null){
+				displayMessage("No such image!");
+				return;
+			}
+		}
+		else {
 			path    = avatarUri.getPath();
 			bitmap  = BitmapFactory.decodeFile(path);
 			rotate = getOrientation(path);

@@ -81,6 +81,6 @@
   	
   	<string name="activity_friend_details_iv_friend_avatar">Avatar for the user</string>
   	
-  	
+  	<string name="chooseavatar_tv_title">Choisis ton avatar</string>
   	
 </resources>

@@ -1,6 +1,7 @@
 package com.sogifty.activities;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import android.app.Activity;
@@ -30,6 +31,9 @@ import com.sogifty.tasks.listeners.OnGetGiftsTaskListener;
 public class FriendDetailsActivity extends Activity implements OnGetGiftsTaskListener{
 	
 	static final String FRIEND = "Friend";
+
+	private static final Object WOMAN = "woman";
+	private static final Object MAN = "man";
 
 	TextView nameText;
 	TextView firstnameText;
@@ -136,7 +140,19 @@ public class FriendDetailsActivity extends Activity implements OnGetGiftsTaskLis
 		Bitmap bitmap   = null;
         String path = friend.getAvatar();
         if (path !=null){
-        	bitmap = BitmapFactory.decodeFile(path);
+        	if (path.equals(WOMAN) || path.equals(MAN)){
+    			if (path.equals(MAN)){
+    				InputStream is = getResources().openRawResource(R.drawable.man);
+    				bitmap = BitmapFactory.decodeStream(is);
+    			}
+    			else if (path.equals(WOMAN)){
+    				InputStream is = getResources().openRawResource(R.drawable.woman);
+    				bitmap = BitmapFactory.decodeStream(is);
+    							}
+    		}
+        	else {
+        		bitmap = BitmapFactory.decodeFile(path);
+        	}
         	if (bitmap != null) {
         		int rotate = getOrientation(path);
         		int imgHeight = bitmap.getHeight();
