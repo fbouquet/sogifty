@@ -1,10 +1,19 @@
 package com.sogifty.service;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.log4j.Logger;
 
 import com.sogifty.dao.GiftDAO;
+import com.sogifty.dao.LoggingDAO;
+import com.sogifty.dao.dto.Gift;
+import com.sogifty.exception.SogiftyException;
 import com.sogifty.service.recommendation.AbstractGiftsFetcher;
 import com.sogifty.service.recommendation.CDiscountGiftsFetcher;
+import com.sogifty.util.DateUtils;
 
 
 /*
@@ -22,7 +31,9 @@ public class PeriodicGiftService implements Runnable {
 	private static final Logger logger = Logger.getLogger(PeriodicGiftService.class);
 
 	public void run(){
+		LoggingDAO.addLoggingData("PeriodicGiftService : launch of the periodic service. ");
 		logger.debug("Par necessite, le service recurrent est commente pour le moment.");
+		
 //		List<Gift> giftsToDelete = new ArrayList<Gift>();
 //
 //		Set<Gift> gifts = null;
@@ -43,6 +54,7 @@ public class PeriodicGiftService implements Runnable {
 //			} else if(DateUtils.getDateDiff(lastUpdate, todayDate) > GIFT_UPDATE_TIME) {
 //				try {
 //					logger.info("This gift has to be updated : " + gift);
+//					LoggingDAO.addLoggingData("PeriodicGiftService : this gift has to be updated : " + gift.getName());
 //					giftsFetcher.updateGift(gift);
 //				} catch (SogiftyException e) {
 //					logger.error("The gift is detected as problematic, we will delete it : " + e.getMessage());
@@ -57,6 +69,7 @@ public class PeriodicGiftService implements Runnable {
 //		
 //		// Delete the gifts too old
 //		logger.info(giftsToDelete.size() + " gift(s), too old, are going to be deleted from the database.");
+//		LoggingDAO.addLoggingData("PeriodicGiftService : " + giftsToDelete.size() + " gift(s), too old, are going to be deleted from the database.");
 //		if(!giftsToDelete.isEmpty()) {
 //			try {
 //				giftDAO.deleteGifts(giftsToDelete);

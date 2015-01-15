@@ -8,6 +8,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.sogifty.dao.LoggingDAO;
 import com.sogifty.exception.SogiftyException;
 import com.sogifty.service.TagService;
 
@@ -20,6 +21,7 @@ public class TagWebService {
 	@Path("tags/{tagId}")
 	@DELETE
 	public Response delete(@PathParam("tagId") int id) {
+		LoggingDAO.addLoggingData("TagWebService : deletion of the tag " + id);
 		try {
 			tagService.delete(id, null, null);
 		} catch (SogiftyException e) {
@@ -31,6 +33,7 @@ public class TagWebService {
 	@Path("users/{userId}/friends/{friendId}/tags/{tagId}")
 	@DELETE
 	public Response delete(@PathParam("tagId") int id, @PathParam("userId") int userId, @PathParam("friendId") int friendId) {
+		LoggingDAO.addLoggingData("TagWebService : deletion of the tag " + id + " for the friend " + friendId + " for the user " + userId);
 		try {
 			tagService.delete(id, userId, friendId);
 		} catch (SogiftyException e) {

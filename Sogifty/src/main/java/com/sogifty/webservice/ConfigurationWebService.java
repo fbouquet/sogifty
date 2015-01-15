@@ -7,6 +7,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.sogifty.dao.LoggingDAO;
 import com.sogifty.exception.SogiftyException;
 import com.sogifty.service.ConfigurationService;
 import com.sogifty.service.model.ConfigurationModel;
@@ -21,6 +22,7 @@ public class ConfigurationWebService {
 	@Path("config")
 	@GET
 	public Response getConfiguration() {
+		LoggingDAO.addLoggingData("ConfigurationWebService : get the configuration.");
 		ConfigurationModel configuration = null;
 		try {
 			configuration = configurationService.getConfiguration();

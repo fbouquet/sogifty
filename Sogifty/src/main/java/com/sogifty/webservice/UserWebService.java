@@ -7,6 +7,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.sogifty.dao.LoggingDAO;
 import com.sogifty.dao.dto.User;
 import com.sogifty.exception.SogiftyException;
 import com.sogifty.service.UserService;
@@ -22,6 +23,7 @@ public class UserWebService {
 	@Path("register")
 	@POST
 	public Response register(User user) {
+		LoggingDAO.addLoggingData("UserWebService : registration of a new user [" + user.getEmail() + "].");
 		UserModel returnedUser = null;
 
 		try {
@@ -35,6 +37,7 @@ public class UserWebService {
 	@Path("login")
 	@POST
 	public Response login(User user) {
+		LoggingDAO.addLoggingData("UserWebService : login of the user [" + user.getEmail() + "].");
 		UserModel returnedUser = null;
 
 		try {

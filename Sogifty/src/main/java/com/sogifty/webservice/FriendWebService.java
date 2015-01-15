@@ -14,6 +14,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.sogifty.dao.LoggingDAO;
 import com.sogifty.exception.SogiftyException;
 import com.sogifty.service.FriendService;
 import com.sogifty.service.GiftService;
@@ -30,6 +31,7 @@ public class FriendWebService {
 
 	@GET
 	public Response getFriends(@PathParam("userId") int userId) {
+		LoggingDAO.addLoggingData("FriendWebService : get the friends of the user " + userId);
 		List<FriendModel> returnedFriends = null;
 
 		try {
@@ -42,6 +44,7 @@ public class FriendWebService {
 
 	@POST
 	public Response create(@PathParam("userId") int userId, FriendModel friend) {
+		LoggingDAO.addLoggingData("FriendWebService : creation of the friend " + friend.getFirstName() + " " + friend.getName() + " for the user " + userId);
 		FriendModel returnedFriend = null;
 
 		try {
@@ -55,6 +58,7 @@ public class FriendWebService {
 	@Path("{friendId}")
 	@PUT
 	public Response update(@PathParam("userId") int userId, @PathParam("friendId") int friendId, FriendModel friend) {
+		LoggingDAO.addLoggingData("FriendWebService : update of the friend " + friend.getFirstName() + " " + friend.getName() + " for the user " + userId);
 		FriendModel returnedFriend = null;
 
 		try {
@@ -68,6 +72,7 @@ public class FriendWebService {
 	@Path("{friendId}")
 	@DELETE
 	public Response delete(@PathParam("friendId") int id) {
+		LoggingDAO.addLoggingData("FriendWebService : deletion of the friend " + id);
 		try {
 			friendService.delete(id);
 		} catch (SogiftyException e) {
@@ -79,7 +84,7 @@ public class FriendWebService {
 	@Path("{friendId}/gifts")
 	@GET
 	public Response getGifts(@PathParam("friendId") int friendId) {
-
+		LoggingDAO.addLoggingData("FriendWebService : get the gifts of the friend " + friendId);
 		Set<GiftModel> returnedGifts = null;
 
 		try {
