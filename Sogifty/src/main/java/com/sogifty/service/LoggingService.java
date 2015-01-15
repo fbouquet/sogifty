@@ -9,4 +9,8 @@ public class LoggingService {
 	public String getLoggingData() {
 		return loggingDAO.getLoggingData();
 	}
+	
+	public void clearLogs() {
+		LoggingDAO.clearLogs();
+	}
 }

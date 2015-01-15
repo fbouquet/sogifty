@@ -15,4 +15,11 @@ public class LoggingWebService {
 	public Response logging() {
 		return Response.status(200).entity(loggingService.getLoggingData()).build();
 	}
+	
+	@GET
+	@Path("clear")
+	public Response clearLogs() {
+		loggingService.clearLogs();
+		return Response.status(200).build();
+	}
 }
