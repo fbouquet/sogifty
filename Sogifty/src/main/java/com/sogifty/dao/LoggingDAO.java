@@ -8,7 +8,7 @@ public class LoggingDAO {
 	
 	private static String loggingData = new String();
 	
-	private final static String HTML_HEADER = "<!doctype html><html lang=\"fr\"><head><META HTTP-EQUIV=\"refresh\" CONTENT=\"10\"><meta charset=\"utf-8\"><title>Sogifty server logging</title></head><body>";
+	private final static String HTML_HEADER = "<!doctype html><html lang=\"fr\"><head><META HTTP-EQUIV=\"refresh\" CONTENT=\"3\"><meta charset=\"utf-8\"><title>Sogifty server logging</title></head><body>";
 	private final static String HTML_FOOTER = "</body></html>";
 	private final static String NEW_LINE	= "<br />";
 
