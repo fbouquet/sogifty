@@ -8,7 +8,7 @@ public class LoggingDAO {
 	
 	private static String loggingData = new String();
 	
-	private final static String HTML_HEADER = "<!doctype html><html lang=\"fr\"><head><meta charset=\"utf-8\"><title>Sogifty server logging</title></head><body>";
+	private final static String HTML_HEADER = "<!doctype html><html lang=\"fr\"><head><META HTTP-EQUIV=\"refresh\" CONTENT=\"10\"><meta charset=\"utf-8\"><title>Sogifty server logging</title></head><body>";
 	private final static String HTML_FOOTER = "</body></html>";
 	private final static String NEW_LINE	= "<br />";
 
@@ -32,17 +32,17 @@ public class LoggingDAO {
 		if(lastDate == null || loggingData == null || loggingData.isEmpty()) {
 			lastDate = new GregorianCalendar();
 			lastDate.setTime(new Date());
-			loggingData += LoggingDAO.getDate(lastDate);
+			loggingData = LoggingDAO.getDate(lastDate) + loggingData;
 		} else {
 			Calendar actualDate = new GregorianCalendar();
 			actualDate.setTime(new Date());
 			if(LoggingDAO.getDate(lastDate).compareTo(LoggingDAO.getDate(actualDate)) != 0) {
-				loggingData += LoggingDAO.getDate(actualDate);
+				loggingData = LoggingDAO.getDate(actualDate) + loggingData;
 				lastDate = actualDate;
 			}
 		}
 		
-		loggingData += LoggingDAO.getFormatedTime() + " " + data + NEW_LINE;
+		loggingData = LoggingDAO.getFormatedTime() + " " + data + NEW_LINE + loggingData;
 	}
 	
 	public static void clearLogs() {
