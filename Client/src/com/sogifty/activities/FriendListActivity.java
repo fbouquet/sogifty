@@ -8,13 +8,9 @@ import java.util.List;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -241,6 +237,11 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 		startActivity(intent);
 	}
 
+	private void createConfigActivity() {
+		Intent intent = ConfigActivity.getIntent(this);
+		startActivity(intent);
+	}
+	
 	private void longClickFonction(AdapterView<?> parent,int position) {
 		//utility to determine
 		FriendAdapter f = (FriendAdapter) parent.getAdapter();
@@ -299,11 +300,20 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 			createAddFriendActivity();
 			overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
 			break;
+		case R.id.action_config:
+			createConfigActivity();
+			overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
+			break;
 		default:
 			break;
 		}
 		return true;
 	} 
+
+	
+
+
+
 
 	private void removeCheckedElementFromList() {
 		new DeleteFriendTask(this, this).execute(friendsToDelete);
@@ -333,7 +343,10 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 		createFriendListActivity();
 	}
 
-
+	@Override
+	public void onBackPressed() {
+		finish();
+	}
 
 
 }

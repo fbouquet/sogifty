@@ -76,6 +76,8 @@
   	<string name="useritem_iv_user_description">Avatar for the user</string>
   	<string name="useritem_iv_gift_description">Gift proposed</string>
 	<string name="useritem_tv_price">gift price</string>
+  	<string name="useritem_tv_age">Age: </string>
+  	<string name="useritem_tv_birthday">Anniversaire: </string>
   	
   	<string name="gift_pager_iv_gift_description">One of the gift proposed</string>		
   	

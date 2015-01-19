@@ -33,6 +33,7 @@
         <activity android:name="com.sogifty.activities.SubscriptionActivity" />
         <activity android:name="com.sogifty.activities.AddFriendActivity" />
 		 <activity android:name="com.sogifty.activities.ChooseAvatarActivity" />
+        <activity android:name="com.sogifty.activities.ConfigActivity" />
         
         <receiver android:name="com.sogifty.widget.WidgetProvider" >
             <intent-filter>

@@ -37,6 +37,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -74,7 +75,7 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 	private Friend friend = null;
 	private EditText etName = null ;
 	private EditText etFirstname = null ;
-	private EditText etBirthdaydate = null ;
+	private DatePicker dpBirthdaydate = null ;
 	private ImageView ivAvatar;
 	private Button bAddTag;
 	private Button bModifyAvatar;
@@ -124,10 +125,12 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 		etName.setText(friend.getNom());
 		etFirstname = (EditText) findViewById(R.id.modify_et_firstname);
 		etFirstname.setText(friend.getPrenom());
-		etBirthdaydate = (EditText) findViewById(R.id.modify_et_birthdaydate);
-		if (friend.getBirthdayDate()==null)
-			etBirthdaydate.setText("");
-		else etBirthdaydate.setText(String.valueOf(friend.getBirthdayDate()));
+		dpBirthdaydate = (DatePicker) findViewById(R.id.modify_dp_birthdaydate);
+		if (friend.getBirthdayDate()!=null){
+			String date = friend.getBirthdayDate();
+			String[] dmy = date.split("-");
+			dpBirthdaydate.updateDate(Integer.parseInt(dmy[2]), Integer.parseInt(dmy[1]), Integer.parseInt(dmy[0]));
+		}
 		ivAvatar = (ImageView) findViewById(R.id.modify_iv_avatar);
 
 		initButtonModifyAvatar();
@@ -524,7 +527,7 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 		case R.id.action_modify_ok:
 			updateFriend();
 			if(isModify){
-				if(friend.getNom().equals("") && etBirthdaydate.getText().toString().equals("")){
+				if(friend.getNom().equals("")){
 					loadEmptyPopUp();
 				}
 				else{
@@ -532,7 +535,7 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 				}
 			}
 			else {
-				if(friend.getNom().equals("") && etBirthdaydate.getText().toString().equals("")){
+				if(friend.getNom().equals("")){
 					loadEmptyPopUp();
 				}
 				else{
@@ -552,7 +555,7 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 		friend.setNom(tmp);
 		tmp=etFirstname.getText().toString();
 		friend.setPrenom(tmp);
-		tmp = etBirthdaydate.getText().toString();
+		tmp = dpBirthdaydate.getDayOfMonth() + "-" + dpBirthdaydate.getMonth() + "-" + dpBirthdaydate.getYear();
 		friend.setBirthdayDate(tmp);
 		List<String> tags = new ArrayList<String>(leftFriendTags);
 		tags.addAll(rightFriendTags);
@@ -571,11 +574,12 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 		startActivity(intent);
 	}
 	private void callConnectionAddTask() {
+
 		String id = String.valueOf(friend.getId());
 		List<String> tags = new ArrayList<String>(leftFriendTags);
 		tags.addAll(rightFriendTags);
 		new AddOrModifyFriendTask(this,this,false)
-		.execute(friend.getNom(),friend.getPrenom(),etBirthdaydate.getText().toString(), id, friend.getTagsinJsonString(), friend.getAvatar());
+		.execute(friend.getNom(),friend.getPrenom(), friend.getBirthdayDate(), id, friend.getTagsinJsonString(), friend.getAvatar());
 	}
 
 	private void callConnectionModificationTask() {

@@ -1,25 +1,29 @@
 package com.sogifty.services;
 
+import java.util.Iterator;
+import java.util.List;
+
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
 import com.sogifty.R;
+import com.sogifty.activities.ConfigActivity;
 import com.sogifty.activities.StartActivity;
 import com.sogifty.model.Friend;
 import com.sogifty.model.Friends;
 import com.sogifty.tasks.GetFriendListServiceTask;
-import com.sogifty.tasks.GetFriendListTask;
 import com.sogifty.tasks.listeners.OnGetFriendListServiceTaskListener;
-import com.sogifty.tasks.listeners.OnGetFriendListTaskListener;
 
 public class NotificationService extends Service implements OnGetFriendListServiceTaskListener{
 
@@ -30,6 +34,8 @@ public class NotificationService extends Service implements OnGetFriendListServi
 	private static final CharSequence NOUVEL_ANNIVERSAIRE = "Anniversaire";
 	private Friends friendsList = null;
 	private static final String TAG = "Notification Service";
+	private static final String PLUSIEURS_ANNIVERSAIRES = "Plusieurs Anniversaires proches";
+	private static final String MORE_BIRTHDAY = "Attention ? anniversaires dans la semaine!";
 	private WakeLock mWakeLock;
 	
 	public NotificationService(){
@@ -56,45 +62,22 @@ public class NotificationService extends Service implements OnGetFriendListServi
 		mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
 		mWakeLock.acquire();
 
-//		// check the global background data setting
-//		ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-//		if (!cm.getBackgroundDataSetting()) {
-//			stopSelf();
-//			return;
-//		}
 
 		// do the actual work, in a separate thread
 		new PollTask().execute();
 	}
 
 	private class PollTask extends AsyncTask<Void, Void, Void> {
-		/**
-		 * This is where YOU do YOUR work. There's nothing for me to write here
-		 * you have to fill this in. Make your HTTP request(s) or whatever it is
-		 * you have to do to get your updates in here, because this is run in a
-		 * separate thread
-		 * @return 
-		 */
+		
 		@Override
 		protected Void doInBackground(Void... params) {
 			
-			// do stuff
+			
 			new GetFriendListServiceTask(NotificationService.this, NotificationService.this).execute();
 			return null;
 		}
 
-		/**
-		 * In here you should interpret whatever you fetched in doInBackground
-		 * and push any notifications you need to the status bar, using the
-		 * NotificationManager. I will not cover this here, go check the docs on
-		 * NotificationManager.
-		 *
-		 * What you HAVE to do is call stopSelf() after you've pushed your
-		 * notification(s). This will:
-		 * 1) Kill the service so it doesn't waste precious resources
-		 * 2) Call onDestroy() which will release the wake lock, so the device
-		 *    can go to sleep again and save precious battery.
-		 */
+		
 		@Override
 		protected void onPostExecute(Void result) {
 			// handle your data
@@ -102,10 +85,7 @@ public class NotificationService extends Service implements OnGetFriendListServi
 		}
 	}
 
-	/**
-	 * This is deprecated, but you have to implement it if you're planning on
-	 * supporting devices with an API level lower than 5 (Android 2.0).
-	 */
+	
 	@Override
 	public void onStart(Intent intent, int startId) {
 
@@ -113,57 +93,76 @@ public class NotificationService extends Service implements OnGetFriendListServi
 	}
 
 	public void createNotif() {
-
-		Friend f = friendsList.getListFriends().get(0);
-		if (f!=null){
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+		List<Friend> fl = friendsList.getListFriends();
+		Iterator<Friend> it = fl.iterator();
+		Friend f;
+		int nb_birthday = 0;
+		while (it.hasNext() && (f=it.next()).getRemainingDay()<7 ) {
+			nb_birthday++;
 			String textNotification="";
-			if(f.getRemainingDay()==6)
+			if(f.getRemainingDay()==6 && preferences.getBoolean(ConfigActivity.NOTIF_WEEK, true))
 				textNotification = TEXT_NOTIFICATION_WEEK;
-			else if (f.getRemainingDay()==1)
+			else if (f.getRemainingDay()==1 && preferences.getBoolean(ConfigActivity.NOTIF_DAY_BEFORE, true))
 				textNotification = TEXT_NOTIFICATION_DAY;
-			else if (f.getRemainingDay() == 0)
+			else if (f.getRemainingDay() == 0 && preferences.getBoolean(ConfigActivity.NOTIF_DDAY, true))
 				textNotification = TEXT_NOTIFICATION_DDAY;
 			if (textNotification!=""){
-				
-				textNotification = textNotification.replace("?", f.getNom()+" "+f.getPrenom());
-				NotificationCompat.Builder mBuilder =
-						new NotificationCompat.Builder(this)
-				.setSmallIcon(R.drawable.sogifti_logo)
-				.setContentTitle(NOUVEL_ANNIVERSAIRE)
-				.setContentText(textNotification)
-				.setAutoCancel(true);
-				
-				// Creates an explicit intent for an Activity in your app
-				Intent resultIntent = new Intent(this, StartActivity.class);
+				if(nb_birthday<=1){
+					textNotification = textNotification.replace("?", f.getNom()+" "+f.getPrenom());
+					NotificationCompat.Builder mBuilder =
+							new NotificationCompat.Builder(this)
+					.setSmallIcon(R.drawable.sogifti_logo)
+					.setContentTitle(NOUVEL_ANNIVERSAIRE)
+					.setContentText(textNotification)
+					.setAutoCancel(true);
 
-				// The stack builder object will contain an artificial back stack for the
-				// started Activity.
-				// This ensures that navigating backward from the Activity leads out of
-				// your application to the Home screen.
-				TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-				// Adds the back stack for the Intent (but not the Intent itself)
-				stackBuilder.addParentStack(StartActivity.class);
-				// Adds the Intent that starts the Activity to the top of the stack
-				stackBuilder.addNextIntent(resultIntent);
-				PendingIntent resultPendingIntent =
-						stackBuilder.getPendingIntent(
-								0,
-								PendingIntent.FLAG_UPDATE_CURRENT
-								);
-				mBuilder.setContentIntent(resultPendingIntent);
-				NotificationManager mNotificationManager =
-						(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-				// mId allows you to update the notification later on.
-				mNotificationManager.notify(0, mBuilder.build());
+					Intent resultIntent = new Intent(this, StartActivity.class);
+
+					TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+					stackBuilder.addParentStack(StartActivity.class);
+					stackBuilder.addNextIntent(resultIntent);
+					PendingIntent resultPendingIntent =
+							stackBuilder.getPendingIntent(
+									0,
+									PendingIntent.FLAG_UPDATE_CURRENT
+									);
+					mBuilder.setContentIntent(resultPendingIntent);
+					NotificationManager mNotificationManager =
+							(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+					mNotificationManager.notify(0, mBuilder.build());
+				}
+				else {
+					textNotification = MORE_BIRTHDAY.replace("?", String.valueOf(nb_birthday));
+					NotificationCompat.Builder mBuilder =
+							new NotificationCompat.Builder(this)
+					.setSmallIcon(R.drawable.sogifti_logo)
+					.setContentTitle(PLUSIEURS_ANNIVERSAIRES)
+					.setContentText(textNotification)
+					.setAutoCancel(true);
+
+					Intent resultIntent = new Intent(this, StartActivity.class);
+
+					TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+					stackBuilder.addParentStack(StartActivity.class);
+					stackBuilder.addNextIntent(resultIntent);
+					PendingIntent resultPendingIntent =
+							stackBuilder.getPendingIntent(
+									0,
+									PendingIntent.FLAG_UPDATE_CURRENT
+									);
+					mBuilder.setContentIntent(resultPendingIntent);
+					NotificationManager mNotificationManager =
+							(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+					mNotificationManager.notify(1, mBuilder.build());
+				}
+					
 			}
+			
 		}
 	}
 
-	/**
-	 * This is called on 2.0+ (API level 5 or higher). Returning
-	 * START_NOT_STICKY tells the system to not restart the service if it is
-	 * killed because of poor resource (memory/cpu) conditions.
-	 */
+	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
@@ -171,11 +170,7 @@ public class NotificationService extends Service implements OnGetFriendListServi
 		return START_NOT_STICKY;
 	}
 
-	/**
-	 * In onDestroy() we release our wake lock. This ensures that whenever the
-	 * Service stops (killed for resources, stopSelf() called, etc.), the wake
-	 * lock will be released.
-	 */
+	
 	public void onDestroy() {
 
 		super.onDestroy();

@@ -61,13 +61,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/modify_tv_birthdaydate" />
 
-            <EditText
-                android:id="@+id/modify_et_birthdaydate"
+            <DatePicker
+                android:id="@+id/modify_dp_birthdaydate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="@string/modify_h_birthdaydate"
-                android:inputType="date" />
+                android:startYear="1900"
+                android:spinnersShown="true"
+                android:calendarViewShown="false"/>
         </LinearLayout>
 
         <TextView

@@ -13,5 +13,13 @@
         android:showAsAction="always"
         android:title="@string/menu_list_add">
     </item>
+   
+    <item
+        android:id="@+id/action_config"
+        android:orderInCategory="300"
+        android:showAsAction="always"
+        android:title=""
+        android:icon="@drawable/config">
+    </item>
 
 </menu> 
