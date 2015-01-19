@@ -90,7 +90,6 @@ public class FriendAdapter extends BaseAdapter {
 		TextView prenom;
 		TextView age;
 		TextView remainingDate;
-		//TextView fonction;
 		TextView id;
 		CheckBox cb;
 		ImageView iv;
@@ -151,15 +150,6 @@ public class FriendAdapter extends BaseAdapter {
 			else{
 				holder.giftImage.setVisibility(IGNORE_ITEM_VIEW_TYPE);
 			}
-			//			holder.giftImage.setOnClickListener(new View.OnClickListener(){
-			//			    public void onClick(View v){
-			//			        Intent intent = new Intent();
-			//			        intent.setAction(Intent.ACTION_VIEW);
-			//			        intent.addCategory(Intent.CATEGORY_BROWSABLE);
-			//			        intent.setData(Uri.parse(g.getUrl()));
-			//			        startActivity(intent);
-			//			    }
-			//			});
 			holder.giftImage.setVisibility(CheckBox.VISIBLE);
 		}
 		else{
@@ -176,27 +166,6 @@ public class FriendAdapter extends BaseAdapter {
 			holder.cb.setVisibility(CheckBox.GONE);
 			holder.ar.setVisibility(CheckBox.VISIBLE);
 		}
-
-		/*String imgUrl = users.get(position).getAvatar();
-
-
-		if(imgUrl != null){
-			Log.i("URL", imgUrl);
-			UrlImageViewHelper.setUrlDrawable(holder.iv, imgUrl);
-			//UrlImageViewHelper.loadUrlDrawable(context, imgUrl);
-
-			//Ne marche pas
-			//holder.iv.setImageBitmap(UrlImageViewHelper.getCachedBitmap(imgUrl));
-		}
-		else
-			holder.iv.setImageResource(android.R.drawable.ic_menu_gallery);
-		 */
-
-		//		try {
-		//			holder.iv.setImageBitmap(AvatarGenerator.generate(f.getNom(), f.getGender() ,context));
-		//		} catch (IOException e) {
-		//			e.printStackTrace();
-		//		}
 	}
 
 
@@ -227,7 +196,7 @@ public class FriendAdapter extends BaseAdapter {
 					imgHeight = bitmap.getHeight();
 					imgWidth = bitmap.getWidth();
 				}
-				float fixedWidth = dpToPx(68);
+				float fixedWidth = dpToPx(70);
 				float rate = fixedWidth/imgWidth;
 				Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, Math.round(fixedWidth), Math.round(imgHeight*rate), true);
 				holder.iv.setImageBitmap(resizedBitmap);
@@ -283,7 +252,6 @@ public class FriendAdapter extends BaseAdapter {
 		holder.giftImage = (ImageView)convertView.findViewById(R.id.imageViewGift);
 		holder.giftPrice = (TextView)convertView.findViewById(R.id.useritem_tv_price);
 		holder.giftName = (TextView)convertView.findViewById(R.id.useritem_tv_title);
-		//holder.fonction = (TextView)convertView.findViewById(R.id.fonction);
 		holder.cb = (CheckBox)convertView.findViewById(R.id.checkBox);
 		holder.ar = (ImageView)convertView.findViewById(R.id.arrow);
 		holder.layout = (LinearLayout)convertView.findViewById(R.id.main_ll_itemUserList);

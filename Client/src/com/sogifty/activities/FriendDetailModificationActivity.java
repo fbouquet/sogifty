@@ -142,8 +142,6 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 		initAutoCompleteTags();
 		initTagsList();
 		initAvatar();
-		//UrlImageViewHelper.setUrlDrawable(iv, user.getAvatar());
-		//		 iv.setImageBitmap(AvatarGenerator.generate(friend.getNom(), "M", this));
 	}
 
 	private void initAvatar () {
