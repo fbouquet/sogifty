@@ -50,7 +50,7 @@ public class GetGiftsTask extends AsyncTask<String, String, Boolean>{
 	@Override
     protected void onPreExecute()
     {
-        progressDialog = ProgressDialog.show(this.context,"",LOADING);
+        //progressDialog = ProgressDialog.show(this.context,"",LOADING);
     }
 	@Override
 	protected Boolean doInBackground(String... userConnectionItems) {

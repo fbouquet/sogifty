@@ -4,17 +4,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
-import com.sogifty.model.Friend;
-import com.sogifty.model.Gift;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService.RemoteViewsFactory;
 
+import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import com.sogifty.R;
+import com.sogifty.model.Friend;
+import com.sogifty.model.Gift;
 
 /**
  * If you are familiar with Adapter of ListView,this is the same as adapter with
@@ -25,6 +24,7 @@ public class ListProvider implements RemoteViewsFactory {
 	private List<Friend> listUsers = new ArrayList<Friend>();
 	private List<Gift> listGift = new ArrayList<Gift>();
 	private Context context = null;
+	private boolean firstOk;
 
 
 
@@ -33,6 +33,7 @@ public class ListProvider implements RemoteViewsFactory {
 
 		this.listGift = listGift; 
 		listUsers = list;
+		firstOk = false;
 		getImageInCache();
 	}
 
@@ -41,14 +42,22 @@ public class ListProvider implements RemoteViewsFactory {
 
 		while (i.hasNext()) {
 			Friend f = i.next();
-			UrlImageViewHelper.loadUrlDrawable(context, f.getAvatar());
+			if(f != null)
+				//UrlImageViewHelper.loadUrlDrawable(context, f.getAvatar());
+				System.out.println("f non nul");
+			else
+				System.out.println(" f nul");
 		}
 		
 		Iterator<Gift> i2 = listGift.iterator();
 
 		while (i2.hasNext()) {
 			Gift g = i2.next();
-			UrlImageViewHelper.loadUrlDrawable(context, g.getImgUrl() );
+			if (g != null)
+				//UrlImageViewHelper.loadUrlDrawable(context, g.getImgUrl() );
+				System.out.println("g non nul");
+			else
+				System.out.println("g nul");
 		}
 		
 
@@ -83,17 +92,37 @@ public class ListProvider implements RemoteViewsFactory {
 		final RemoteViews remoteView = new RemoteViews(
 				context.getPackageName(), R.layout.list_row);
 		Friend f = listUsers.get(position);
-		Gift g = getGiftForFriend(f);
-		
 		remoteView.setTextViewText(R.id.heading, f.getNom());
 		remoteView.setTextViewText(R.id.content, "Anniversaire dans "+f.getRemainingDay()+" jours.");
-		if(g.getPrice() == null)
-			remoteView.setTextViewText(R.id.price, "?€");
-		else	
-			remoteView.setTextViewText(R.id.price, g.getPrice());
-
-		remoteView.setBitmap(R.id.imageView, "setImageBitmap",
-				UrlImageViewHelper.getCachedBitmap(g.getImgUrl()));
+		
+		Gift g;
+		System.out.println(f.getNom());
+		System.out.println(firstOk);
+		if(f.getNom().compareTo("sadiagnostic") == 0){
+			//firstOk = true;
+			System.out.println("first ok ");
+			if (f!= null){
+				g = listGift.get(0);
+				if( g != null){
+					System.out.println(g.getDecription());
+					remoteView.setTextViewText(R.id.suggestion,"offrez-lui "+g.getName());
+					//remoteView.setImageViewResource(R.id.imageViewWidget, R.drawable.cadeau);
+//					new DownloadImageForWidgetTask(remoteView)
+//					.execute(g.getImgUrl());
+					UrlImageViewHelper.loadUrlDrawable(context, g.getImgUrl());
+					remoteView.setBitmap(R.id.imageViewWidget,"setImageBitmap", 
+							UrlImageViewHelper.getCachedBitmap(g.getImgUrl()));
+				}
+				else{
+					System.out.println("g nul");
+					remoteView.setTextViewText(R.id.suggestion, "?€");
+				}
+			}
+		}
+		
+		
+		//remoteView.setBitmap(R.id.imageView, "setImageBitmap",
+		//		UrlImageViewHelper.getCachedBitmap(g.getImgUrl()));
 		
 		/*Intent fillInIntent = new Intent();
         fillInIntent.putExtra(WidgetProvider.TOAST_ACTION, position);
@@ -105,13 +134,13 @@ public class ListProvider implements RemoteViewsFactory {
         
         //Rajouter ici les extras que l'on veut, par exemple : spécifier l'url du cadeau à ouvrir dans le navigateur
         //String giftUrl = u.getUrl(); 
-        extras.putString(WidgetProvider.EXTRA_URL_GIFT, g.getUrl());
+        //extras.putString(WidgetProvider.EXTRA_URL_GIFT, g.getUrl());
         extras.putInt(WidgetProvider.EXTRA_ITEM, position);
         Intent fillInIntent = new Intent();
         fillInIntent.putExtras(extras);
         // Make it possible to distinguish the individual on-click
         // action of a given item
-        remoteView.setOnClickFillInIntent(R.id.imageView, fillInIntent);
+        remoteView.setOnClickFillInIntent(R.id.imageViewWidget, fillInIntent);
         
         
         Bundle extrasForFriendDetail = new Bundle();
@@ -121,7 +150,8 @@ public class ListProvider implements RemoteViewsFactory {
         fillInIntentDetail.putExtras(extrasForFriendDetail);
         remoteView.setOnClickFillInIntent(R.id.heading, fillInIntentDetail);
         remoteView.setOnClickFillInIntent(R.id.content, fillInIntentDetail);
-        remoteView.setOnClickFillInIntent(R.id.price, fillInIntentDetail);
+        remoteView.setOnClickFillInIntent(R.id.suggestion, fillInIntentDetail);
+        remoteView.setOnClickFillInIntent(R.id.imageViewWidget, fillInIntentDetail);
 
 		return remoteView;
 	}

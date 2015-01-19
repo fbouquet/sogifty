@@ -47,7 +47,7 @@ public class GetFriendListTask extends AsyncTask<String,Integer,Boolean>{
 	@Override
     protected void onPreExecute()
     {
-        progressDialog = ProgressDialog.show(this.context,"",LOADING);
+        //progressDialog = ProgressDialog.show(this.context,"",LOADING);
     }
 	
 	@Override

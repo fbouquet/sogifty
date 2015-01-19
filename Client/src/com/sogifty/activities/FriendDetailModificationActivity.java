@@ -100,7 +100,7 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 	private void initFriendAndMode() {
 		Intent tmp = getIntent();
 		friend = (Friend) tmp.getSerializableExtra(FriendDetailsActivity.FRIEND);
-		if (friend.getAvatar()!=null)
+		if (friend != null && friend.getAvatar()!=null)
 			avatarUri = Uri.parse(friend.getAvatar());
 		isModify=tmp.getBooleanExtra(IS_MODIFY, true);
 	}
