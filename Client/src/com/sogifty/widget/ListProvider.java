@@ -1,12 +1,14 @@
 package com.sogifty.widget;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.opengl.Visibility;
 import android.os.Bundle;
+import android.widget.CheckBox;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService.RemoteViewsFactory;
 
@@ -21,46 +23,29 @@ import com.sogifty.model.Gift;
  * 
  */
 public class ListProvider implements RemoteViewsFactory {
+	private static final int WIDTH = 85;
+	private static final int HEIGHT = 85;
 	private List<Friend> listUsers = new ArrayList<Friend>();
 	private List<Gift> listGift = new ArrayList<Gift>();
+	private List<String> listBitmapUrl = new ArrayList<String>();
+	private List<String> listDescription = new ArrayList<String>();
 	private Context context = null;
-	private boolean firstOk;
-
-
+	
 
 	public ListProvider(Context context, Intent intent, List<Friend> list, List<Gift> listGift) {
 		this.context = context;
 
 		this.listGift = listGift; 
 		listUsers = list;
-		firstOk = false;
-		getImageInCache();
-	}
-
-	private void getImageInCache() {
-		Iterator<Friend> i = listUsers.iterator();
-
-		while (i.hasNext()) {
-			Friend f = i.next();
-			if(f != null)
-				//UrlImageViewHelper.loadUrlDrawable(context, f.getAvatar());
-				System.out.println("f non nul");
-			else
-				System.out.println(" f nul");
+		UrlImageViewHelper.loadUrlDrawable(context, listGift.get(0).getImgUrl());
+		listBitmapUrl.add(listGift.get(0).getImgUrl());
+		
+		listDescription.add("Offrez lui "+listGift.get(0).getName() + "!!");
+		for(int i=1;i<getCount();i++){
+			listBitmapUrl.add("");
+			listDescription.add("");
 		}
 		
-		Iterator<Gift> i2 = listGift.iterator();
-
-		while (i2.hasNext()) {
-			Gift g = i2.next();
-			if (g != null)
-				//UrlImageViewHelper.loadUrlDrawable(context, g.getImgUrl() );
-				System.out.println("g non nul");
-			else
-				System.out.println("g nul");
-		}
-		
-
 	}
 
 	public int getCount() {
@@ -71,19 +56,7 @@ public class ListProvider implements RemoteViewsFactory {
 		return position;
 	}
 	
-	public Gift getGiftForFriend(Friend f){
-		Iterator<Gift> i = listGift.iterator();
-
-		while (i.hasNext()) {
-			Gift g = i.next();
-			if (g.getFriendId() == Integer.toString(f.getId())){
-				return g;
-			}
-		}
-		
-		return null;
-	}
-
+	
 	/*
 	 * Similar to getView of Adapter where instead of Viewwe return RemoteViews
 	 */
@@ -94,39 +67,20 @@ public class ListProvider implements RemoteViewsFactory {
 		Friend f = listUsers.get(position);
 		remoteView.setTextViewText(R.id.heading, f.getNom());
 		remoteView.setTextViewText(R.id.content, "Anniversaire dans "+f.getRemainingDay()+" jours.");
-		
-		Gift g;
-		System.out.println(f.getNom());
-		System.out.println(firstOk);
-		if(f.getNom().compareTo("sadiagnostic") == 0){
-			//firstOk = true;
-			System.out.println("first ok ");
-			if (f!= null){
-				g = listGift.get(0);
-				if( g != null){
-					System.out.println(g.getDecription());
-					remoteView.setTextViewText(R.id.suggestion,"offrez-lui "+g.getName());
-					//remoteView.setImageViewResource(R.id.imageViewWidget, R.drawable.cadeau);
-//					new DownloadImageForWidgetTask(remoteView)
-//					.execute(g.getImgUrl());
-					UrlImageViewHelper.loadUrlDrawable(context, g.getImgUrl());
-					remoteView.setBitmap(R.id.imageViewWidget,"setImageBitmap", 
-							UrlImageViewHelper.getCachedBitmap(g.getImgUrl()));
-				}
-				else{
-					System.out.println("g nul");
-					remoteView.setTextViewText(R.id.suggestion, "?€");
-				}
-			}
+		if(listBitmapUrl.get(position).compareTo("") == 0){
+			remoteView.setBitmap(R.id.imageViewWidget,"setImageBitmap",
+					Bitmap.createBitmap(WIDTH, HEIGHT, Bitmap.Config.ARGB_8888));
+			remoteView.setViewVisibility(R.id.imageViewWidget, CheckBox.GONE);
+		}
+		else{
+			UrlImageViewHelper.loadUrlDrawable(context, listGift.get(0).getImgUrl());
+			remoteView.setBitmap(R.id.imageViewWidget,"setImageBitmap",
+					UrlImageViewHelper.getCachedBitmap(listBitmapUrl.get(position)));
+			remoteView.setViewVisibility(R.id.imageViewWidget, CheckBox.VISIBLE);
 		}
 		
+		remoteView.setTextViewText(R.id.suggestion,listDescription.get(position));
 		
-		//remoteView.setBitmap(R.id.imageView, "setImageBitmap",
-		//		UrlImageViewHelper.getCachedBitmap(g.getImgUrl()));
-		
-		/*Intent fillInIntent = new Intent();
-        fillInIntent.putExtra(WidgetProvider.TOAST_ACTION, position);
-        remoteView.setOnClickFillInIntent(R.id.imageView, fillInIntent);*/
 		
 		// Next, set a fill-intent, which will be used to fill in the pending intent template
         // that is set on the collection view in StackWidgetProvider.

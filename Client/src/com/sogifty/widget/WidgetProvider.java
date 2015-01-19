@@ -57,8 +57,7 @@ public class WidgetProvider extends AppWidgetProvider implements OnGetFriendList
 	}
 	
 	public void onReceive(Context context, Intent intent) {
-               
-        if (intent.getAction().equals(TOAST_ACTION)) {
+		if (intent.getAction().equals(TOAST_ACTION)) {
         	if(intent.hasExtra(EXTRA_URL_GIFT)){
 	        	int viewIndex = intent.getIntExtra(EXTRA_ITEM, 0);
 	            //Toast.makeText(context, "Touched view " + String.valueOf(viewIndex), Toast.LENGTH_SHORT).show();
@@ -171,9 +170,7 @@ public class WidgetProvider extends AppWidgetProvider implements OnGetFriendList
             rv.setPendingIntentTemplate(R.id.listViewWidget, toastPendingIntent);
             
             awm.updateAppWidget(appWidgetIds[i], rv);
-
-
-			//appWidgetManager.updateAppWidget(appWidgetIds[i], remoteViews);
+//appWidgetManager.updateAppWidget(appWidgetIds[i], remoteViews);
 			
 			
 		}
