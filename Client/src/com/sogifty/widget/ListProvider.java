@@ -6,7 +6,6 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.widget.CheckBox;
 import android.widget.RemoteViews;

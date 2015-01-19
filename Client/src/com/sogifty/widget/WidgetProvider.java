@@ -13,7 +13,6 @@ import android.net.Uri;
 import android.widget.RemoteViews;
 
 import com.sogifty.R;
-import com.sogifty.activities.FriendDetailModificationActivity;
 import com.sogifty.activities.StartActivity;
 import com.sogifty.model.Friend;
 import com.sogifty.model.Friends;
@@ -60,7 +59,6 @@ public class WidgetProvider extends AppWidgetProvider implements OnGetFriendList
 		if (intent.getAction().equals(TOAST_ACTION)) {
         	if(intent.hasExtra(EXTRA_URL_GIFT)){
 	        	int viewIndex = intent.getIntExtra(EXTRA_ITEM, 0);
-	            //Toast.makeText(context, "Touched view " + String.valueOf(viewIndex), Toast.LENGTH_SHORT).show();
 	            String url = intent.getStringExtra(EXTRA_URL_GIFT);
 	            
 	            Intent i = new Intent(Intent.ACTION_VIEW);
@@ -69,18 +67,8 @@ public class WidgetProvider extends AppWidgetProvider implements OnGetFriendList
 	            context.startActivity(i);
         	}
         	else if (intent.hasExtra(EXTRA_FRIEND_INDEX)){
-	        	//int friendIndex = intent.getIntExtra(EXTRA_FRIEND_INDEX, 0);
-	            //Toast.makeText(context, "Touched view " + String.valueOf(viewIndex), Toast.LENGTH_SHORT).show();
-	            
+		            
 	            Intent i = new Intent(context, StartActivity.class);
-	            /* REPLACER TOUT CA PAR JUSTE friendId*/
-	            //i.putExtra("friendId", friendIndex);
-	            
-//	            i.putExtra("name", "test");
-//				
-//				i.putExtra("avatar", "lol");
-//				i.putExtra("id", friendIndex);
-	            
 	            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 	            context.startActivity(i);
 	        }
@@ -102,14 +90,7 @@ public class WidgetProvider extends AppWidgetProvider implements OnGetFriendList
 			if(listFriends.isEmpty())
 				displayMessage(context.getResources().getString(R.string.friendlist_no_friend));
 		}
-		//		listJson.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-		//		//createFalseList();
-		//		if(friendsList.getListFriends().isEmpty())
-		//			displayMessage("you have no friend, add one");
-		//		adapter = new FriendAdapter(this, friendsList.getListFriends(), firstFriendGifts);
-		//		listJson.setAdapter(adapter);
-		//		userAdapter = ((FriendAdapter) listJson.getAdapter());
-		//updateAfterTasks();
+
 	}
 
 	@Override
@@ -132,36 +113,14 @@ public class WidgetProvider extends AppWidgetProvider implements OnGetFriendList
 		/*int[] appWidgetIds holds ids of multiple instance of your widget
 		 * meaning you are placing more than one widgets on your homescreen*/
 		for (int i = 0; i < N; ++i) {
-			
-			//RemoteViews remoteViews = updateWidgetListView(context,appWidgetIds[i], appWidgetManager);
-			
-
-
-            // Sets up the intent that points to the StackViewService that will
-            // provide the views for this collection.
             Intent intent = new Intent(context, WidgetService.class);
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
-//            intent.putExtra(FRIEND_LIST, listFriends);
-//            intent.putExtra(GIFT_LIST, listGift);
-            // When intents are compared, the extras are ignored, so we need to embed the extras
-            // into the data so that the extras will not be ignored.
             intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
             RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
             rv.setRemoteAdapter(R.id.listViewWidget, intent);
-    
-            // The empty view is displayed when the collection has no items. It should be a sibling
-            // of the collection view.
             rv.setEmptyView(R.id.listViewWidget, R.id.empty_view);
 
-            // This section makes it possible for items to have individualized behavior.
-            // It does this by setting up a pending intent template. Individuals items of a collection
-            // cannot set up their own pending intents. Instead, the collection as a whole sets
-            // up a pending intent template, and the individual items set a fillInIntent
-            // to create unique behavior on an item-by-item basis.
             Intent toastIntent = new Intent(context, WidgetProvider.class);
-            // Set the action for the intent.
-            // When the user touches a particular view, it will have the effect of
-            // broadcasting TOAST_ACTION.
             toastIntent.setAction(WidgetProvider.TOAST_ACTION);
             toastIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
             intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
@@ -170,9 +129,6 @@ public class WidgetProvider extends AppWidgetProvider implements OnGetFriendList
             rv.setPendingIntentTemplate(R.id.listViewWidget, toastPendingIntent);
             
             awm.updateAppWidget(appWidgetIds[i], rv);
-//appWidgetManager.updateAppWidget(appWidgetIds[i], remoteViews);
-			
-			
 		}
 
 		

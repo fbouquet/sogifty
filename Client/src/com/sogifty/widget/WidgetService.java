@@ -26,10 +26,6 @@ public class WidgetService extends RemoteViewsService {
 		int appWidgetId = intent.getIntExtra(
 				AppWidgetManager.EXTRA_APPWIDGET_ID,
 				AppWidgetManager.INVALID_APPWIDGET_ID);
-		//new GetFriendList().execute();
-		
-		
-		/* DEBUT DE LA REQUETE SERVEUR POUR CHOPER CE QU'ON VEUT. PEUT ETRE QU'IL FAUT LA METTRE DANS UNE ASYNC, À TESTER */
 		Constants projectConstants = new Constants();
 
 		SoapObject  request = new SoapObject(
@@ -46,105 +42,11 @@ public class WidgetService extends RemoteViewsService {
 
 		HttpTransportSE httpTransport = new HttpTransportSE(
 				projectConstants.URL);
-/*
-		try {
-			httpTransport.call(
-					projectConstants.SOAP_ACTION_GET_FRIEND_LIST, envelope);
-			SoapObject response = (SoapObject) envelope.getResponse();
-
-			if (response == null) {
-				Log.i("Demo Test", "reponse null");
-			} else {
-				Log.i("Demo Test", "reponse not null");
-				for (int i = 0; i < response.getPropertyCount(); i++) {
-					User u = new User();
-					Gift g = new Gift();
-					
-					SoapObject friendNotif = (SoapObject) response
-							.getProperty(i);
-					
-					u.setId(Integer.parseInt(friendNotif.getPropertyAsString(projectConstants.FriendId)));
-					u.setNom(friendNotif.getPropertyAsString(projectConstants.FirstName));
-					u.setPrenom(friendNotif.getPropertyAsString(projectConstants.LastName));
-					u.setPrenom(friendNotif.getPropertyAsString(projectConstants.AvatarUrl));
-					
-					
-					g.setUrl(friendNotif.getPropertyAsString(projectConstants.giftLink));
-					g.setImgUrl(friendNotif.getPropertyAsString(projectConstants.giftThumbnail));
-					g.setFriendId(friendNotif.getPropertyAsString(projectConstants.FriendId));
-					
-					listUsers.add(u);
-					listGift.add(g);					
-				}
-
-
-			}
-		} catch (Exception exception) {
-			Log.i("Exception", exception.getMessage());
-		}
-		*/
-		/* FIN DE LA REQUETE */
-		
-		//Donc ici c'est cool on passe la liste qu'on veut en paramètre
-//		Friend f = new Friend();
-//		f.setAvatar("http://image.jeuxvideo.com/images/pc/t/h/the-banner-saga-pc-00x.jpg");
-//		f.setNom("Julie Belle");
-//		f.setId(Integer.parseInt("1"));
-//		f.setRemainingDay(Integer.parseInt("2"));
-//		
-//		listFriends.add(f);
-//		
-//		f = new Friend();
-//		f.setAvatar("http://image.jeuxvideo.com/chroniques-images/0011/dmc-devil-may-cry-pc-00118146-1389610521-1389614776-accroche.jpg");
-//		f.setNom("Maxime le Boxeur");
-//		f.setId(Integer.parseInt("2"));
-//		f.setRemainingDay(Integer.parseInt("4"));
-//		listFriends.add(f);
-//		
-//		f = new Friend();
-//		f.setAvatar("http://image.jeuxvideo.com/chroniques-images/0011/dmc-devil-may-cry-pc-00118146-1389610521-1389614776-accroche.jpg");
-//		f.setNom("Simon l'Enfant");
-//		f.setId(Integer.parseInt("3"));
-//		f.setRemainingDay(Integer.parseInt("7"));
-//		
-//		listFriends.add(f);
-//		
-//		
-//		Gift g = new Gift();
-//		
-//		g.setUrl("http://shop.uniformchanges.co.uk/index.php?main_page=index&cPath=10");
-//		g.setImgUrl("http://shop.uniformchanges.co.uk/images/G%20SKT01%20box%20pleat%20skirt.jpg");
-//		g.setFriendId("1");
-//		
-//		g.setPrice("19");
-//		
-//		listGift.add(g);
-//		
-//		g = new Gift();
-//		
-//		g.setUrl("http://rhone-alpes.all.biz/gant-de-boxe-adidas-g16327");
-//		g.setImgUrl("http://www.fr.all.biz/img/fr/catalog/16327.jpeg");
-//		g.setFriendId("2");
-//		
-//		g.setPrice("14");
-//		
-//		listGift.add(g);
-//		
-//		g = new Gift();
-//		
-//		g.setUrl("http://french.alibaba.com/product-gs/toy-car-kids-car-kids-ride-on-car-268704440.html");
-//		g.setImgUrl("http://img.alibaba.com/photo/268704440/Toy_Car_Kids_Car_Kids_Ride_on_Car.jpg");
-//		g.setFriendId("3");
-//		
-//		g.setPrice("199");
-//		
-//		listGift.add(g);
 		
 		listFriends = WidgetProvider.listFriends;
 		listGift = WidgetProvider.listGift;
 		
 		return (new ListProvider(this.getApplicationContext(), intent, listFriends, listGift));
-		//return (new ListProvider(this.getApplicationContext(), intent, listUsers, listGift));
 	}
 
 	
