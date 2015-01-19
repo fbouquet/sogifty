@@ -40,9 +40,6 @@
         android:textSize="20sp"
         android:visibility="gone" />
 
-    <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-    </GridLayout>
+    
 
 </LinearLayout>

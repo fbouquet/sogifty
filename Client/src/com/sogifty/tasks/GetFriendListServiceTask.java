@@ -6,14 +6,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
-import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -24,25 +22,21 @@ import android.preference.PreferenceManager;
 import com.sogifty.R;
 import com.sogifty.activities.ParserJson;
 import com.sogifty.model.Friends;
-import com.sogifty.model.Gift;
-import com.sogifty.tasks.listeners.OnGetFriendListTaskListener;
-import com.sogifty.tasks.listeners.OnGetGiftsTaskListener;
+import com.sogifty.tasks.listeners.OnGetFriendListServiceTaskListener;
 
-public class GetGiftsTask extends AsyncTask<String, String, Boolean>{
+public class GetFriendListServiceTask extends AsyncTask<String,Integer,Boolean>{
 	private static final String USER_ID = "user_id";
 	private static final String LOADING = "Loading..";
-	private static final String URL_SUFFIX_REGISTER = "users/<userId>/friends/<friendId>/gifts";
+	private static final String URL_SUFFIX_REGISTER = "users/<userId>/friends";
 	
-	private ProgressDialog progressDialog;
 	private Context context;
 	private int httpStatus;
-	private List<Gift> giftList;
+	private Friends friendList;
 	private String errorMessage;
-	private OnGetGiftsTaskListener callback;
+	private OnGetFriendListServiceTaskListener callback;
 	
-	public GetGiftsTask(Context context, OnGetGiftsTaskListener callback) {
+	public GetFriendListServiceTask(Context context, OnGetFriendListServiceTaskListener callback) {
 		this.context = context;
-		this.progressDialog = new ProgressDialog(this.context);
 		this.callback = callback;
 	}
 	
@@ -50,36 +44,29 @@ public class GetGiftsTask extends AsyncTask<String, String, Boolean>{
 	@Override
     protected void onPreExecute()
     {
-        //progressDialog = ProgressDialog.show(this.context,"",LOADING);
     }
+	
 	@Override
 	protected Boolean doInBackground(String... userConnectionItems) {
-		String urlKnowingUserId = this.context.getResources().getString(R.string.web_url_init)+URL_SUFFIX_REGISTER.replace("<userId>", String.valueOf(loadUserId()));
-		String urlKnowingFriendId = urlKnowingUserId.replace("<friendId>", userConnectionItems[0]);
-		System.out.println("friend Id :::"+userConnectionItems[0]);
-		System.out.println("url :::"+urlKnowingFriendId);
-	    return callServerConnectionWebService(urlKnowingFriendId);
+		return callServerConnectionWebService(this.context.getResources().getString(R.string.web_url_init)+URL_SUFFIX_REGISTER.replace("<userId>", String.valueOf(loadUserId())));
 	}
 	@Override
 	protected void onPostExecute(Boolean resultCall){
 		if(resultCall.booleanValue()){
-			callback.onGetGiftsComplete(giftList);
+			callback.onGetFriendListServiceComplete(friendList);
 		}
 		else{
-			callback.onGetGiftsFailed(errorMessage);
+			callback.onGetFriendListServiceFailed(errorMessage);
 		}
-		progressDialog.dismiss();
 	}
 	
 	
 	private boolean callServerConnectionWebService(String webServiceUrlInit) {
-		System.out.println("try to connect");
-	       
 		if(isConnected()){
 			String result = GET(webServiceUrlInit);
 			if(httpStatus == 200){
 				ParserJson parser = new ParserJson(result);
-				giftList = parser.executeParseGift();
+				friendList = parser.executeParseFriendList();
 				return true;
 			}
 			else{
@@ -119,7 +106,6 @@ public class GetGiftsTask extends AsyncTask<String, String, Boolean>{
 	public String GET(String url){
         InputStream inputStream = null;
         String result = null;
-        System.out.println("try to get on "+url);
         try {
         	HttpClient httpclient = new DefaultHttpClient();
         	
@@ -128,10 +114,8 @@ public class GetGiftsTask extends AsyncTask<String, String, Boolean>{
             
             httpGet.setHeader("Accept", "application/json");
             httpGet.setHeader("Content-type", "application/json");
-            System.out.println("try to execute");
             
             HttpResponse httpResponse = httpclient.execute(httpGet);
-            System.out.println("exectuted on "+url);
             
             inputStream = httpResponse.getEntity().getContent();
             httpStatus = httpResponse.getStatusLine().getStatusCode();

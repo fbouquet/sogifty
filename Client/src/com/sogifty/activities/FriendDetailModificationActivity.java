@@ -3,6 +3,7 @@ package com.sogifty.activities;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -36,6 +37,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -55,7 +57,7 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 	private static final String EMPTY_CONNECTION_ITEMS = "Please enter at least name and birthdate";
 	private static final int PICK_FROM_CAMERA = 1;
 	private static final int PICK_FROM_FILE = 2;
-
+	protected static final int PICK_FROM_APPLICATION = 3;
 
 	private static ArrayAdapter<String> autoCompleteExistingsTagsAdapter = null;
 
@@ -67,10 +69,13 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 	private static final String NB_TAGS_MAX = "nb_tags";
 	private static final int NB_TAGS_MAX_DEFAULT = 10;
 	protected static final String TOO_MUCH_TAG = "Vous avez atteint le nombre maximum de tags";
+	private static final String WOMAN = "woman";
+	private static final String MAN = "man";
+
 	private Friend friend = null;
 	private EditText etName = null ;
 	private EditText etFirstname = null ;
-	private EditText etBirthdaydate = null ;
+	private DatePicker dpBirthdaydate = null ;
 	private ImageView ivAvatar;
 	private Button bAddTag;
 	private Button bModifyAvatar;
@@ -96,7 +101,7 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 	private void initFriendAndMode() {
 		Intent tmp = getIntent();
 		friend = (Friend) tmp.getSerializableExtra(FriendDetailsActivity.FRIEND);
-		if (friend.getAvatar()!=null)
+		if (friend != null && friend.getAvatar()!=null)
 			avatarUri = Uri.parse(friend.getAvatar());
 		isModify=tmp.getBooleanExtra(IS_MODIFY, true);
 	}
@@ -120,10 +125,12 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 		etName.setText(friend.getNom());
 		etFirstname = (EditText) findViewById(R.id.modify_et_firstname);
 		etFirstname.setText(friend.getPrenom());
-		etBirthdaydate = (EditText) findViewById(R.id.modify_et_birthdaydate);
-		if (friend.getBirthdayDate()==null)
-			etBirthdaydate.setText("");
-		else etBirthdaydate.setText(String.valueOf(friend.getBirthdayDate()));
+		dpBirthdaydate = (DatePicker) findViewById(R.id.modify_dp_birthdaydate);
+		if (friend.getBirthdayDate()!=null){
+			String date = friend.getBirthdayDate();
+			String[] dmy = date.split("-");
+			dpBirthdaydate.updateDate(Integer.parseInt(dmy[2]), Integer.parseInt(dmy[1]), Integer.parseInt(dmy[0]));
+		}
 		ivAvatar = (ImageView) findViewById(R.id.modify_iv_avatar);
 
 		initButtonModifyAvatar();
@@ -135,8 +142,6 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 		initAutoCompleteTags();
 		initTagsList();
 		initAvatar();
-		//UrlImageViewHelper.setUrlDrawable(iv, user.getAvatar());
-		//		 iv.setImageBitmap(AvatarGenerator.generate(friend.getNom(), "M", this));
 	}
 
 	private void initAvatar () {
@@ -144,7 +149,19 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 		Bitmap bitmap   = null;
 		String path = friend.getAvatar();
 		if (path !=null){
-			bitmap = BitmapFactory.decodeFile(path);
+			if (path.equals(WOMAN) || path.equals(MAN)){
+    			if (path.equals(MAN)){
+    				InputStream is = getResources().openRawResource(R.drawable.man);
+    				bitmap = BitmapFactory.decodeStream(is);
+    			}
+    			else if (path.equals(WOMAN)){
+    				InputStream is = getResources().openRawResource(R.drawable.woman);
+    				bitmap = BitmapFactory.decodeStream(is);
+    							}
+    		}
+        	else {
+        		bitmap = BitmapFactory.decodeFile(path);
+        	}
 			if(bitmap!=null){
 				int rotate = getOrientation(path);
 				int imgHeight = bitmap.getHeight();
@@ -165,7 +182,7 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 
 	private void initButtonModifyAvatar() {
 
-		final String [] items           = new String [] {"From Camera", "From SD Card"};
+		final String [] items           = new String [] {"From Camera", "From SD Card","From Application's Avatar"};
 		ArrayAdapter<String> adapter  = new ArrayAdapter<String> (this, android.R.layout.select_dialog_item,items);
 		AlertDialog.Builder builder     = new AlertDialog.Builder(this);
 
@@ -188,13 +205,18 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 					}
 
 					dialog.cancel();
-				} else {
+				} else if(item == 1){
 					Intent intent = new Intent();
 
 					intent.setType("image/*");
 					intent.setAction(Intent.ACTION_GET_CONTENT);
 
 					startActivityForResult(Intent.createChooser(intent, "Complete action using"), PICK_FROM_FILE);
+				}
+				else{
+					Intent intent = ChooseAvatarActivity.getIntent(FriendDetailModificationActivity.this);
+
+					startActivityForResult(intent, PICK_FROM_APPLICATION);
 				}
 			}
 		} );
@@ -214,7 +236,6 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode != RESULT_OK) return;
-
 		Bitmap bitmap   = null;
 		String path     = "";
 		int rotate = 0;
@@ -229,7 +250,22 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 				bitmap  = BitmapFactory.decodeFile(path);
 				rotate = getOrientation(path);
 			}
-		} else {
+		} else if (requestCode == PICK_FROM_APPLICATION){
+			path = data.getStringExtra(ChooseAvatarActivity.RESULT);
+			if (path.equals(MAN)){
+				InputStream is = this.getResources().openRawResource(R.drawable.man);
+				bitmap = BitmapFactory.decodeStream(is);
+			}
+			else if (path.equals(WOMAN)){
+				InputStream is = this.getResources().openRawResource(R.drawable.woman);
+				bitmap = BitmapFactory.decodeStream(is);
+							}
+			if (bitmap == null){
+				displayMessage("No such image!");
+				return;
+			}
+		}
+		else {
 			path    = avatarUri.getPath();
 			bitmap  = BitmapFactory.decodeFile(path);
 			rotate = getOrientation(path);
@@ -309,7 +345,7 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 		bAddTag = (Button) findViewById(R.id.modify_b_addtag);
 
 		bAddTag.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				if(leftFriendTags.size()+rightFriendTags.size() >= nbTagsMax){
@@ -321,7 +357,7 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 				}
 			}
 
-			
+
 		});
 
 	}
@@ -489,7 +525,7 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 		case R.id.action_modify_ok:
 			updateFriend();
 			if(isModify){
-				if(friend.getNom().equals("") && etBirthdaydate.getText().toString().equals("")){
+				if(friend.getNom().equals("")){
 					loadEmptyPopUp();
 				}
 				else{
@@ -497,7 +533,7 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 				}
 			}
 			else {
-				if(friend.getNom().equals("") && etBirthdaydate.getText().toString().equals("")){
+				if(friend.getNom().equals("")){
 					loadEmptyPopUp();
 				}
 				else{
@@ -517,7 +553,7 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 		friend.setNom(tmp);
 		tmp=etFirstname.getText().toString();
 		friend.setPrenom(tmp);
-		tmp = etBirthdaydate.getText().toString();
+		tmp = dpBirthdaydate.getDayOfMonth() + "-" + dpBirthdaydate.getMonth() + "-" + dpBirthdaydate.getYear();
 		friend.setBirthdayDate(tmp);
 		List<String> tags = new ArrayList<String>(leftFriendTags);
 		tags.addAll(rightFriendTags);
@@ -536,11 +572,12 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 		startActivity(intent);
 	}
 	private void callConnectionAddTask() {
+
 		String id = String.valueOf(friend.getId());
 		List<String> tags = new ArrayList<String>(leftFriendTags);
 		tags.addAll(rightFriendTags);
 		new AddOrModifyFriendTask(this,this,false)
-		.execute(friend.getNom(),friend.getPrenom(),etBirthdaydate.getText().toString(), id, friend.getTagsinJsonString(), friend.getAvatar());
+		.execute(friend.getNom(),friend.getPrenom(), friend.getBirthdayDate(), id, friend.getTagsinJsonString(), friend.getAvatar());
 	}
 
 	private void callConnectionModificationTask() {

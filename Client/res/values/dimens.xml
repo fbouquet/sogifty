@@ -4,5 +4,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 	<dimen name="text_size">16dp</dimen>
+    <dimen name="margin_image">16dp</dimen>
+    <dimen name="margin_image_list">4dp</dimen>
     
 </resources>

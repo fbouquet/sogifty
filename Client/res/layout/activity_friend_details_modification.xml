@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true" >
-   <LinearLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/gradient_background"
@@ -18,13 +19,15 @@
                 android:id="@+id/modify_iv_avatar"
                 android:layout_width="match_parent"
                 android:layout_height="155dp"
+                android:layout_margin="@dimen/margin_image"
                 android:src="@drawable/noavatar" />
-            <Button 
+
+            <Button
                 android:id="@+id/modify_b_avatar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="@string/modify_b_avatar"/>
+                android:text="@string/modify_b_avatar" />
 
             <TextView
                 android:id="@+id/modify_tv_firstname"
@@ -58,15 +61,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/modify_tv_birthdaydate" />
 
-            <EditText
-                android:id="@+id/modify_et_birthdaydate"
+            <DatePicker
+                android:id="@+id/modify_dp_birthdaydate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="@string/modify_h_birthdaydate"
-                android:inputType="date" />
-
-            
+                android:startYear="1900"
+                android:spinnersShown="true"
+                android:calendarViewShown="false"/>
         </LinearLayout>
 
         <TextView
