@@ -129,7 +129,7 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 		if (friend.getBirthdayDate()!=null){
 			String date = friend.getBirthdayDate();
 			String[] dmy = date.split("-");
-			dpBirthdaydate.updateDate(Integer.parseInt(dmy[2]), Integer.parseInt(dmy[1]), Integer.parseInt(dmy[0]));
+			dpBirthdaydate.updateDate(Integer.parseInt(dmy[2]), Integer.parseInt(dmy[1])-1, Integer.parseInt(dmy[0]));
 		}
 		ivAvatar = (ImageView) findViewById(R.id.modify_iv_avatar);
 
@@ -553,7 +553,8 @@ public class FriendDetailModificationActivity extends Activity implements OnAddO
 		friend.setNom(tmp);
 		tmp=etFirstname.getText().toString();
 		friend.setPrenom(tmp);
-		tmp = dpBirthdaydate.getDayOfMonth() + "-" + dpBirthdaydate.getMonth() + "-" + dpBirthdaydate.getYear();
+		tmp = dpBirthdaydate.getDayOfMonth() + "-" + (dpBirthdaydate.getMonth()+1) + "-" + dpBirthdaydate.getYear();
+		System.out.println(tmp);
 		friend.setBirthdayDate(tmp);
 		List<String> tags = new ArrayList<String>(leftFriendTags);
 		tags.addAll(rightFriendTags);
