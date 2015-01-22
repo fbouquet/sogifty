@@ -39,18 +39,21 @@ public class GetGiftsTask extends AsyncTask<String, String, Boolean>{
 	private List<Gift> giftList;
 	private String errorMessage;
 	private OnGetGiftsTaskListener callback;
+	private boolean widget;
 	
-	public GetGiftsTask(Context context, OnGetGiftsTaskListener callback) {
+	public GetGiftsTask(Context context, OnGetGiftsTaskListener callback, boolean widget) {
 		this.context = context;
 		this.progressDialog = new ProgressDialog(this.context);
 		this.callback = callback;
+		this.widget = widget;
 	}
 	
 	
 	@Override
     protected void onPreExecute()
     {
-        //progressDialog = ProgressDialog.show(this.context,"",LOADING);
+		if (widget == false)
+			progressDialog = ProgressDialog.show(this.context,"",LOADING);
     }
 	@Override
 	protected Boolean doInBackground(String... userConnectionItems) {

@@ -67,7 +67,7 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 		initLayout();
 
 		//createListView();
-		new GetFriendListTask(FriendListActivity.this, this).execute();
+		new GetFriendListTask(FriendListActivity.this, this, false).execute();
 
 		listJson.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> adapter, View view,
@@ -154,7 +154,7 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 	public void onGetFriendListComplete(Friends friendsListparam) {
 		friendsList = friendsListparam;
 		if(friendsList.getListFriends() != null && friendsList.getListFriends().size() != 0){
-			new GetGiftsTask(this, this).execute(String.valueOf(friendsList.getListFriends().get(0).getId()));
+			new GetGiftsTask(this, this, false).execute(String.valueOf(friendsList.getListFriends().get(0).getId()));
 			
 		}
 		else{

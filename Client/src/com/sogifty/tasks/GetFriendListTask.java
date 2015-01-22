@@ -36,18 +36,21 @@ public class GetFriendListTask extends AsyncTask<String,Integer,Boolean>{
 	private Friends friendList;
 	private String errorMessage;
 	private OnGetFriendListTaskListener callback;
+	private boolean widget;
 	
-	public GetFriendListTask(Context context, OnGetFriendListTaskListener callback) {
+	public GetFriendListTask(Context context, OnGetFriendListTaskListener callback, boolean widget) {
 		this.context = context;
 		this.progressDialog = new ProgressDialog(this.context);
 		this.callback = callback;
+		this.widget = widget;
 	}
 	
 	
 	@Override
     protected void onPreExecute()
     {
-        //progressDialog = ProgressDialog.show(this.context,"",LOADING);
+		if (widget == false)
+			progressDialog = ProgressDialog.show(this.context,"",LOADING);
     }
 	
 	@Override

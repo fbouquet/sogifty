@@ -62,7 +62,7 @@ public class FriendDetailsActivity extends Activity implements OnGetGiftsTaskLis
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_friend_details);
 		initFriendInformations();
-		new GetGiftsTask(this, this).execute(String.valueOf(friend.getId()));
+		new GetGiftsTask(this, this, false).execute(String.valueOf(friend.getId()));
 		
 	}
     

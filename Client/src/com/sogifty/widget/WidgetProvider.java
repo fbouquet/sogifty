@@ -50,7 +50,7 @@ public class WidgetProvider extends AppWidgetProvider implements OnGetFriendList
 		this.appWidgetIds = appWidgetIds;
 		this.context = context;
 		
-		new GetFriendListTask(context, this).execute();
+		new GetFriendListTask(context, this, true).execute();
 		
 		
 	}
@@ -83,7 +83,7 @@ public class WidgetProvider extends AppWidgetProvider implements OnGetFriendList
 		listFriends = friendsListparam.getListFriends();
 		System.out.println("getFriendListComplete");
 		if(listFriends != null && listFriends.size() != 0){
-			new GetGiftsTask(context, this).execute(String.valueOf(listFriends.get(0).getId()));
+			new GetGiftsTask(context, this, true).execute(String.valueOf(listFriends.get(0).getId()));
 			
 		}
 		else{
