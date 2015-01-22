@@ -15,7 +15,6 @@ import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import com.sogifty.R;
 import com.sogifty.model.Friend;
 import com.sogifty.model.Gift;
-
 /**
  * If you are familiar with Adapter of ListView,this is the same as adapter with
  * few changes
@@ -36,9 +35,9 @@ public class ListProvider implements RemoteViewsFactory {
 
 		this.listGift = listGift; 
 		listUsers = list;
-		UrlImageViewHelper.loadUrlDrawable(context, listGift.get(0).getImgUrl());
+		//UrlImageViewHelper.loadUrlDrawable(context, listGift.get(0).getImgUrl());
 		listBitmapUrl.add(listGift.get(0).getImgUrl());
-		
+		System.out.println("lala"+listGift.get(0).getImgUrl());
 		listDescription.add("Offrez lui "+listGift.get(0).getName() + "!!");
 		for(int i=1;i<getCount();i++){
 			listBitmapUrl.add("");
@@ -72,9 +71,18 @@ public class ListProvider implements RemoteViewsFactory {
 			remoteView.setViewVisibility(R.id.imageViewWidget, CheckBox.GONE);
 		}
 		else{
-			UrlImageViewHelper.loadUrlDrawable(context, listGift.get(0).getImgUrl());
+			System.out.println("lala url ok" + listGift.get(position).getImgUrl());
+			System.out.println(f.getNom());
+			UrlImageViewHelper.loadUrlDrawable(context, listGift.get(position).getImgUrl());
+			try {
+			    Thread.sleep(1000);                 
+			} catch(InterruptedException ex) {
+			    Thread.currentThread().interrupt();
+			}
 			remoteView.setBitmap(R.id.imageViewWidget,"setImageBitmap",
 					UrlImageViewHelper.getCachedBitmap(listBitmapUrl.get(position)));
+			
+//			new DownloadImageWidgetTask(remoteView).execute();
 			remoteView.setViewVisibility(R.id.imageViewWidget, CheckBox.VISIBLE);
 		}
 		
@@ -122,9 +130,11 @@ public class ListProvider implements RemoteViewsFactory {
 	}
 
 	public void onCreate() {
+		System.out.println("create");
 	}
 
 	public void onDataSetChanged() {
+		System.out.println("datachanged");
 	}
 
 	public void onDestroy() {
