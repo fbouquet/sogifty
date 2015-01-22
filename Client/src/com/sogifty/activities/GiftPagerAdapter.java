@@ -25,7 +25,7 @@ public class GiftPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public GiftPager getItem(int position) {
     	
-        return GiftPager.create(position, giftsToPrint);
+        return GiftPager.create(position, giftsToPrint, this.getCount());
     }
 
     @Override

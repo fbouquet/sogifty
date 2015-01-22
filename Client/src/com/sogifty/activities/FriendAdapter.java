@@ -140,7 +140,9 @@ public class FriendAdapter extends BaseAdapter {
 		if(position == 0){
 			holder.tags.setVisibility(CheckBox.VISIBLE);
 			if (gifts != null && gifts.size() != 0){
-				int i = (int)(Math.random())%gifts.size();
+				//int i = (int)(Math.random())%gifts.size();
+				int i = 0;
+				System.out.println("0"+gifts.get(i).getImgUrl());
 				new DownloadImageTask(holder.giftImage)
 				.execute(gifts.get(i).getImgUrl());
 				holder.giftPrice.setText(gifts.get(i).getPrice());

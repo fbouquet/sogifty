@@ -2,9 +2,12 @@ package com.sogifty.activities;
 
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,20 +20,20 @@ import com.sogifty.model.Gifts;
 import com.sogifty.tasks.DownloadImageTask;
 
 public class GiftPager extends Fragment {
-
-
+	private static final int NB_GIFTS_DEFAULT_VALUE = 0;
+	private static final String NB_GIFTS = "nb_gifts";
 	public static final String ARG_PAGE = "page";
-
 	private static final String GIFTARG = "gifts";
 
 	private int pageNumber;
 	private Gifts gifts;
+	private int max_gifts;
 	
-	public static GiftPager create(int _pageNumber, Gifts giftsToPrint) {
+	public static GiftPager create(int _pageNumber, Gifts giftsToPrint, int maxGifts) {
 		GiftPager fragment = new GiftPager();
 		Bundle args = new Bundle();
 		args.putInt(ARG_PAGE, _pageNumber);
-		
+		args.putInt(NB_GIFTS, maxGifts);
 		args.putSerializable(GIFTARG, giftsToPrint);
 		fragment.setArguments(args);
 		return fragment;
@@ -44,6 +47,7 @@ public class GiftPager extends Fragment {
 		super.onCreate(savedInstanceState);
 		pageNumber = getArguments().getInt(ARG_PAGE);
 		gifts = (Gifts) getArguments().getSerializable(GIFTARG);
+	
 //		if(gifts != null && getView() != null){
 //			setGiftItems(getView(), gifts.getGiftList().get(((int)Math.random())%gifts.getGiftList().size()));
 //		}
@@ -59,8 +63,12 @@ public class GiftPager extends Fragment {
 		ViewGroup rootView = (ViewGroup) inflater
 				.inflate(R.layout.gift_pager_item, container, false);
 		int pos = getArguments().getInt(ARG_PAGE);
+		
+		int max_gift = getArguments().getInt(NB_GIFTS);
+		int mod = min(gifts.getGiftList().size(),max_gift);
 		if(gifts != null && (gifts.getGiftList().size() != 0) ){
-			setGiftItems(rootView, gifts.getGiftList().get(pos%gifts.getGiftList().size()));
+			System.out.println("position"+pos);
+			setGiftItems(rootView, gifts.getGiftList().get((pos)%mod));
 		}
 		else{
 			hideGiftItems(rootView);
@@ -68,6 +76,13 @@ public class GiftPager extends Fragment {
 		
 		
 		return rootView;
+	}
+
+	private int min(int size, int max_gift) {
+		if(size <= max_gift)
+			return size;
+		else
+			return max_gift;
 	}
 
 	public int getPageNumber() {
@@ -110,6 +125,6 @@ public class GiftPager extends Fragment {
 		price.setVisibility(TRIM_MEMORY_UI_HIDDEN);
 	 	
 	}
-		
+	
 		
 }

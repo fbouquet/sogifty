@@ -6,6 +6,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
@@ -66,6 +69,7 @@ public class GetGiftsTask extends AsyncTask<String, String, Boolean>{
 	@Override
 	protected void onPostExecute(Boolean resultCall){
 		if(resultCall.booleanValue()){
+			Collections.sort(giftList);
 			callback.onGetGiftsComplete(giftList);
 		}
 		else{

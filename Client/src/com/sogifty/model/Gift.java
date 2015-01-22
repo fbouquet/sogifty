@@ -2,7 +2,7 @@ package com.sogifty.model;
 
 import java.io.Serializable;
 
-public class Gift implements Serializable{
+public class Gift implements Comparable<Gift>, Serializable{
 	/**
 	 * 
 	 */
@@ -64,6 +64,22 @@ public class Gift implements Serializable{
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	@Override
+	public int compareTo(Gift another) {
+
+		int anotherId = Integer.parseInt(another.getId());
+		int id = Integer.parseInt(this.getId());
+
+		if(anotherId > id){
+			return -1;
+		}
+		else if(anotherId < id){
+			return 1;
+		}
+		else{
+			return 0;
+		}
 	}
 
 
