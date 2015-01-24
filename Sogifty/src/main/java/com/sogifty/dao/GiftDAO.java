@@ -13,11 +13,12 @@ import com.sogifty.dao.dto.Gift;
 import com.sogifty.exception.SogiftyException;
 
 public class GiftDAO extends AbstractDAO<Gift> {
-
-	public GiftDAO() {
-		this.setType(Gift.class);
-	}
 	
+	@Override
+	public Class<Gift> getType() {
+		return Gift.class;
+	}
+
 	public void createGifts(List<Gift> gifts) throws SogiftyException {
 		Session session = null;
 		Transaction t = null;

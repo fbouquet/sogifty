@@ -14,8 +14,10 @@ import com.sogifty.util.persistance.HibernateUtil;
 
 
 public class FriendDAO extends AbstractDAO<Friend> {
-	public FriendDAO() {
-		this.setType(Friend.class);
+	
+	@Override
+	public Class<Friend> getType() {
+		return Friend.class;
 	}
 	
 	public Set<Tag> getTags(int friendId) throws SogiftyException {
