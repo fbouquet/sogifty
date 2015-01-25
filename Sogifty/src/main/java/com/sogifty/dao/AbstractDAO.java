@@ -32,15 +32,9 @@ public abstract class AbstractDAO<T extends DTO> {
 			t = session.beginTransaction();
 			createdObjectId = (Integer) session.save(obj);
 			t.commit();
-		} catch(ConstraintViolationException e) {
+		} catch(Exception e) {
 			rollbackTransaction(t);
-			logger.fatal("This object is already stored in the db : " + e);
-			throw new SogiftyException(Response.Status.CONFLICT);
-		}
-		catch(Exception e) {
-			rollbackTransaction(t);
-			logger.fatal("Could not create the object: " + e);
-			throw new SogiftyException(Response.Status.INTERNAL_SERVER_ERROR);
+			throwAppropriateSogiftyExceptionForCreate(e);
 		} finally {
 			closeSession(session);
 		}
@@ -110,14 +104,9 @@ public abstract class AbstractDAO<T extends DTO> {
 			T objectToDelete = getById(id);
 			session.delete(objectToDelete);
 			t.commit();
-		} catch(StaleStateException e) {
-			rollbackTransaction(t);
-			logger.fatal("The object to delete doesn't exist: " + e);
-			throw new SogiftyException(Response.Status.NOT_FOUND);
 		} catch(Exception e) {
 			rollbackTransaction(t);
-			logger.fatal("Could not delete the object: " + e);
-			throw new SogiftyException(Response.Status.INTERNAL_SERVER_ERROR);
+			throwAppropriateSogiftyExceptionForDelete(e);			
 		} finally {
 			closeSession(session);
 		}
@@ -160,6 +149,27 @@ public abstract class AbstractDAO<T extends DTO> {
 		}
 
 		return found;
+	}
+	
+	protected void throwAppropriateSogiftyExceptionForCreate(Exception e) throws SogiftyException {
+		if (e instanceof ConstraintViolationException) {
+			logger.fatal("This object is already stored in the db: " + e);
+			throw new SogiftyException(Response.Status.CONFLICT);
+		} else {
+			logger.fatal("Could not create the object: " + e);
+			throw new SogiftyException(Response.Status.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	protected void throwAppropriateSogiftyExceptionForDelete(Exception e)
+			throws SogiftyException {
+		if (e instanceof StaleStateException) {
+			logger.fatal("The object to delete doesn't exist: " + e);
+			throw new SogiftyException(Response.Status.NOT_FOUND);
+		} else {
+			logger.fatal("Could not delete the object: " + e);
+			throw new SogiftyException(Response.Status.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	/***
