@@ -101,41 +101,7 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 
 
 		});
-
-		
-
-		//		deleteBtn.setText(R.string.deleteModeBtnFalse);
-		//		deleteBtn.setOnClickListener(new View.OnClickListener() {
-		//
-		//			public void onClick(View view) {
-		//
-		//				deleteMode = !deleteMode;
-		//
-		//				if (deleteMode) {
-		//					listJson.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-		//					friendsToDelete.clear();
-		//				} else {
-		//					//deleteBtn.setText(R.string.deleteModeBtnFalse);
-		//					removeCheckedElementFromList();
-		//					listJson.setChoiceMode(ListView.CHOICE_MODE_NONE);
-		//				}
-		//			}
-		//		});
-
-
 	}
-
-
-
-
-	//	private void createListView() {
-	//		listJson.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-	//		createFalseList();
-	//		//friendsList = new GetFriendListTask(FriendListActivity.this).execute(loadUserId());
-	//		adapter = new FriendAdapter(this, friendsList.getListFriends());
-	//		listJson.setAdapter(adapter);
-	//		userAdapter = ((FriendAdapter) listJson.getAdapter());
-	//	}
 
 
 	private void initLayout() {
@@ -161,13 +127,7 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 			if(friendsList.getListFriends().isEmpty())
 				displayMessage(getResources().getString(R.string.friendlist_no_friend));
 		}
-		//		listJson.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-		//		//createFalseList();
-		//		if(friendsList.getListFriends().isEmpty())
-		//			displayMessage("you have no friend, add one");
-		//		adapter = new FriendAdapter(this, friendsList.getListFriends(), firstFriendGifts);
-		//		listJson.setAdapter(adapter);
-		//		userAdapter = ((FriendAdapter) listJson.getAdapter());
+		
 	}
 
 	@Override
@@ -201,26 +161,17 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 		FriendAdapter f = (FriendAdapter) parent.getAdapter();
 		Friend o = (Friend) f.getItem(position);
 		int idValue = o.getId();
-		//		Toast.makeText(
-		//				FriendListActivity.this,
-		//				ITEM_POSITION + o.getId()
-		//						+ CLICKED, Toast.LENGTH_LONG).show();
 		if (!friendsToDelete.contains(idValue)){
 			friendsToDelete.add(idValue);
 			System.out.println(idValue);
 		}
 		else
 			friendsToDelete.remove(friendsToDelete.indexOf(idValue));
-
-		//		Log.i("id is",
-		//				((User) listJson.getAdapter().getItem(position))
-		//						.getNom());
 	}
 
 	public void createFriendDetailsActivity(int position){
 		SparseBooleanArray checkedPositions = listJson
 				.getCheckedItemPositions();
-		//Log.i(ID_TO_REMOVE_LIST, checkedPositions.toString());
 		Friend f = (Friend) listJson.getAdapter().getItem(position);
 
 		Intent intent = FriendDetailsActivity.getIntent(this, f);
@@ -345,7 +296,7 @@ public class FriendListActivity extends Activity implements OnGetFriendListTaskL
 
 	@Override
 	public void onBackPressed() {
-		finish();
+		moveTaskToBack(true);
 	}
 
 

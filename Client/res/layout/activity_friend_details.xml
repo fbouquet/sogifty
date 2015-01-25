@@ -56,44 +56,12 @@
                 android:textSize="20sp" />
         </LinearLayout>
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/frienddetails_tv_tags"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/frienddetails_tv_tags" />
-
-    <TextView
-        android:id="@+id/frienddetails_all_tags"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="" />
-
-    <LinearLayout
-        android:id="@+id/frienddetails_l_tags"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        android:weightSum="2" >
-
-        <LinearLayout
-            android:id="@+id/frienddetails_l_ltags"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical" >
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/frienddetails_l_rtags"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical" >
-        </LinearLayout>
-    </LinearLayout>
-
+	
+	<TextView
+                android:id="@+id/frienddetails_tv_tags"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp" />
     <LinearLayout
         android:id="@+id/frienddetails_l_viewPager"
         android:layout_width="match_parent"

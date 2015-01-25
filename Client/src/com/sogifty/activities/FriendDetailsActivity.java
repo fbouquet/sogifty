@@ -29,7 +29,7 @@ import com.sogifty.tasks.GetGiftsTask;
 import com.sogifty.tasks.listeners.OnGetGiftsTaskListener;
 
 public class FriendDetailsActivity extends Activity implements OnGetGiftsTaskListener{
-	
+
 	static final String FRIEND = "Friend";
 
 	private static final Object WOMAN = "woman";
@@ -39,62 +39,59 @@ public class FriendDetailsActivity extends Activity implements OnGetGiftsTaskLis
 	TextView firstnameText;
 	TextView remaingDate;
 	TextView age;
-	TextView tagsView;
 	ImageView ivAvatar;
-	
+
 	private ViewPager giftPager;
-    private GiftPagerAdapter giftPagerAdapter;
-    private List<Gift> gifts;
-    
-    private Friend friend;
-    
-    public static Intent getIntent(Context ctxt, Friend friend){
-		
-    	Intent newActivityIntent = new Intent(ctxt, FriendDetailsActivity.class);
+	private GiftPagerAdapter giftPagerAdapter;
+	private List<Gift> gifts;
+
+	private Friend friend;
+
+	public static Intent getIntent(Context ctxt, Friend friend){
+
+		Intent newActivityIntent = new Intent(ctxt, FriendDetailsActivity.class);
 		newActivityIntent.putExtra(FRIEND, friend);
-	
-    	return newActivityIntent;
+
+		return newActivityIntent;
 	}
-	
-    
-    @Override
+
+
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_friend_details);
 		initFriendInformations();
 		new GetGiftsTask(this, this, false).execute(String.valueOf(friend.getId()));
-		
+
 	}
-    
-    
+
+
 	private void initActivity() {
 		nameText = (TextView) findViewById(R.id.frienddetails_tv_name);
 		firstnameText =(TextView) findViewById(R.id.frienddetails_tv_firstname);
 		remaingDate =(TextView) findViewById(R.id.frienddetails_tv_RemainingDate);
 		age = (TextView) findViewById(R.id.frienddetails_tv_age);
-		tagsView = (TextView) findViewById(R.id.frienddetails_all_tags);
 		ivAvatar = (ImageView) findViewById(R.id.frienddetails_iv_friendAvatar);
 		nameText.setText(friend.getNom());
 		firstnameText.setText(friend.getPrenom());
 		remaingDate.setText(remaingDate.getText() + String.format("%d", ParserJson.getRemainingDay(friend.getBirthdayDate())));
 		age.setText(age.getText() + String.format("%d",ParserJson.getAge(friend.getBirthdayDate())));
-		if(friend.getTagsinPointString().compareTo("") != 0){
-			tagsView.setText(friend.getTagsinPointString());
-		}
-		else{
-			tagsView.setText(getResources().getString(R.string.frienddetails_no_taste));
-			tagsView.setTypeface(null, Typeface.ITALIC);
-		}
+		if(friend.getTagsinPointString().compareTo("") == 0){ 
+			TextView tagsView = (TextView) findViewById(R.id.frienddetails_tv_tags);
+			tagsView.setText(getResources().getString(R.string.frienddetails_no_taste)); 
+			tagsView.setTypeface(null, Typeface.ITALIC); 
+		} 
+
 		initAvatar();
 		giftPager = (ViewPager) findViewById(R.id.frienddetails_vp_giftPager);
 		giftPagerAdapter = new GiftPagerAdapter(getFragmentManager(),new Gifts(gifts), this);
-        giftPager.setAdapter(giftPagerAdapter);
-        
-       
-         
+		giftPager.setAdapter(giftPagerAdapter);
+
+
+
 	}
-	
-	
+
+
 	private void initFriendInformations() {
 		Intent tmp = getIntent();
 		friend = (Friend) tmp.getSerializableExtra(FRIEND);
@@ -105,11 +102,11 @@ public class FriendDetailsActivity extends Activity implements OnGetGiftsTaskLis
 		createFriendListActivity();
 		overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
 	}
-	
-	
+
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		
+
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.friendetails_menu, menu);
 		return true;
@@ -136,40 +133,40 @@ public class FriendDetailsActivity extends Activity implements OnGetGiftsTaskLis
 
 
 	protected void initAvatar () {
-    
+
 		Bitmap bitmap   = null;
-        String path = friend.getAvatar();
-        if (path !=null){
-        	if (path.equals(WOMAN) || path.equals(MAN)){
-    			if (path.equals(MAN)){
-    				InputStream is = getResources().openRawResource(R.drawable.man);
-    				bitmap = BitmapFactory.decodeStream(is);
-    			}
-    			else if (path.equals(WOMAN)){
-    				InputStream is = getResources().openRawResource(R.drawable.woman);
-    				bitmap = BitmapFactory.decodeStream(is);
-    							}
-    		}
-        	else {
-        		bitmap = BitmapFactory.decodeFile(path);
-        	}
-        	if (bitmap != null) {
-        		int rotate = getOrientation(path);
-        		int imgHeight = bitmap.getHeight();
-        		int imgWidth = bitmap.getWidth();
-        		if(imgHeight<imgWidth){
-        			bitmap = changeImgOrientation(bitmap, rotate);
-        			imgHeight = bitmap.getHeight();
-        			imgWidth = bitmap.getWidth();
-        		}
-        		float fixedHeight = dpToPx(155);
-        		float rate = fixedHeight/imgHeight;
-        		Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, Math.round(imgWidth*rate), Math.round(fixedHeight), true);
-        		ivAvatar.setImageBitmap(resizedBitmap);
-        	}
-        }
-    }
- 
+		String path = friend.getAvatar();
+		if (path !=null){
+			if (path.equals(WOMAN) || path.equals(MAN)){
+				if (path.equals(MAN)){
+					InputStream is = getResources().openRawResource(R.drawable.man);
+					bitmap = BitmapFactory.decodeStream(is);
+				}
+				else if (path.equals(WOMAN)){
+					InputStream is = getResources().openRawResource(R.drawable.woman);
+					bitmap = BitmapFactory.decodeStream(is);
+				}
+			}
+			else {
+				bitmap = BitmapFactory.decodeFile(path);
+			}
+			if (bitmap != null) {
+				int rotate = getOrientation(path);
+				int imgHeight = bitmap.getHeight();
+				int imgWidth = bitmap.getWidth();
+				if(imgHeight<imgWidth){
+					bitmap = changeImgOrientation(bitmap, rotate);
+					imgHeight = bitmap.getHeight();
+					imgWidth = bitmap.getWidth();
+				}
+				float fixedHeight = dpToPx(155);
+				float rate = fixedHeight/imgHeight;
+				Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, Math.round(imgWidth*rate), Math.round(fixedHeight), true);
+				ivAvatar.setImageBitmap(resizedBitmap);
+			}
+		}
+	}
+
 	private int getOrientation(String path) {
 		int orientation = 0 ;
 		try {
@@ -192,25 +189,25 @@ public class FriendDetailsActivity extends Activity implements OnGetGiftsTaskLis
 		}
 	}
 
-	
+
 	private Bitmap changeImgOrientation(Bitmap bitmap, int rotate) {
 		Matrix matrix = new Matrix();
 		matrix.postRotate(rotate);
-	    return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+		return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 	}
-		
+
 
 	private int dpToPx(int dp)
 	{
-	    float density = getApplicationContext().getResources().getDisplayMetrics().density;
-	    return Math.round((float)dp * density);
+		float density = getApplicationContext().getResources().getDisplayMetrics().density;
+		return Math.round((float)dp * density);
 	}
 
 	@Override
 	public void onGetGiftsComplete(List<Gift> giftList) {
 		gifts = giftList;
 		initActivity();
-		
+
 	}
 
 
@@ -218,7 +215,7 @@ public class FriendDetailsActivity extends Activity implements OnGetGiftsTaskLis
 	public void onGetGiftsFailed(String message) {
 		displayMessage(message);
 	}
-	
+
 	private void displayMessage(String message) {
 		AlertDialog.Builder adb = new AlertDialog.Builder(this);
 		adb.setMessage(message);
