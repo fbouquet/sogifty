@@ -3,6 +3,7 @@ package com.sogifty.service.recommendation;
 import org.jsoup.nodes.Element;
 
 import com.sogifty.dao.dto.Tag;
+import com.sogifty.dao.dto.Website;
 
 public class CDiscountGiftsFetcher extends AbstractGiftsFetcher {
 
@@ -18,6 +19,10 @@ public class CDiscountGiftsFetcher extends AbstractGiftsFetcher {
 	private final static String PRODUCT_PRICE_SELECTOR					= PRODUCT_BASE_SELECTOR + "[itemprop=price]";
 	private final static String PRODUCT_PICTURE_SELECTOR				= PRODUCT_BASE_SELECTOR + "[itemprop=image]";
 	private final static String PRODUCT_PICTURE_URL_ATTRIBUTE			= "href";
+	
+	public CDiscountGiftsFetcher(int nbGiftsToFetch) {
+		super(nbGiftsToFetch);
+	}
 	
 	public String getSearchUrl(Tag tag) {
 		return BASE_URL + SEARCH_URL_SUFFIX + "/" + convertSpaces(tag.getLabel()) + END_SEARCH_URL;
@@ -68,5 +73,10 @@ public class CDiscountGiftsFetcher extends AbstractGiftsFetcher {
 	@Override
 	protected String getProductPictureUrl(Element element) {
 		return element.attr(PRODUCT_PICTURE_URL_ATTRIBUTE);
+	}
+
+	@Override
+	protected Website getWebSite() {
+		return Website.CDISCOUNT;
 	}
 }

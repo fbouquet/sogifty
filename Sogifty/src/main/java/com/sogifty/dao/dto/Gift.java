@@ -7,6 +7,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -51,6 +53,10 @@ public class Gift implements DTO {
 				joinColumns = {@JoinColumn(name = "gift_id", nullable = false, updatable = false)},
 				inverseJoinColumns = {@JoinColumn(name = "tag_id", nullable = false, updatable = false)})
 	private List<Tag> tags;
+	
+	@Column(name = "website")
+	@Enumerated(EnumType.STRING)
+	private Website website;
 
 	public String getName() {
 		return name;
@@ -122,6 +128,14 @@ public class Gift implements DTO {
 	public Gift setLastUpdate(Date lastUpdate) {
 		this.lastUpdate = lastUpdate;
 		return this;
+	}
+
+	public Website getWebsite() {
+		return website;
+	}
+
+	public void setWebsite(Website website) {
+		this.website = website;
 	}
 
 	public List<Tag> getTags() {
