@@ -13,4 +13,8 @@ public class LoggingService {
 	public void clearLogs() {
 		LoggingDAO.clearLogs();
 	}
+
+	public void changeRefreshFrequency(int frequencyInSeconds) {
+		LoggingDAO.changeRefreshFrequency(frequencyInSeconds);
+	}
 }

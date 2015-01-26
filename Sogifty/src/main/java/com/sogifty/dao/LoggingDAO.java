@@ -6,23 +6,8 @@ import java.util.GregorianCalendar;
 
 public class LoggingDAO {
 
-	private static final String PAGE_REFRESH_INTERVAL_IN_SECONDS = "3";
 	private static final String BOOTSTRAPCDN_URL = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css";
 	private static final String PAGE_TITLE = "SoGifty server logs";
-
-	private static final String HTML_HEADER = "<!doctype html>\n" +
-			"<html lang=\"fr\">\n" +
-			"\t<head>\n" +
-			"\t\t<meta http-equiv=\"refresh\" content=\"" + PAGE_REFRESH_INTERVAL_IN_SECONDS + "\">\n" +
-			"\t\t<meta charset=\"utf-8\">\n" +
-			"\t\t<link href=\"" + BOOTSTRAPCDN_URL + "\" rel=\"stylesheet\">\n" +
-			"\t\t<title>" + PAGE_TITLE + "</title>\n" +
-			"\t</head>\n" +
-			"\t<body>\n" +
-			"\t\t<div class=\"container\">\n" +
-			"\t\t\t<div class=\"jumbotron\">\n" +
-			"\t\t\t\t<h1 class=\"text-center\">" + PAGE_TITLE + "</h1>\n" +
-			"\t\t\t</div>\n";
 
 	private static final String HTML_FOOTER = "\t\t</div>\n" + "\t</body>\n</html>";
 
@@ -39,20 +24,40 @@ public class LoggingDAO {
 	private static final Integer SAFETY_MARGIN = 512;
 	private static final Integer LOGGING_STRING_LIMIT_LENGTH = Integer.MAX_VALUE - SAFETY_MARGIN;
 
+	private static int refreshInterval = 5;
+	private static String HTML_HEADER_BEGIN = "<!doctype html>\n" +
+			"<html lang=\"fr\">\n" +
+			"\t<head>\n" +
+			"\t\t<meta http-equiv=\"refresh\" content=\"";
+	private static String HTML_HEADER_END = "\">\n" +
+			"\t\t<meta charset=\"utf-8\">\n" +
+			"\t\t<link href=\"" + BOOTSTRAPCDN_URL + "\" rel=\"stylesheet\">\n" +
+			"\t\t<title>" + PAGE_TITLE + "</title>\n" +
+			"\t</head>\n" +
+			"\t<body>\n" +
+			"\t\t<div class=\"container\">\n" +
+			"\t\t\t<div class=\"jumbotron\">\n" +
+			"\t\t\t\t<h1 class=\"text-center\">" + PAGE_TITLE + "</h1>\n" +
+			"\t\t\t</div>\n";
+	
 	private static String loggingData = new String(); // Holds the variable content of the log page's HTML code
 	private static Calendar lastDate = null;
 
 	public static void clearLogs() {
 		loggingData = new String();
 	}
+	
+	public static void changeRefreshFrequency(int frequencyInSeconds) {
+		refreshInterval = frequencyInSeconds;
+	}
 
 	public String getLoggingData() {
 		// If there are no logs, return an HTML page saying it
 		if (loggingData == null || loggingData.isEmpty()) {
-			return HTML_HEADER + NO_LOGS_MESSAGE + HTML_FOOTER;
+			return buildHTMLHeader() + NO_LOGS_MESSAGE + HTML_FOOTER;
 		}
 		// Else return an HTML page displaying the logs
-		return HTML_HEADER + loggingData + HTML_FOOTER;
+		return buildHTMLHeader() + loggingData + HTML_FOOTER;
 	}
 
 	public static void addLoggingData(String data) {
@@ -81,6 +86,10 @@ public class LoggingDAO {
 		}
 	}
 
+	private String buildHTMLHeader() {
+		return HTML_HEADER_BEGIN + Integer.toString(refreshInterval) + HTML_HEADER_END;
+	}
+	
 	private static String getLogTableRow(String data) {
 		return new StringBuilder("\t\t\t\t<tr>\n")
 		.append("\t\t\t\t\t<td>").append(getFormatedTime()).append("</td>\n")
