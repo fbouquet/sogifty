@@ -55,3 +55,6 @@ create table preferences (
     nb_tags     integer             not null,
     nb_gifts    integer             not null
 );
+
+insert into preferences(nb_tags, nb_gifts) values
+	(10, 10);
