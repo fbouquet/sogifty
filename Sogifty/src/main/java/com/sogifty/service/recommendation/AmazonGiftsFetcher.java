@@ -4,6 +4,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.sogifty.dao.dto.Tag;
+import com.sogifty.dao.dto.Website;
 
 public class AmazonGiftsFetcher extends AbstractGiftsFetcher {
 
@@ -20,6 +21,10 @@ public class AmazonGiftsFetcher extends AbstractGiftsFetcher {
 	private final static String PRODUCT_PICTURE_URL_ATTRIBUTE			= "src";
 	
 	private final static String EURO_SYMBOL 							= "€";
+	
+	public AmazonGiftsFetcher(int nbGiftsToFetch) {
+		super(nbGiftsToFetch);
+	}
 	
 	public String getSearchUrl(Tag tag) {
 		return BASE_URL + SEARCH_URL_SUFFIX + convertSpaces(tag.getLabel());
@@ -80,5 +85,10 @@ public class AmazonGiftsFetcher extends AbstractGiftsFetcher {
 	@Override
 	protected String getProductPictureUrl(Element element) {
 		return element.attr(PRODUCT_PICTURE_URL_ATTRIBUTE);
+	}
+
+	@Override
+	protected Website getWebSite() {
+		return Website.AMAZON;
 	}
 }

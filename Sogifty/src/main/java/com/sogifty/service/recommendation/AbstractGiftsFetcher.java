@@ -16,39 +16,45 @@ import org.jsoup.select.Elements;
 import com.sogifty.dao.GiftDAO;
 import com.sogifty.dao.dto.Gift;
 import com.sogifty.dao.dto.Tag;
+import com.sogifty.dao.dto.Website;
 import com.sogifty.exception.SogiftyException;
 
 public abstract class AbstractGiftsFetcher {
 	
 	private final String USER_AGENT = "Mozilla";
 	private static final Logger logger = Logger.getLogger(AbstractGiftsFetcher.class);
-	private static final int NB_GIFTS_TO_FETCH = 3;
 	private static final String DEFAULT_DESCRIPTION = "Pas de description";
+	private int nbGiftsToFetch;
 	
 	private GiftDAO giftDao = new GiftDAO();
 	
-	protected abstract String getSearchUrl(Tag tag);
-	protected abstract String getProductUrlSelector();
-	protected abstract String getProductNameSelector();
-	protected abstract String getProductDescriptionSelector();
-	protected abstract String getProductPriceSelector();
-	protected abstract String getProductPictureSelector();
+	protected abstract String	getSearchUrl(Tag tag);
+	protected abstract String	getProductUrlSelector();
+	protected abstract String	getProductNameSelector();
+	protected abstract String	getProductDescriptionSelector();
+	protected abstract String	getProductPriceSelector();
+	protected abstract String	getProductPictureSelector();
+	protected abstract Website	getWebSite();
 	
-	protected abstract String getProductUrl(Element element);
-	protected abstract String getProductName(Element element);
-	protected abstract String getProductDescription(Element element);
-	protected abstract String getProductPrice(Element element);
-	protected abstract String getProductPictureUrl(Element element);
+	protected abstract String	getProductUrl(Element element);
+	protected abstract String	getProductName(Element element);
+	protected abstract String	getProductDescription(Element element);
+	protected abstract String	getProductPrice(Element element);
+	protected abstract String	getProductPictureUrl(Element element);
+	
+	public AbstractGiftsFetcher(int nbGiftsToFetch) {
+		this.nbGiftsToFetch = nbGiftsToFetch;
+	}
 	
 	public List<Gift> fetchGifts(Tag tag) throws SogiftyException {
-		logger.info("Starting gift Fetch for tag '" + tag.getLabel() + "'.");
+		logger.info("Starting gift fetch for tag '" + tag.getLabel() + "'.");
 		List<Gift> gifts = new ArrayList<Gift>();
 		Document fetchedProductList;
 		try {
 			fetchedProductList = Jsoup.connect(getSearchUrl(tag)).userAgent(USER_AGENT).get();
 			
 			Elements productsUrlElts = fetchedProductList.select(getProductUrlSelector());
-			for (int i = 0; i < productsUrlElts.size() && i < NB_GIFTS_TO_FETCH; ++i) {
+			for (int i = 0; i < productsUrlElts.size() && i < nbGiftsToFetch; ++i) {
 				Gift gift = null;
 				Element product = productsUrlElts.get(i);
 				String productUrl = getProductUrl(product);
@@ -116,6 +122,7 @@ public abstract class AbstractGiftsFetcher {
 		gift.setUrl(giftUrl);
 		gift.setCreation(new Date());
 		gift.setLastUpdate(new Date());
+		gift.setWebsite(getWebSite());
 		
 		return gift;
 	}
