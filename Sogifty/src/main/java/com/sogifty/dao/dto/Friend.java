@@ -25,33 +25,57 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.sogifty.util.serialization.JsonDateDeserializer;
 import com.sogifty.util.serialization.JsonDateSerializer;
 
+/**
+ * Entity representing a friend of an user.
+ */
 @Entity
 @Table(name = "friend")
 public class Friend implements DTO {
 	
+	/**
+	 * Unique id.
+	 */
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
+	/**
+	 * Last name of the friend.
+	 */
 	@Column(name = "name")
 	private String name;
 	
+	/**
+	 * First name of the friend.
+	 */
 	@Column(name = "first_name")
 	private String firstName;
 	
+	/**
+	 * The path of the avatar, more precisely the path and of the file in the mobile phone.
+	 */
 	@Column(name = "avatar_path")
 	private String avatarPath;
 	
+	/**
+	 * The birthdate of the friend.
+	 */
 	@Column(name = "birthdate")
 	@Temporal(TemporalType.DATE)
 	private Date birthdate;
 	
+	/**
+	 * The user owning this friend.
+	 */
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "app_user_id")
 	@JsonBackReference
 	private User appUser;
 
+	/**
+	 * The preferences of the friend, described by a set of tags.
+	 */
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(	name = "enjoy", 
 				joinColumns = {@JoinColumn(name = "friend_id")},

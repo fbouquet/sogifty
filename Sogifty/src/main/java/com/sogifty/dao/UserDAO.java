@@ -14,6 +14,9 @@ import com.sogifty.dao.dto.User;
 import com.sogifty.exception.SogiftyException;
 import com.sogifty.util.persistance.HibernateUtil;
 
+/**
+ * Data Access Object dealing with the User objects.
+ **/
 public class UserDAO extends AbstractDAO<User> {
 	
 	@Override
@@ -21,6 +24,12 @@ public class UserDAO extends AbstractDAO<User> {
 		return User.class;
 	}
 
+	/**
+	 * Get the friends of a user.
+	 * @param userId The id of the user.
+	 * @return A set of Friend.
+	 * @throws SogiftyException
+	 */
 	public Set<Friend> getFriends(int userId) throws SogiftyException {
 		Session session = null;
 		try {
@@ -35,6 +44,12 @@ public class UserDAO extends AbstractDAO<User> {
 		}
 	}
 
+	/**
+	 * Get the id of a user.
+	 * @param user The user.
+	 * @return The id.
+	 * @throws SogiftyException
+	 */
 	public Integer getId(User user) throws SogiftyException {
 		Session session = null;
 		Integer userFoundId = null;

@@ -15,21 +15,36 @@ import javax.persistence.Table;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonManagedReference;
 
+/**
+ * Entity representing a user of the application.
+ */
 @Entity
 @Table(name = "app_user")
 public class User implements DTO {
 	
+	/**
+	 * Unique id.
+	 */
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
+	/**
+	 * The password of the user
+	 */
 	@Column(name = "pwd")
 	private String pwd;
 	
+	/**
+	 * The email of the user, used for the loggin feature.
+	 */
 	@Column(name = "email")
 	private String email;
 	
+	/**
+	 * The friends of the user.
+	 */
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "appUser", cascade = CascadeType.ALL)
 	@Column(nullable = true)
 	@JsonManagedReference

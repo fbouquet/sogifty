@@ -4,6 +4,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+/**
+ * Data Access Object dealing with the logging feature.
+ **/
 public class LoggingDAO {
 
 	private static final String BOOTSTRAPCDN_URL = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css";
@@ -43,14 +46,25 @@ public class LoggingDAO {
 	private static String loggingData = new String(); // Holds the variable content of the log page's HTML code
 	private static Calendar lastDate = null;
 
+	/**
+	 * Delete all the existing logs.
+	 **/
 	public static void clearLogs() {
 		loggingData = new String();
 	}
 	
+	/**
+	 * Modify the frequency of the page refresh.
+	 * @param frequencyInSeconds The frequency, in seconds.
+	 **/
 	public static void changeRefreshFrequency(int frequencyInSeconds) {
 		refreshInterval = frequencyInSeconds;
 	}
 
+	/**
+	 * Get the current logs.
+	 * @return The log, i.e. a HTML page.
+	 **/
 	public String getLoggingData() {
 		// If there are no logs, return an HTML page saying it
 		if (loggingData == null || loggingData.isEmpty()) {
@@ -60,6 +74,10 @@ public class LoggingDAO {
 		return buildHTMLHeader() + loggingData + HTML_FOOTER;
 	}
 
+	/**
+	 * Add a log to the existing logs.
+	 * @param data The log to insert.
+	**/
 	public static void addLoggingData(String data) {
 		// If the String if too long, clear the data
 		if (loggingData.length() >= LOGGING_STRING_LIMIT_LENGTH) {
@@ -86,10 +104,19 @@ public class LoggingDAO {
 		}
 	}
 
+	/**
+	 * Build the header of the HTML page representing the logs.
+	 * @param The HTML page header.
+	 **/
 	private String buildHTMLHeader() {
 		return HTML_HEADER_BEGIN + Integer.toString(refreshInterval) + HTML_HEADER_END;
 	}
 	
+	/**
+	 * Get a line of the log, to be inserted in the corresponding table.
+	 * @param data The log line.
+	 * @return The HTML formatted log line.
+	 **/
 	private static String getLogTableRow(String data) {
 		return new StringBuilder("\t\t\t\t<tr>\n")
 		.append("\t\t\t\t\t<td>").append(getFormatedTime()).append("</td>\n")
@@ -98,6 +125,10 @@ public class LoggingDAO {
 		.toString();
 	}
 
+	/**
+	 * Get the current time in a nice format (i.e 02:00:00)
+	 * @return The formated current time
+	 **/
 	private static String getFormatedTime() {
 		Calendar cal = new GregorianCalendar();
 		cal.setTime(new Date());
@@ -107,6 +138,12 @@ public class LoggingDAO {
 				.toString();
 	}
 
+	
+	/**
+	 * Get the day date in a suitable HTML format (h2 title).
+	 * @param cal The calendar representing the date to be print.
+	 * @return The date.
+	 */
 	private static String getDate(Calendar cal) {
 		return new StringBuilder("\t\t\t<h2 class=\"text-center\">")
 		.append(printableTimeElement(String.valueOf(cal.get(Calendar.DAY_OF_MONTH)))).append("/")
@@ -116,11 +153,11 @@ public class LoggingDAO {
 		.toString();
 	}
 
-	/***
+	/**
 	 * For time elements before 10, print a '0' before (e.g.: 02 instead of 2)
-	 * @param e : the time element
-	 * @return the printable time element
-	 */
+	 * @param e The time element
+	 * @return The printable time element
+	 **/
 	private static String printableTimeElement(String e) {
 		return e.length() == 1 ? e = "0" + e : e;
 	}
