@@ -20,7 +20,7 @@ public class AmazonGiftsFetcher extends AbstractGiftsFetcher {
 	private final static String PRODUCT_PICTURE_SELECTOR				= "#landingImage ";
 	private final static String PRODUCT_PICTURE_URL_ATTRIBUTE			= "src";
 	
-	private final static String EURO_SYMBOL 							= "€";
+	private final static String EURO_SYMBOL 							= "\u20AC";
 	
 	public AmazonGiftsFetcher(int nbGiftsToFetch) {
 		super(nbGiftsToFetch);
