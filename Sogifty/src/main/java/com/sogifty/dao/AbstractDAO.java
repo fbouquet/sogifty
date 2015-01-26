@@ -22,17 +22,8 @@ public abstract class AbstractDAO<T extends DTO> {
 
 	protected final Logger logger = Logger.getLogger(getClass());
 	protected SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-	private Class<T> type;
-	
-	public Class<T> getType() {
-		return type;
-	}
 
-	public void setType(Class<T> type) {
-		this.type = type;
-	}
-
-	public Integer create(T obj) throws SogiftyException {
+	public final Integer create(T obj) throws SogiftyException {
 		Session session = null;
 		Transaction t = null;
 		Integer createdObjectId = null;
@@ -41,15 +32,9 @@ public abstract class AbstractDAO<T extends DTO> {
 			t = session.beginTransaction();
 			createdObjectId = (Integer) session.save(obj);
 			t.commit();
-		} catch(ConstraintViolationException e) {
+		} catch(Exception e) {
 			rollbackTransaction(t);
-			logger.fatal("This object is already stored in the db : " + e);
-			throw new SogiftyException(Response.Status.CONFLICT);
-		}
-		catch(Exception e) {
-			rollbackTransaction(t);
-			logger.fatal("Could not create the object: " + e);
-			throw new SogiftyException(Response.Status.INTERNAL_SERVER_ERROR);
+			throwAppropriateSogiftyExceptionForCreate(e);
 		} finally {
 			closeSession(session);
 		}
@@ -57,7 +42,7 @@ public abstract class AbstractDAO<T extends DTO> {
 		return createdObjectId;
 	}
 
-	public Integer update(T obj) throws SogiftyException {
+	public final Integer update(T obj) throws SogiftyException {
 		if (obj.getId() == null) {
 			logger.fatal("Could not find object to update in database");
 			throw new SogiftyException(Response.Status.NOT_FOUND);
@@ -95,10 +80,10 @@ public abstract class AbstractDAO<T extends DTO> {
 	}
 
 	@SuppressWarnings("unchecked")
-	private T updateFields(T objectToUpdate, T updatedObject) throws SogiftyException {
+	private final T updateFields(T objectToUpdate, T updatedObject) throws SogiftyException {
 		T updated = null;
 		try {
-			T instance = type.newInstance();
+			T instance = getType().newInstance();
 			updated = (T) instance.updateFields(objectToUpdate, updatedObject);
 		} catch (InstantiationException e) {
 			logger.fatal("Could not update the object: " + e);
@@ -110,7 +95,7 @@ public abstract class AbstractDAO<T extends DTO> {
 		return updated;
 	}
 
-	public void delete(Integer id) throws SogiftyException {
+	public final void delete(Integer id) throws SogiftyException {
 		Session session = null;
 		Transaction t = null;
 		try {
@@ -119,21 +104,16 @@ public abstract class AbstractDAO<T extends DTO> {
 			T objectToDelete = getById(id);
 			session.delete(objectToDelete);
 			t.commit();
-		} catch(StaleStateException e) {
-			rollbackTransaction(t);
-			logger.fatal("The object to delete doesn't exist: " + e);
-			throw new SogiftyException(Response.Status.NOT_FOUND);
 		} catch(Exception e) {
 			rollbackTransaction(t);
-			logger.fatal("Could not delete the object: " + e);
-			throw new SogiftyException(Response.Status.INTERNAL_SERVER_ERROR);
+			throwAppropriateSogiftyExceptionForDelete(e);			
 		} finally {
 			closeSession(session);
 		}
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Set<T> findAll() throws SogiftyException {
+	public final Set<T> findAll() throws SogiftyException {
 		Session session = null;
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
@@ -148,7 +128,7 @@ public abstract class AbstractDAO<T extends DTO> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public T getById(Integer id) throws SogiftyException {
+	public final T getById(Integer id) throws SogiftyException {
 		if (id == null) {
 			logger.fatal("Could not find object without id in database");
 			throw new SogiftyException(Response.Status.BAD_REQUEST);
@@ -171,13 +151,41 @@ public abstract class AbstractDAO<T extends DTO> {
 		return found;
 	}
 	
-	protected void closeSession(Session session) {
+	protected void throwAppropriateSogiftyExceptionForCreate(Exception e) throws SogiftyException {
+		if (e instanceof ConstraintViolationException) {
+			logger.fatal("This object is already stored in the db: " + e);
+			throw new SogiftyException(Response.Status.CONFLICT);
+		} else {
+			logger.fatal("Could not create the object: " + e);
+			throw new SogiftyException(Response.Status.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	protected void throwAppropriateSogiftyExceptionForDelete(Exception e)
+			throws SogiftyException {
+		if (e instanceof StaleStateException) {
+			logger.fatal("The object to delete doesn't exist: " + e);
+			throw new SogiftyException(Response.Status.NOT_FOUND);
+		} else {
+			logger.fatal("Could not delete the object: " + e);
+			throw new SogiftyException(Response.Status.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	/***
+	 * Get the class that the DAO accesses.
+	 * @return the class that the DAO accesses. e.g.: in UserDAO -> return User.class
+	 */
+	// Function used in template methods: create, update, updateFields, delete, findAll, getById
+	public abstract Class<T> getType();
+	
+	protected final void closeSession(Session session) {
 		if (session != null) {
 			session.close();
 		}
 	}
 
-	protected void rollbackTransaction(Transaction t) {
+	protected final void rollbackTransaction(Transaction t) {
 		if(t != null) {
 			t.rollback();
 		}
