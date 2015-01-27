@@ -54,7 +54,7 @@ public class CDiscountGiftsFetcher extends AbstractGiftsFetcher {
 	
 	@Override
 	protected String getProductUrl(Element element) {
-		return BASE_URL + element.attr(PRODUCT_URL_ATTRIBUTE);
+		return element.absUrl(PRODUCT_URL_ATTRIBUTE);
 	}
 	
 	@Override

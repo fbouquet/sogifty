@@ -18,7 +18,7 @@ public class AmazonGiftsFetcher extends AbstractGiftsFetcher {
 	private final static String PRODUCT_DESCRIPTION_LINES_SELECTOR		= "ul li";
 	private final static String PRODUCT_PRICE_SELECTOR					= "#priceblock_ourprice ";
 	private final static String PRODUCT_PICTURE_SELECTOR				= "#landingImage ";
-	private final static String PRODUCT_PICTURE_URL_ATTRIBUTE			= "src";
+	private final static String PRODUCT_PICTURE_URL_ATTRIBUTE			= "data-old-hires";
 	
 	private final static String EURO_SYMBOL 							= "\u20AC";
 	

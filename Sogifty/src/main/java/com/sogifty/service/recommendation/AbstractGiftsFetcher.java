@@ -54,13 +54,16 @@ public abstract class AbstractGiftsFetcher {
 			fetchedProductList = Jsoup.connect(getSearchUrl(tag)).userAgent(USER_AGENT).get();
 			
 			Elements productsUrlElts = fetchedProductList.select(getProductUrlSelector());
-			for (int i = 0; i < productsUrlElts.size() && i < nbGiftsToFetch; ++i) {
+			logger.info("Nb products found : " + productsUrlElts.size());
+			for (int i = 0; i < productsUrlElts.size() && gifts.size() < nbGiftsToFetch; ++i) {
 				Gift gift = null;
 				Element product = productsUrlElts.get(i);
 				String productUrl = getProductUrl(product);
+				logger.info("Product n°" + i + " URL : "+ productUrl);
 				try {
 					gift = toGift(productUrl);
 				} catch (Exception e) {
+					logger.fatal("Unable to parse product N°" + i + " : " + e);
 					continue;
 				}
 				
