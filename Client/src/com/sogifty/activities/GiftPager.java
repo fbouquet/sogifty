@@ -101,7 +101,7 @@ public class GiftPager extends Fragment {
 		    }
 		});
 		
-		System.out.println("lcccc"+g.getImgUrl());
+//		System.out.println("lcccc"+g.getImgUrl());
 		TextView title = (TextView) v.findViewById(R.id.giftPager_tv_title);
 		title.setText(g.getName());
 		title.setTextColor(getResources().getColor(R.color.red));
