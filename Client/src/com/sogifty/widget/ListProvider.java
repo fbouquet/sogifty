@@ -36,9 +36,14 @@ public class ListProvider implements RemoteViewsFactory {
 		this.listGift = listGift; 
 		listUsers = list;
 		//UrlImageViewHelper.loadUrlDrawable(context, listGift.get(0).getImgUrl());
-		listBitmapUrl.add(listGift.get(0).getImgUrl());
-		System.out.println("lala"+listGift.get(0).getImgUrl());
-		listDescription.add("Offrez lui "+listGift.get(0).getName() + "!!");
+		if(listGift != null && listGift.size() != 0){
+			listBitmapUrl.add(listGift.get(0).getImgUrl());
+			listDescription.add("Offrez lui "+listGift.get(0).getName() + "!!");
+		}
+		else{
+			listBitmapUrl.add("");
+			listDescription.add("");
+		}
 		for(int i=1;i<getCount();i++){
 			listBitmapUrl.add("");
 			listDescription.add("");
