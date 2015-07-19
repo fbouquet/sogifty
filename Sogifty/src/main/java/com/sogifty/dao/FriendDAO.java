@@ -12,7 +12,9 @@ import com.sogifty.dao.dto.Tag;
 import com.sogifty.exception.SogiftyException;
 import com.sogifty.util.persistance.HibernateUtil;
 
-
+/**
+ * Data Access Object dealing with the Friend objects.
+ **/
 public class FriendDAO extends AbstractDAO<Friend> {
 	
 	@Override
@@ -20,6 +22,12 @@ public class FriendDAO extends AbstractDAO<Friend> {
 		return Friend.class;
 	}
 	
+	/**
+	 * Get the tags of a friend.
+	 * @param friendId The id of the friend.
+	 * @return A set of Tags.
+	 * @throws SogiftyException
+	 */
 	public Set<Tag> getTags(int friendId) throws SogiftyException {
 		Session session = null;
 		try {

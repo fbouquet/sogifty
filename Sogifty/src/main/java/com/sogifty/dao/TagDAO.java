@@ -16,6 +16,9 @@ import com.sogifty.dao.dto.Tag;
 import com.sogifty.exception.SogiftyException;
 import com.sogifty.util.persistance.HibernateUtil;
 
+/**
+ * Data Access Object dealing with the Tag objects.
+ **/
 public class TagDAO extends AbstractDAO<Tag> {
 	
 	@Override
@@ -23,6 +26,12 @@ public class TagDAO extends AbstractDAO<Tag> {
 		return Tag.class;
 	}
 
+	/**
+	 * Get the tags of a friend.
+	 * @param friendId The id of the friend.
+	 * @return A set of Tags.
+	 * @throws SogiftyException
+	 */
 	public Set<Tag> getTags(int friendId) throws SogiftyException {
 		Session session = null;
 		try {
@@ -44,7 +53,12 @@ public class TagDAO extends AbstractDAO<Tag> {
 		}
 	}
 	
-	// Used mostly to check if tag exists in database
+	/**
+	 * Get a tag by its label. Used mostly to check if tag exists in database.
+	 * @param label The label of the tag.
+	 * @return The tag.
+	 * @throws SogiftyException
+	 */
 	public Tag getByLabel(String label) throws SogiftyException {
 		if (label == null) {
 			logger.fatal("Could not find object without label in database");
@@ -68,6 +82,11 @@ public class TagDAO extends AbstractDAO<Tag> {
 		return found;
 	}
 	
+	/**
+	 * Get all the existing tags labels.
+	 * @return A set of labels.
+	 * @throws SogiftyException
+	 */
 	@SuppressWarnings("unchecked")
 	public Set<String> getAllLabels() throws SogiftyException {
 		Session session = null;

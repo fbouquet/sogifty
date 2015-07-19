@@ -18,42 +18,75 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+/**
+ * Entity representing a gift.
+ **/
 @Entity
 @Table(name = "gift")
 public class Gift implements DTO {
 
+	/**
+	 * Unique id.
+	 */
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int		id;
+	private int	id;
 
+	/**
+	 * A short name of the gift.
+	 */
 	@Column(name = "name")
 	private String	name;
 
+	/**
+	 * A longer description.
+	 */
 	@Column(name = "description")
 	private String	description;
 
+	/**
+	 * The price of the gift.
+	 */
 	@Column(name = "price")
 	private String	price;
 
+	/**
+	 * A valid and reachable URL of a picture representing the gift.
+	 */
 	@Column(name = "picture_url")
 	private String	pictureUrl;
 
+	/**
+	 * A valid and reachable URL of the page describing the gift in the e-shopping web-site.
+	 */
 	@Column(name = "url")
 	private String	url;
 	
+	/**
+	 * The date when the gift was first inserted in the database.
+	 */
 	@Column(name = "creation")
 	private Date creation;
 	
+	/**
+	 * The date when the gift was updated the last time.
+	 */
 	@Column(name = "last_update")
 	private Date lastUpdate;
 	
+	/**
+	 * The tags matching with this gift.
+	 */
 	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(	name = "match", 
 				joinColumns = {@JoinColumn(name = "gift_id", nullable = false, updatable = false)},
 				inverseJoinColumns = {@JoinColumn(name = "tag_id", nullable = false, updatable = false)})
 	private List<Tag> tags;
 	
+	/**
+	 * The web-site where the gift was fetched.
+	 */
 	@Column(name = "website")
 	@Enumerated(EnumType.STRING)
 	private Website website;
